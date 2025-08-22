@@ -19,7 +19,7 @@ This serves as a mono-repository for all the code dedicated to Code to Give Hack
 
 - @strengthless
 - @pranavi-apk
-- @LaviniaThosatriavi
+- @laviniatho
 - @amxxch
 - @edbertw
-- ...
+- @SebastianK1009

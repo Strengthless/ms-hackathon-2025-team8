@@ -1,11 +1,19 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useState } from "react";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { View, StyleSheet, Image } from "react-native";
-import { TextInput, Button, Title, Text } from "react-native-paper";
+import { TextInput, Button, Title, Text, useTheme } from "react-native-paper";
 
-const LoginScreen = ({ setIsLoggedIn }) => {
+type LoginScreenProps = {
+  setIsLoggedIn: (isLoggedIn: boolean) => void;
+};
+
+const LoginScreen: React.FC<LoginScreenProps> = ({ setIsLoggedIn }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  const theme = useTheme();
+  const { t } = useTranslation();
 
   const navigation = useNavigation();
 
@@ -16,14 +24,59 @@ const LoginScreen = ({ setIsLoggedIn }) => {
     }
   };
 
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: "center",
+      padding: 20,
+      backgroundColor: theme.colors.background,
+    },
+    logo: {
+      width: 100,
+      height: 100,
+      alignSelf: "center",
+      marginBottom: 20,
+    },
+    title: {
+      fontSize: 28,
+      fontWeight: "bold",
+      textAlign: "center",
+      marginBottom: 5,
+      color: theme.colors.primary,
+    },
+    subtitle: {
+      fontSize: 16,
+      textAlign: "center",
+      marginBottom: 30,
+      color: theme.colors.secondary,
+    },
+    input: {
+      marginBottom: 15,
+    },
+    button: {
+      marginTop: 10,
+      paddingVertical: 5,
+      backgroundColor: theme.colors.primary,
+    },
+    buttonLabel: {
+      fontSize: 16,
+    },
+    signupButton: {
+      marginTop: 15,
+    },
+    signupButtonLabel: {
+      color: theme.colors.primary,
+    },
+  });
+
   return (
     <View style={styles.container}>
       <Image
         source={{ uri: "https://img.icons8.com/color/96/000000/children.png" }}
         style={styles.logo}
       />
-      <Title style={styles.title}>Phonics Fun</Title>
-      <Text style={styles.subtitle}>Learn, Play, Grow!</Text>
+      <Title style={styles.title}>{t("login.title")}</Title>
+      <Text style={styles.subtitle}>{t("login.subtitle")}</Text>
 
       <TextInput
         label="Username"
@@ -64,50 +117,5 @@ const LoginScreen = ({ setIsLoggedIn }) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    padding: 20,
-    backgroundColor: "#E8F5E9",
-  },
-  logo: {
-    width: 100,
-    height: 100,
-    alignSelf: "center",
-    marginBottom: 20,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginBottom: 5,
-    color: "#6200EE",
-  },
-  subtitle: {
-    fontSize: 16,
-    textAlign: "center",
-    marginBottom: 30,
-    color: "#757575",
-  },
-  input: {
-    marginBottom: 15,
-  },
-  button: {
-    marginTop: 10,
-    paddingVertical: 5,
-    backgroundColor: "#6200EE",
-  },
-  buttonLabel: {
-    fontSize: 16,
-  },
-  signupButton: {
-    marginTop: 15,
-  },
-  signupButtonLabel: {
-    color: "#6200EE",
-  },
-});
 
 export default LoginScreen;

@@ -10,6 +10,7 @@ import TasksScreen from "./screens/TasksScreen";
 import LeaderboardScreen from "./screens/LeaderboardScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import "./localization/i18n";
+import { DefaultTheme, PaperProvider } from "react-native-paper";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -56,26 +57,40 @@ function TabNavigator() {
 export default function AppNavigator() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  // Source of truth for our design theme
+  const theme = {
+    ...DefaultTheme,
+    // Specify custom property
+    myOwnProperty: true,
+    // Specify custom property in nested object
+    colors: {
+      ...DefaultTheme.colors,
+      myOwnColor: "#BADA55",
+    },
+  };
+
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        {isLoggedIn ? (
-          <Stack.Screen name="Main" options={{ headerShown: false }}>
-            {() => <TabNavigator />}
-          </Stack.Screen>
-        ) : (
-          <>
-            <Stack.Screen name="Login" options={{ headerShown: false }}>
-              {() => <LoginScreen setIsLoggedIn={setIsLoggedIn} />}
+    <PaperProvider theme={theme}>
+      <NavigationContainer>
+        <Stack.Navigator>
+          {isLoggedIn ? (
+            <Stack.Screen name="Main" options={{ headerShown: false }}>
+              {() => <TabNavigator />}
             </Stack.Screen>
-            <Stack.Screen
-              name="Signup"
-              component={SignupScreen}
-              options={{ headerShown: false }}
-            />
-          </>
-        )}
-      </Stack.Navigator>
-    </NavigationContainer>
+          ) : (
+            <>
+              <Stack.Screen name="Login" options={{ headerShown: false }}>
+                {() => <LoginScreen setIsLoggedIn={setIsLoggedIn} />}
+              </Stack.Screen>
+              <Stack.Screen
+                name="Signup"
+                component={SignupScreen}
+                options={{ headerShown: false }}
+              />
+            </>
+          )}
+        </Stack.Navigator>
+      </NavigationContainer>
+    </PaperProvider>
   );
 }

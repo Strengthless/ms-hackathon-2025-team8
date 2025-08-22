@@ -3,9 +3,11 @@ import { View, StyleSheet, ScrollView } from "react-native";
 import { Title, Card, Text, Avatar } from "react-native-paper";
 import { users, badges as allBadges } from "../constants/mockData";
 import { useTranslation } from "react-i18next";
+import { useGetTipOfTheDay } from "../hooks/useGetTipOfTheDay";
 
 const DashboardScreen = () => {
   const { t } = useTranslation();
+  const tip = useGetTipOfTheDay();
 
   const user = users[0];
   const userBadges = allBadges.filter((badge) =>
@@ -19,7 +21,7 @@ const DashboardScreen = () => {
           <Text variant="titleLarge" style={styles.welcomeTitle}>
             {t("dashboard.welcome", { username: user.username })}
           </Text>
-          <Text>Keep up the great work learning phonics!</Text>
+          <Text>{t("dashboard.keepUp")}</Text>
         </Card.Content>
       </Card>
 
@@ -29,7 +31,7 @@ const DashboardScreen = () => {
             <Avatar.Icon size={50} icon="fire" style={styles.streakIcon} />
             <View>
               <Text style={styles.statNumber}>{user.streak}</Text>
-              <Text style={styles.statLabel}>Day Streak</Text>
+              <Text style={styles.statLabel}>{t("dashboard.streak")}</Text>
             </View>
           </Card.Content>
         </Card>
@@ -39,7 +41,7 @@ const DashboardScreen = () => {
             <Avatar.Icon size={50} icon="star" style={styles.scoreIcon} />
             <View>
               <Text style={styles.statNumber}>{user.score}</Text>
-              <Text style={styles.statLabel}>Points</Text>
+              <Text style={styles.statLabel}>{t("dashboard.points")}</Text>
             </View>
           </Card.Content>
         </Card>
@@ -47,7 +49,7 @@ const DashboardScreen = () => {
 
       <Card style={styles.badgesCard}>
         <Card.Content>
-          <Title>Your Badges</Title>
+          <Title>{t("dashboard.badges")}</Title>
           <View style={styles.badgesContainer}>
             {userBadges.map((badge) => (
               <View key={badge.id} style={styles.badgeItem}>
@@ -66,11 +68,8 @@ const DashboardScreen = () => {
 
       <Card style={styles.tipCard}>
         <Card.Content>
-          <Title>Today's Tip</Title>
-          <Text>
-            Practice the 'sh' sound today! Try saying "ship", "shop", and "wish"
-            out loud.
-          </Text>
+          <Title>{t("dashboard.tip")}</Title>
+          <Text>{tip}</Text>
         </Card.Content>
       </Card>
     </ScrollView>

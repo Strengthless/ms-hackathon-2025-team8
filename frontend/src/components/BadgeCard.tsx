@@ -1,9 +1,13 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { Card, Title, Avatar } from 'react-native-paper';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import React from "react";
+import { View, StyleSheet } from "react-native";
+import { Card, Title, Avatar } from "react-native-paper";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-const BadgeCard = ({ badge }) => {
+type BadgeCardProps = {
+  badge: Badge;
+};
+
+const BadgeCard: React.FC<BadgeCardProps> = ({ badge }) => {
   return (
     <Card style={styles.card}>
       <Card.Content style={styles.content}>
@@ -27,15 +31,15 @@ const styles = StyleSheet.create({
     width: 150,
   },
   content: {
-    alignItems: 'center',
+    alignItems: "center",
   },
   textContainer: {
     marginTop: 8,
-    alignItems: 'center',
+    alignItems: "center",
   },
   title: {
     fontSize: 14,
-    textAlign: 'center',
+    textAlign: "center",
   },
 });
 

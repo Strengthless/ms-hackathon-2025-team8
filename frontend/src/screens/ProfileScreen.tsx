@@ -2,12 +2,15 @@ import React from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
 import { Title, Card, Avatar, Text, Button } from "react-native-paper";
 import { users, badges as allBadges } from "../constants/mockData";
+import { useNavigation } from "@react-navigation/native";
 
-const ProfileScreen = ({ navigation }) => {
+const ProfileScreen = () => {
   const user = users[0];
   const userBadges = allBadges.filter((badge) =>
     user.badges.includes(badge.name.toLowerCase().replace(" ", "_"))
   );
+
+  const navigation = useNavigation();
 
   const handleLogout = () => {
     // In a real app, you would clear authentication state

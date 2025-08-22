@@ -1,5 +1,13 @@
 {
   "dashboard": {
-    "welcome": "Welcome back, {{username}}!"
+    "welcome": "Welcome back, {{username}}!",
+    "keepUp": "Keep up the great work learning phonics!",
+    "streak": "Day Streak",
+    "points": "Points",
+    "badges": "Your Badges",
+    "tip": "Tip of the Day"
+  },
+  "login": {
+    "title": "Phonics Fun"
   }
 }

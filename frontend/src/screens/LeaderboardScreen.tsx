@@ -24,7 +24,7 @@ const LeaderboardScreen = () => {
         <Text style={styles.subtitle}>Top phonics learners this week</Text>
       </View>
 
-      {leaderboard.map((player, index) => {
+      {leaderboard.map((player) => {
         const medal = getMedalIcon(player.position);
         return (
           <Card key={player.id} style={styles.playerCard}>
