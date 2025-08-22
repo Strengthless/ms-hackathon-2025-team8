@@ -24,18 +24,18 @@ def _generate_fallback_feedback(pronunciation_score: float, overall_quality: str
 class AIFeedbackGenerator:
     def __init__(self):
         """
-        Initialize AI feedback generator using OpenRouter.
+        Initialize AI feedback generator using Poe.
         
         Args:
-            api_key: OpenRouter API key. If not provided, will try to get from environment.
+            api_key: Poe API key. If not provided, will try to get from environment.
         """
-        self.api_key = os.getenv("OPENROUTER_API_KEY")
-        print("Loaded OpenRouter API Key from environment.")
+        self.api_key = os.getenv("POE_API_KEY")
+        print("Loaded Poe API Key from environment.")
         if not self.api_key:
-            raise ValueError("OpenRouter API key is required. Set OPENROUTER_API_KEY in .env file")
+            raise ValueError("POE key is required. Set POE_API_KEY in .env file")
         
-        self.base_url = "https://openrouter.ai/api/v1"
-        self.model = "deepseek/deepseek-chat-v3-0324:free"
+        self.base_url = "https://api.poe.com/v1"
+        self.model = "GPT-4o-mini"
         
     def generate_feedback(self, 
                          pronunciation_score: float,
@@ -64,8 +64,8 @@ class AIFeedbackGenerator:
         )
         print(f"AI Feedback Prompt: {prompt}")
         try:
-            # Make request to OpenRouter
-            response = self._make_openrouter_request(prompt)
+            # Make request to Poe
+            response = self._make_Poe_request(prompt)
             print(f"LLM Response: {response}")
             return response
             
@@ -149,8 +149,8 @@ Format your response as:
 
         return prompt
    
-    def _make_openrouter_request(self, prompt: str) -> str:
-        """Make a request to OpenRouter API."""
+    def _make_Poe_request(self, prompt: str) -> str:
+        """Make a request to Poe API."""
         
         headers = {
             "Authorization": f"Bearer {self.api_key}",
@@ -176,15 +176,15 @@ Format your response as:
                 timeout=8
             )
         except requests.RequestException as e:
-            print(f"Error connecting to OpenRouter API: {e}")
-            raise Exception(f"Failed to connect to OpenRouter API: {e}")
+            print(f"Error connecting to Poe API: {e}")
+            raise Exception(f"Failed to connect to Poe API: {e}")
         
         if response.status_code == 200:
             result = response.json()
-            print(f"OpenRouter Response: {json.dumps(result, indent=2)}")
+            print(f"Poe Response: {json.dumps(result, indent=2)}")
             return result['choices'][0]['message']['content'].strip()
         else:
-            raise Exception(f"OpenRouter API error: {response.status_code} - {response.text}")
+            raise Exception(f"Poe API error: {response.status_code} - {response.text}")
    
     def _generate_fallback_feedback(self, pronunciation_score: float, overall_quality: str) -> str:
         """Generate fallback feedback if AI service is unavailable."""
