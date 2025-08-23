@@ -5,7 +5,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import LoginScreen from "./screens/LoginScreen";
 import SignupScreen from "./screens/SignupScreen";
-import DashboardScreen from "./screens/DashboardScreen";
+import HomeScreen from "./screens/HomeScreen"; 
 import TasksScreen from "./screens/TasksScreen";
 import LeaderboardScreen from "./screens/LeaderboardScreen";
 import ProfileScreen from "./screens/ProfileScreen";
@@ -32,8 +32,8 @@ function TabNavigator() {
         tabBarIcon: ({ focused, color, size }) => {
           let iconName: string;
 
-          if (route.name === "Dashboard") {
-            iconName = focused ? "view-dashboard" : "view-dashboard-outline";
+          if (route.name === "Home") {
+            iconName = focused ? "home" : "home-outline";
           } else if (route.name === "Tasks") {
             iconName = focused ? "format-list-checks" : "format-list-checkbox";
           } else if (route.name === "Leaderboard") {
@@ -56,7 +56,11 @@ function TabNavigator() {
         headerTintColor: "#fff",
       })}
     >
-      <Tab.Screen name="Dashboard" component={DashboardScreen} />
+      <Tab.Screen 
+        name="Home" 
+        component={HomeScreen} 
+        options={{ title: "DinoPhonics" }}
+      />
       <Tab.Screen name="Tasks" component={TasksScreen} />
       <Tab.Screen name="Leaderboard" component={LeaderboardScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />

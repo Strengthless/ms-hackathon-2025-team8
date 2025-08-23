@@ -1,12 +1,18 @@
+from datetime import datetime, timezone
 import logging
 import os
 import tempfile
 from typing import Optional
 
+from db_init import initialize_database
+from supabase import create_client, Client
+
 import torch
 from dotenv import load_dotenv
-from fastapi import FastAPI, File, UploadFile, Form, HTTPException, Request
+from fastapi import FastAPI, File, UploadFile, Form, HTTPException, Request, Query, Body, Path
 from fastapi.middleware.cors import CORSMiddleware
+
+from typing import Optional, Any, Dict
 
 from app.pronunciation_trainer import PronunciationTrainer
 from utils.audio_processing import load_audio_file
@@ -55,6 +61,29 @@ app.add_middleware(
 # Initialize pronunciation trainer and AI feedback generator
 pronunciation_trainer = PronunciationTrainer()
 ai_feedback_generator = None
+
+supabase_client: Client = None
+# Database Startup
+@app.on_event("startup")
+async def startup_event():
+
+    # initialize supabase
+    global supabase_client
+
+    # Load Supabase URL and Key from environment variables
+
+    
+    supabase_url = os.getenv("SUPABASE_URL")
+    supabase_key = os.getenv("SUPABASE_KEY")
+
+    if not supabase_url or not supabase_key:
+        raise ValueError("SUPABASE_URL and SUPABASE_KEY must be set in environment variables.")
+
+    # Initialize the Supabase client
+    supabase_client = create_client(supabase_url, supabase_key)
+
+    # Initialize database with default data
+    # initialize_database()
 
 
 @app.post("/analyze")
@@ -209,7 +238,252 @@ async def analyze(
     except Exception as e:
         logger.exception("Unhandled error in /analyze", extra={"client_host": client_host})
         raise HTTPException(status_code=500, detail=f"Error processing audio: {str(e)}")
+    
+# SUBMISSIONS
+@app.post("/submissions")
+async def create_submission(payload: Dict[str, Any] = Body(...)):
+    """
+    Insert a new submission.
+    Adds created_at as the current UTC timestamp.
+    Expected keys (example): assignment_id:int, details:json, is_final:bool
+    """
+    try:
+        enriched = {
+            **payload,
+            "created_at": datetime.now(timezone.utc).isoformat()
+        }
+        res = supabase_client.table("submissions").insert(enriched).execute()
+        
+        return {"data": res.data}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
+@app.put("/submissions/{submission_id}")
+async def update_submission_grade_feedback(
+    submission_id: int = Path(...),
+    grade: Optional[int] = Body(None),
+    feedback: Optional[str] = Body(None),
+):
+    """
+    Update grade & feedback of a submission.
+    Provide one or both of: grade, feedback.
+    """
+    try:
+        update_fields = {}
+        if grade is not None:
+            update_fields["grade"] = grade
+        if feedback is not None:
+            update_fields["feedback"] = feedback
+        if not update_fields:
+            raise HTTPException(status_code=400, detail="Nothing to update.")
+        res = (
+            supabase_client.table("submissions")
+            .update(update_fields)
+            .eq("id", submission_id)
+            .execute()
+        )
+        return {"data": res.data}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/submissions")
+async def get_submissions_by_assignment(assignment_id: int = Query(...)):
+    """
+    Get submissions filtered by assignment_id.
+    """
+    try:
+        res = (
+            supabase_client.table("submissions")
+            .select("*")
+            .eq("assignment_id", assignment_id)
+            .execute()
+        )
+        return {"data": res.data}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+        
+# ASSIGNMENTS
+@app.get("/assignments")
+async def get_assignments(assigned_to: Optional[str] = Query(None)):
+    """Get all assignments or filter by assigned_to when provided."""
+    try:
+        query = supabase_client.table("assignments").select("*")
+        if assigned_to is not None:
+            query = query.eq("assigned_to", assigned_to)
+        res = query.execute()
+        return {"data": res.data}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/assignments")
+async def create_assignment(payload: Dict[str, Any] = Body(...)):
+    """
+    Add a new assignment.
+    Adds created_at as the current UTC timestamp.
+    Expected keys: detail:json, type:int2, assigned_to:text
+    """
+    try:
+        enriched = {
+            **payload,
+            "created_at": datetime.now(timezone.utc).isoformat()
+        }
+        res = supabase_client.table("assignments").insert(enriched).execute()
+
+        return {"data": res.data}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.put("/assignments/{assignment_id}")
+async def update_assignment(
+    assignment_id: int = Path(...),
+    payload: Dict[str, Any] = Body(...)
+):
+    """
+    Change assignment details. Payload can include any updatable fields.
+    """
+    try:
+        if not payload:
+            raise HTTPException(status_code=400, detail="No fields provided.")
+        res = (
+            supabase_client.table("assignments")
+            .update(payload)
+            .eq("id", assignment_id)
+            .execute()
+        )
+        return {"data": res.data}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+# POSTS
+@app.post("/students")
+async def create_student(payload: Dict[str, Any] = Body(...)):
+    """
+    Create a new student.
+    Expected keys: username:text, pw_hash:varchar
+    """
+    try:
+        res = supabase_client.table("students").insert(payload).execute()
+        return {"data": res.data}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+@app.post("/posts")
+async def create_forum_post(payload: Dict[str, Any] = Body(...)):
+    """
+    Create a new forum post.
+    Adds created_at as the current UTC timestamp.
+    Expected keys: title, details, author, is_public:bool, anonymous:bool, likes:int (optional)
+    """
+    try:
+        enriched = {
+            **payload,
+            "created_at": datetime.now(timezone.utc).isoformat()
+        }
+        res = (
+            supabase_client
+            .table("posts")
+            .insert(enriched)
+            .execute()
+        )
+        return {"data": res.data}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/posts")
+async def get_forum_posts_by_author(author: str = Query(...)):
+    """
+    Get forum posts by author.
+    """
+    try:
+        res = (
+            supabase_client.table("posts")
+            .select("*")
+            .eq("author", author)
+            .execute()
+        )
+        return {"data": res.data}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+
+
+@app.post("/posts/{post_id}/like")
+async def increment_post_likes(post_id: int = Path(...)) -> Dict[str, Any]:
+    """
+    Increment the 'likes' column by 1 for the specified post via RPC.
+    Returns the updated row.
+    """
+    try:
+        rpc_res = supabase_client.rpc("increment_post_likes", {"p_id": post_id}).execute()
+        if not rpc_res.data:
+            # When the function doesn't update any row (e.g., id not found)
+            raise HTTPException(status_code=404, detail="Post not found")
+        return {"data": rpc_res.data}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+@app.post("/comments")
+async def create_comment(payload: Dict[str, Any] = Body(...)):
+    """
+    Create a new comment.
+    Adds created_at as the current UTC timestamp.
+    Expected keys: author:text, post:int8 (post id), anonymous:bool, likes:int (optional)
+    """
+    try:
+        enriched = {
+            **payload,
+            "created_at": datetime.now(timezone.utc).isoformat()
+        }
+        res = (
+            supabase_client
+            .table("comments")
+            .insert(enriched)
+            .execute()
+        )
+        return {"data": res.data}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/comments")
+async def get_comments_by_post(post_id: int = Query(..., alias="post_id")):
+    """
+    Get comments for a given post id.
+    """
+    try:
+        res = (
+            supabase_client
+            .table("comments")
+            .select("*")
+            .eq("post", post_id)
+            .order("created_at", desc=False)
+            .execute()
+        )
+        return {"data": res.data}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+@app.post("/comments/{comment_id}/like")
+async def increment_comment_likes(comment_id: int = Path(...)) -> Dict[str, Any]:
+    """
+    Increment the 'likes' column by 1 for the specified comment via RPC.
+    Returns the updated row.
+    """
+    try:
+        rpc_res = supabase_client.rpc("increment_comment_likes", {"c_id": comment_id}).execute()
+        if not rpc_res.data:
+            # When the function doesn't update any row (e.g., id not found)
+            raise HTTPException(status_code=404, detail="Comment not found")
+        return {"data": rpc_res.data}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
     import uvicorn

@@ -36,6 +36,69 @@
     "rerecord": "Re-record",
     "stopRecording": "Stop Recording",
     "getStars": "You got ⭐ {{stars}} Dino Stars ⭐",
-    "waitForFeedback": "Please wait for feedback from your teacher.",
+    "waitForFeedback": "Please wait for feedback from your teacher."
+  },
+  "appName": "DinoPhonics",
+  "week": "Week {{number}}",
+  "lessons": {
+    "letterA": "Letter A",
+    "letterB": "Letter B",
+    "letterC": "Letter C",
+    "letterD": "Letter D",
+    "letterE": "Letter E",
+    "letterF": "Letter F",
+    "letterG": "Letter G",
+    "letterH": "Letter H",
+    "letterI": "Letter I",
+    "letterJ": "Letter J",
+    "week1Boss": "Week 1 Boss",
+    "week2Boss": "Week 2 Boss"
+  },
+  "lessonStatus": {
+    "mastered": "Mastered!",
+    "readyToLearn": "Ready to Learn",
+    "comingSoon": "Coming Soon"
+  },
+  "stats": {
+    "dayStreak": "Day Streak",
+    "dinoEnergy": "Dino Energy"
+  },
+  "mascot": {
+    "readyMessage": "Ready for an adventure?"
+  },
+  "home": {
+    "learningJourney": "Your Learning Journey",
+    "moreAdventuresAhead": "More Adventures Ahead!",
+    "keepPracticing": "Keep practicing to unlock new worlds with your dino friends!"
+  },
+  "alerts": {
+    "adventureLocked": {
+      "title": "Adventure Locked",
+      "message": "Complete the previous lessons to unlock this adventure!",
+      "button": "Got it!"
+    },
+    "startAdventure": {
+      "title": "{{lessonTitle}} Adventure",
+      "message": "Ready to start your pronunciation practice?",
+      "cancelButton": "Not Ready",
+      "confirmButton": "Let's Go!"
+    }
+  },
+  "popup": {
+    "startAdventure": "Start Adventure!",
+    "summaries": {
+      "lessons.letterA": "Master the mighty 'A' sound! Learn how to make this amazing letter with perfect pronunciation.",
+      "lessons.letterB": "Bounce into the 'B' sound! Discover the lip-popping technique for perfect pronunciation.",
+      "lessons.letterC": "Catch the 'C' sound! Learn the crisp consonant that starts so many words.",
+      "lessons.letterD": "Dive into the 'D' sound! Master the tongue-tip technique for this dynamic letter.",
+      "lessons.letterE": "Explore the 'E' sound! Practice the essential vowel that appears everywhere.",
+      "lessons.letterF": "Feel the 'F' sound! Learn the fantastic fricative with lip-to-teeth contact.",
+      "lessons.letterG": "Get the 'G' sound! Master the great consonant with back-of-tongue placement.",
+      "lessons.letterH": "Hear the 'H' sound! Practice the heavenly breath sound that starts so many words.",
+      "lessons.letterI": "Investigate the 'I' sound! Learn the important vowel with its short and long forms.",
+      "lessons.letterJ": "Jump into the 'J' sound! Master the joyful consonant with tongue placement.",
+      "lessons.week1Boss": "Boss Challenge! Test all your Week 1 consonant and vowel skills in epic sound battles!",
+      "lessons.week2Boss": "Ultimate Boss Battle! Show mastery of all sounds learned in an exciting final challenge!"
+    }
   }
 }

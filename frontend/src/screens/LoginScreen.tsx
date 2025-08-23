@@ -11,16 +11,31 @@ type LoginScreenProps = {
 const LoginScreen: React.FC<LoginScreenProps> = ({ setIsLoggedIn }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const theme = useTheme();
   const { t } = useTranslation();
-
   const navigation = useNavigation();
 
-  const handleLogin = () => {
-    // Simple validation - in a real app, you'd verify against a backend
-    if (username && password) {
-      setIsLoggedIn(true);
+  const handleLogin = async () => {
+    // Prevent multiple clicks
+    if (isLoading) return;
+    
+    setIsLoading(true);
+    
+    try {
+      // Simple validation 
+      if (username.trim() && password.trim()) {
+        // Small delay to show loading state
+        await new Promise(resolve => setTimeout(resolve, 500));
+        setIsLoggedIn(true);
+      } else {
+        alert('Please enter both username and password');
+      }
+    } catch (error) {
+      alert('Login failed. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -60,6 +75,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ setIsLoggedIn }) => {
     },
     buttonLabel: {
       fontSize: 16,
+      color: 'white',
     },
     signupButton: {
       marginTop: 15,
@@ -75,8 +91,8 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ setIsLoggedIn }) => {
         source={{ uri: "https://img.icons8.com/color/96/000000/children.png" }}
         style={styles.logo}
       />
-      <Title style={styles.title}>{t("login.title")}</Title>
-      <Text style={styles.subtitle}>{t("login.subtitle")}</Text>
+      <Title style={styles.title}>DinoPhonics</Title>
+      <Text style={styles.subtitle}>Learn with your dino friends!</Text>
 
       <TextInput
         label="Username"
@@ -85,6 +101,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ setIsLoggedIn }) => {
         style={styles.input}
         mode="outlined"
         left={<TextInput.Icon icon="account" />}
+        autoCapitalize="none"
       />
 
       <TextInput
@@ -95,6 +112,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ setIsLoggedIn }) => {
         style={styles.input}
         mode="outlined"
         left={<TextInput.Icon icon="lock" />}
+        autoCapitalize="none"
       />
 
       <Button
@@ -102,13 +120,15 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ setIsLoggedIn }) => {
         onPress={handleLogin}
         style={styles.button}
         labelStyle={styles.buttonLabel}
+        loading={isLoading}
+        disabled={isLoading}
       >
-        Login
+        {isLoading ? 'Logging in...' : 'Login'}
       </Button>
 
       <Button
         mode="text"
-        onPress={() => navigation.navigate("Signup")}
+        onPress={() => navigation.navigate('Signup' as never)}
         style={styles.signupButton}
         labelStyle={styles.signupButtonLabel}
       >
