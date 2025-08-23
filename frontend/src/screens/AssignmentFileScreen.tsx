@@ -166,8 +166,8 @@ const AssignmentFileScreen: React.FC<Props> = ({ route }) => {
         <View style={styles.completionSection}>
             <MaterialIcons name="check-circle" size={52} color="white" style={styles.icon} />
             <Text style={styles.completionTitle}>{t("assignment.assignmentCompleted")} 🎉</Text>
-            <Text style={styles.stars}>You got ⭐ 5 Dino Stars ⭐</Text>
-            <Text style={styles.feedback}>FEEDBACK</Text>
+            <Text style={styles.stars}>{t("assignment.getStars", {stars: task.points})}</Text>
+            <Text style={styles.feedback}>{t("assignment.waitForFeedback")}</Text>
         </View>
         ) : loading ? (
         // Loading State

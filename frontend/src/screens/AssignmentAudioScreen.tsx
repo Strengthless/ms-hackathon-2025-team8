@@ -23,12 +23,11 @@ const AssignmentAudioScreen: React.FC<Props> = ({ route }) => {
     const { ass_id } = route.params;
     const task: Task | undefined = tasks.find(t => t.id === ass_id);
     const [completed, setCompleted] = useState(false);
-
     const [recordedUri, setRecordedUri] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [recording, setRecording] = useState<Audio.Recording | null>(null);
     const [isRecording, setIsRecording] = useState(false);
+    const [recording, setRecording] = useState<Audio.Recording | null>(null);
     const [sound, setSound] = useState<Audio.Sound | null>(null);
     const [feedback, setFeedback] = useState<string>('');
 
@@ -175,8 +174,7 @@ const AssignmentAudioScreen: React.FC<Props> = ({ route }) => {
         <View style={styles.completionSection}>
             <MaterialIcons name="check-circle" size={52} color="white" style={styles.icon} />
             <Text style={styles.completionTitle}>{t("assignment.assignmentCompleted")} 🎉</Text>
-            <Text style={styles.stars}>You got ⭐ 5 Dino Stars ⭐</Text>
-            <Text style={styles.feedback}>FEEDBACK</Text>
+            <Text style={styles.stars}>{t("assignment.getStars", {stars: task.points})}</Text>
         </View>
         )}
 

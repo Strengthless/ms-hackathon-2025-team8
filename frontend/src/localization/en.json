@@ -35,5 +35,7 @@
     "record": "Record",
     "rerecord": "Re-record",
     "stopRecording": "Stop Recording",
+    "getStars": "You got ⭐ {{stars}} Dino Stars ⭐",
+    "waitForFeedback": "Please wait for feedback from your teacher.",
   }
 }
