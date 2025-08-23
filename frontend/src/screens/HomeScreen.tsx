@@ -9,43 +9,21 @@ import {
   Animated
 } from 'react-native';
 import { 
-  Title, 
-  Card, 
   Text, 
   Surface 
 } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import { users } from '../constants/mockData';
+import { 
+  users, 
+  footprintPatterns, 
+  lessonPositions, 
+  localizedLessons, 
+  type LessonStatus,
+  type Lesson 
+} from '../constants/mockData';
 
-const { width, height } = Dimensions.get('window');
-
-// Extended lessons data for scrollable roadmap
-const extendedLessons: Lesson[] = [
-  { id: 1, title: "Letter A", letter: "A", status: "completed", dinoEmoji: '🦕', week: 1 },
-  { id: 2, title: "Letter B", letter: "B", status: "completed", dinoEmoji: '🦖', week: 1 },
-  { id: 3, title: "Letter C", letter: "C", status: "current", dinoEmoji: '🦴', week: 1 },
-  { id: 4, title: "Letter D", letter: "D", status: "locked", dinoEmoji: '🥚', week: 1 },
-  { id: 5, title: "Letter E", letter: "E", status: "locked", dinoEmoji: '🥚', week: 1 },
-  { id: 6, title: "Week 1 Boss", letter: "Boss", status: "locked", dinoEmoji: '👑', week: 1 },
-  { id: 7, title: "Letter F", letter: "F", status: "locked", dinoEmoji: '🥚', week: 2 },
-  { id: 8, title: "Letter G", letter: "G", status: "locked", dinoEmoji: '🥚', week: 2 },
-  { id: 9, title: "Letter H", letter: "H", status: "locked", dinoEmoji: '🥚', week: 2 },
-  { id: 10, title: "Letter I", letter: "I", status: "locked", dinoEmoji: '🥚', week: 2 },
-  { id: 11, title: "Letter J", letter: "J", status: "locked", dinoEmoji: '🥚', week: 2 },
-  { id: 12, title: "Week 2 Boss", letter: "Boss", status: "locked", dinoEmoji: '👑', week: 2 },
-];
-
-type LessonStatus = 'completed' | 'current' | 'locked';
-
-interface Lesson {
-  id: number;
-  title: string;
-  letter: string;
-  status: LessonStatus;
-  dinoEmoji: string;
-  week: number;
-}
+const { width } = Dimensions.get('window');
 
 interface HomeScreenProps {
   navigation?: any;
@@ -107,30 +85,31 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
         }),
       ])
     ).start();
-  }, []);
+  }, [fadeAnim, slideAnim, pulseAnim, titleGlow]);
 
   const startPronunciation = (lesson: Lesson) => {
     if (lesson.status === 'locked') {
       Alert.alert(
-        'Adventure Locked',
-        'Complete the previous lessons to unlock this adventure!',
-        [{ text: 'Got it!' }]
+        t('alerts.adventureLocked.title'),
+        t('alerts.adventureLocked.message'),
+        [{ text: t('alerts.adventureLocked.button') }]
       );
       return;
     }
 
+    const lessonTitle = t(lesson.titleKey);
     Alert.alert(
-      `${lesson.title} Adventure`,
-      `Ready to start your pronunciation practice?`,
+      t('alerts.startAdventure.title', { lessonTitle }),
+      t('alerts.startAdventure.message'),
       [
-        { text: 'Not Ready', style: 'cancel' },
+        { text: t('alerts.startAdventure.cancelButton'), style: 'cancel' },
         { 
-          text: "Let's Go!", 
+          text: t('alerts.startAdventure.confirmButton'), 
           onPress: () => {
             if (navigation) {
               // navigation.navigate('PronunciationPractice', { lesson });
             }
-            console.log('Starting adventure for:', lesson.letter);
+            console.log(t('console.startingAdventure'), lesson.letter);
           }
         }
       ]
@@ -160,52 +139,74 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
     ];
   };
 
+  const getFootprintPosition = (index: number): { 
+    footprints: { offsetX: number; offsetY: number; rotation: string }[] 
+  } => {
+    const stepInWeek = index % 6;
+    const patternIndex = stepInWeek % 5;
+    const pattern = footprintPatterns[patternIndex];
+    
+    return {
+      footprints: pattern.footprints.map(fp => ({
+        offsetX: fp.offsetX * width,
+        offsetY: fp.offsetY,
+        rotation: fp.rotation
+      }))
+    };
+  };
+
+  const renderFootprint = (index: number) => {
+    const position = getFootprintPosition(index);
+    
+    return (
+      <View style={styles.footprintGroupContainer}>
+        {position.footprints.map((footprint, footprintIndex) => (
+          <Animated.View 
+            key={footprintIndex}
+            style={[
+              styles.footprintContainer,
+              {
+                opacity: fadeAnim,
+                transform: [
+                  { translateX: footprint.offsetX },
+                  { translateY: footprint.offsetY },
+                  { rotate: footprint.rotation },
+                ]
+              }
+            ]}
+          >
+            <Text style={styles.footprint}>🐾</Text>
+          </Animated.View>
+        ))}
+      </View>
+    );
+  };
+
   const getLessonPosition = (index: number): { offsetX: number } => {
-    // Create a smoother zigzag pattern
-    const centerX = 0;
-    const leftOffset = -width * 0.12;
-    const rightOffset = width * 0.12;
+    const patternIndex = index % lessonPositions.length;
+    const position = lessonPositions[patternIndex];
     
-    const patterns = [
-      { offsetX: centerX },           // Center - A
-      { offsetX: leftOffset },        // Left - B  
-      { offsetX: rightOffset },       // Right - C
-      { offsetX: leftOffset * 0.7 },  // Slightly left - D
-      { offsetX: rightOffset * 0.7 }, // Slightly right - E
-      { offsetX: centerX },           // Center - Boss
-    ];
-    
-    return patterns[index % patterns.length];
+    return {
+      offsetX: position.offsetX * width
+    };
+  };
+
+  const getStatusText = (status: LessonStatus) => {
+    switch (status) {
+      case 'completed':
+        return t('lessonStatus.mastered');
+      case 'current':
+        return t('lessonStatus.readyToLearn');
+      case 'locked':
+        return t('lessonStatus.comingSoon');
+      default:
+        return t('lessonStatus.comingSoon');
+    }
   };
 
   const renderLessonNode = (lesson: Lesson, index: number) => {
     const position = getLessonPosition(index);
     const isHovered = hoveredLesson === lesson.id;
-    
-    // Create staggered entrance animation
-    const delayedFade = useRef(new Animated.Value(0)).current;
-    const bounceIn = useRef(new Animated.Value(0)).current;
-    
-    useEffect(() => {
-      const delay = index * 200; // Stagger each lesson
-      
-      Animated.sequence([
-        Animated.delay(delay),
-        Animated.parallel([
-          Animated.timing(delayedFade, {
-            toValue: 1,
-            duration: 600,
-            useNativeDriver: true,
-          }),
-          Animated.spring(bounceIn, {
-            toValue: 1,
-            tension: 50,
-            friction: 8,
-            useNativeDriver: true,
-          }),
-        ])
-      ]).start();
-    }, [delayedFade, bounceIn, index]);
     
     return (
       <Animated.View 
@@ -213,16 +214,10 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
         style={[
           styles.lessonContainer,
           {
-            opacity: Animated.multiply(fadeAnim, delayedFade),
+            opacity: fadeAnim,
             transform: [
               { translateY: slideAnim },
               { translateX: position.offsetX },
-              { 
-                scale: bounceIn.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [0.3, 1]
-                })
-              }
             ]
           }
         ]}
@@ -256,14 +251,14 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
             </View>
           )}
           
-          {lesson.title.includes('Boss') && (
+          {lesson.titleKey.includes('Boss') && (
             <View style={styles.bossGlow} />
           )}
           
           {/* Hover sparkle effect */}
           {isHovered && lesson.status !== 'locked' && (
-            <View style={styles.hoverSparkles}>
-              <Text style={styles.sparkle}>✨</Text>
+            <View style={styles.hoverEffect}>
+              <Text style={styles.hoverEmoji}>✨</Text>
             </View>
           )}
         </TouchableOpacity>
@@ -273,66 +268,30 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
             styles.lessonTitle,
             isHovered && lesson.status !== 'locked' && styles.titleHovered
           ]}>
-            {lesson.title}
+            {t(lesson.titleKey)}
           </Text>
           <Text style={styles.lessonSubtitle}>
-            {lesson.status === 'completed' ? 'Mastered!' : 
-             lesson.status === 'current' ? 'Ready to Learn' : 
-             'Coming Soon'}
+            {getStatusText(lesson.status)}
           </Text>
         </View>
-
-        {/* Connecting Path to next lesson */}
       </Animated.View>
     );
   };
 
   const renderWeekHeader = (weekNum: number) => {
-    const weekFade = useRef(new Animated.Value(0)).current;
-    const weekSlide = useRef(new Animated.Value(-50)).current;
-    
-    useEffect(() => {
-      const weekDelay = weekNum * 300;
-      
-      Animated.sequence([
-        Animated.delay(weekDelay),
-        Animated.parallel([
-          Animated.timing(weekFade, {
-            toValue: 1,
-            duration: 800,
-            useNativeDriver: true,
-          }),
-          Animated.spring(weekSlide, {
-            toValue: 0,
-            tension: 60,
-            friction: 8,
-            useNativeDriver: true,
-          }),
-        ])
-      ]).start();
-    }, [weekFade, weekSlide, weekNum]);
-    
     return (
       <Animated.View 
         style={[
           styles.weekHeader,
           {
-            opacity: Animated.multiply(fadeAnim, weekFade),
-            transform: [
-              { translateY: weekSlide },
-              { 
-                scale: weekFade.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [0.8, 1]
-                })
-              }
-            ]
+            opacity: fadeAnim,
+            transform: [{ translateY: slideAnim }]
           }
         ]}
       >
         <Surface style={styles.weekBadge} elevation={4}>
           <MaterialCommunityIcons name="calendar-star" size={20} color="white" />
-          <Text style={styles.weekText}>Week {weekNum}</Text>
+          <Text style={styles.weekText}>{t('week', { number: weekNum })}</Text>
         </Surface>
       </Animated.View>
     );
@@ -345,86 +304,35 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
       bounces={true}
       contentContainerStyle={styles.scrollContent}
     >
-      {/* Header */}
-      <Animated.View style={{ opacity: fadeAnim }}>
-        <Card style={styles.header}>
-          <Card.Content style={styles.headerContent}>
-            <TouchableOpacity 
-              style={styles.mascot}
-              onPress={() => Alert.alert('DinoPhonics', 'Ready for an adventure?')}
-            >
-              <Text style={styles.mascotEmoji}>🦖</Text>
-              <Text style={styles.mascotText}>DinoPhonics</Text>
-            </TouchableOpacity>
-            
-            <View style={styles.stats}>
-              <View style={styles.stat}>
-                <MaterialCommunityIcons name="fire" size={26} color="#FF5722" />
-                <Text style={styles.statNumber}>{user.streak}</Text>
-                <Text style={styles.statLabel}>Day Streak</Text>
-              </View>
-              <View style={styles.stat}>
-                <MaterialCommunityIcons name="lightning-bolt" size={26} color="#FFC107" />
-                <Text style={styles.statNumber}>{user.score}</Text>
-                <Text style={styles.statLabel}>Dino Energy</Text>
-              </View>
-            </View>
-          </Card.Content>
-        </Card>
+      {/* Sticky Stats Bar */}
+      <View style={styles.stickyStatsBar}>
+        <Text style={styles.journeyText}>{t('home.learningJourney')}</Text>
+        
+        <View style={styles.statsRow}>
+          <View style={styles.statItem}>
+            <MaterialCommunityIcons name="fire" size={22} color="#FF5722" />
+            <Text style={styles.statNumber}>{user.streak}</Text>
+            <Text style={styles.statLabel}>{t('stats.dayStreak')}</Text>
+          </View>
 
-        {/* Adventure Overview */}
-        <View style={styles.adventureOverview}>
-          <Text style={styles.adventureTitle}>Your Learning Journey</Text>
+          <View style={styles.statItem}>
+            <MaterialCommunityIcons name="lightning-bolt" size={22} color="#FFC107" />
+            <Text style={styles.statNumber}>{user.score}</Text>
+            <Text style={styles.statLabel}>{t('stats.dinoEnergy')}</Text>
+          </View>
         </View>
-      </Animated.View>
+      </View>
 
       {/* Main Roadmap */}
       <View style={styles.roadmap}>
-        {/* Floating particles animation */}
-        <View style={styles.floatingParticles}>
-          <Animated.View 
-            style={[
-              styles.particle,
-              {
-                transform: [
-                  {
-                    translateY: titleGlow.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [0, -10]
-                    })
-                  }
-                ]
-              }
-            ]}
-          >
-            <Text style={styles.particleText}>✨</Text>
-          </Animated.View>
-          <Animated.View 
-            style={[
-              styles.particle,
-              styles.particle2,
-              {
-                transform: [
-                  {
-                    translateY: titleGlow.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [0, -8]
-                    })
-                  }
-                ]
-              }
-            ]}
-          >
-            <Text style={styles.particleText}>💫</Text>
-          </Animated.View>
-        </View>
-        
         {/* Week 1 Section */}
         {renderWeekHeader(1)}
         <View style={styles.weekSection}>
-          {extendedLessons.slice(0, 6).map((lesson, index) => (
+          {localizedLessons.slice(0, 6).map((lesson, index) => (
             <View key={lesson.id}>
               {renderLessonNode(lesson, index)}
+              {/* Add footprint between lessons (except after the last one) */}
+              {index < 5 && renderFootprint(index)}
             </View>
           ))}
         </View>
@@ -432,9 +340,11 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
         {/* Week 2 Section */}
         {renderWeekHeader(2)}
         <View style={styles.weekSection}>
-          {extendedLessons.slice(6, 12).map((lesson, index) => (
+          {localizedLessons.slice(6, 12).map((lesson, index) => (
             <View key={lesson.id}>
               {renderLessonNode(lesson, index + 6)}
+              {/* Add footprint between lessons (except after the last one) */}
+              {index < 5 && renderFootprint(index + 6)}
             </View>
           ))}
         </View>
@@ -449,9 +359,11 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
             }
           ]}
         >
-          <Text style={styles.comingSoonTitle}>More Adventures Ahead!</Text>
+          <Text variant="titleMedium" style={styles.comingSoonTitle}>
+            {t('home.moreAdventuresAhead')}
+          </Text>
           <Text style={styles.comingSoonText}>
-            Keep practicing to unlock new worlds with your dino friends!
+            {t('home.keepPracticing')}
           </Text>
         </Animated.View>
       </View>
@@ -466,94 +378,57 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#E8F5E9',
   },
-  scrollContent: {
-    paddingBottom: 60,
-  },
-  header: {
-    margin: width * 0.04,
+  stickyStatsBar: {
+    position: 'sticky',
+    top: 0,
+    zIndex: 100,
     backgroundColor: '#6200EE',
-    borderRadius: width * 0.06,
-    elevation: 12,
-  },
-  headerContent: {
+    paddingHorizontal: width * 0.04,
+    paddingVertical: width * 0.03,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 8,
+    elevation: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
   },
-  mascot: {
-    alignItems: 'center',
-  },
-  mascotEmoji: {
-    fontSize: width * 0.13,
-  },
-  mascotText: {
+  journeyText: {
     color: 'white',
-    fontWeight: 'bold',
-    fontSize: width * 0.042,
-    marginTop: 4,
+    fontSize: width * 0.04,
+    fontWeight: '600',
   },
-  stats: {
+  statsRow: {
     flexDirection: 'row',
-    gap: width * 0.08,
+    gap: width * 0.06,
   },
-  stat: {
+  statItem: {
+    flexDirection: 'row',
     alignItems: 'center',
+    gap: width * 0.01,
+  },
+  scrollContent: {
+    paddingBottom: 60,
   },
   statNumber: {
     color: 'white',
-    fontSize: width * 0.055,
+    fontSize: width * 0.032,
     fontWeight: 'bold',
-    marginTop: 6,
   },
   statLabel: {
-    color: '#E1BEE7',
-    fontSize: width * 0.028,
+    color: 'white',
+    fontSize: width * 0.025,
     fontWeight: '500',
   },
-  adventureOverview: {
-    margin: width * 0.04,
-    marginTop: width * 0.01,
-    marginBottom: width * 0.02, // Reduced space before Week 1
-    alignItems: 'center',
-  },
-  adventureTitle: {
-    fontSize: width * 0.06,
-    fontWeight: '600',
-    color: '#2E7D32',
-    textAlign: 'center',
-    letterSpacing: 0.5,
-  },
   roadmap: {
-    paddingTop: 20,
+    paddingTop: 10,
     alignItems: 'center',
     position: 'relative',
   },
-  floatingParticles: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    height: 100,
-    zIndex: -1,
-  },
-  particle: {
-    position: 'absolute',
-    top: 20,
-    left: width * 0.2,
-  },
-  particle2: {
-    position: 'absolute',
-    top: 10,
-    left: width * 0.7,
-  },
-  particleText: {
-    fontSize: 20,
-    opacity: 0.6,
-  },
   weekHeader: {
     alignItems: 'center',
-    marginVertical: 15, // Reduced vertical spacing
+    marginVertical: 15,
   },
   weekBadge: {
     backgroundColor: '#4CAF50',
@@ -575,7 +450,7 @@ const styles = StyleSheet.create({
   },
   lessonContainer: {
     alignItems: 'center',
-    marginVertical: 25, // Increased spacing for better path visibility
+    marginVertical: 15,
     position: 'relative',
   },
   lessonNode: {
@@ -644,7 +519,7 @@ const styles = StyleSheet.create({
     opacity: 0.3,
     zIndex: -1,
   },
-  hoverSparkles: {
+  hoverEffect: {
     position: 'absolute',
     top: -15,
     left: -15,
@@ -654,12 +529,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     zIndex: 10,
   },
-  sparkle: {
+  hoverEmoji: {
     fontSize: 16,
   },
   lessonInfo: {
     alignItems: 'center',
-    marginTop: 15,
+    marginTop: 12,
     maxWidth: width * 0.35,
   },
   lessonTitle: {
@@ -678,79 +553,6 @@ const styles = StyleSheet.create({
     color: '#666',
     textAlign: 'center',
     fontWeight: '500',
-  },
-  roadContainer: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    zIndex: -1,
-    alignItems: 'center',
-  },
-  roadSegment1: {
-    position: 'absolute',
-    top: 40,
-    left: '50%',
-    width: 8,
-    height: 60,
-    backgroundColor: '#A5D6A7',
-    borderRadius: 4,
-    opacity: 0.6,
-  },
-  roadSegment2: {
-    position: 'absolute',
-    top: 90,
-    left: '30%',
-    width: 8,
-    height: 70,
-    backgroundColor: '#A5D6A7',
-    borderRadius: 4,
-    opacity: 0.6,
-    transform: [{ rotate: '-20deg' }],
-  },
-  roadSegment3: {
-    position: 'absolute',
-    top: 150,
-    right: '25%',
-    width: 8,
-    height: 80,
-    backgroundColor: '#A5D6A7',
-    borderRadius: 4,
-    opacity: 0.6,
-    transform: [{ rotate: '25deg' }],
-  },
-  roadSegment4: {
-    position: 'absolute',
-    top: 220,
-    left: '35%',
-    width: 8,
-    height: 70,
-    backgroundColor: '#A5D6A7',
-    borderRadius: 4,
-    opacity: 0.6,
-    transform: [{ rotate: '-15deg' }],
-  },
-  roadSegment5: {
-    position: 'absolute',
-    top: 280,
-    right: '30%',
-    width: 8,
-    height: 75,
-    backgroundColor: '#A5D6A7',
-    borderRadius: 4,
-    opacity: 0.6,
-    transform: [{ rotate: '18deg' }],
-  },
-  roadSegment6: {
-    position: 'absolute',
-    top: 350,
-    left: '50%',
-    width: 8,
-    height: 60,
-    backgroundColor: '#A5D6A7',
-    borderRadius: 4,
-    opacity: 0.6,
   },
   comingSoon: {
     alignItems: 'center',
@@ -776,6 +578,19 @@ const styles = StyleSheet.create({
   },
   bottomSpace: {
     height: 40,
+  },
+  footprintGroupContainer: {
+    alignItems: 'center',
+    marginVertical: 10,
+    position: 'relative',
+  },
+  footprintContainer: {
+    position: 'absolute',
+    alignItems: 'center',
+  },
+  footprint: {
+    fontSize: 24,
+    opacity: 0.6,
   },
 });
 

@@ -1,25 +1,48 @@
 {
-  "dashboard": {
-    "welcome": "Welcome back, {{username}}!",
-    "keepUp": "Keep up the great work learning phonics!",
-    "streak": "Day Streak",
-    "points": "Points",
-    "badges": "Your Badges",
-    "tip": "Tip of the Day"
+  "appName": "DinoPhonics",
+  "week": "Week {{number}}",
+  "lessons": {
+    "letterA": "Letter A",
+    "letterB": "Letter B",
+    "letterC": "Letter C",
+    "letterD": "Letter D",
+    "letterE": "Letter E",
+    "letterF": "Letter F",
+    "letterG": "Letter G",
+    "letterH": "Letter H",
+    "letterI": "Letter I",
+    "letterJ": "Letter J",
+    "week1Boss": "Week 1 Boss",
+    "week2Boss": "Week 2 Boss"
   },
-  "login": {
-    "title": "Phonics Fun"
+  "lessonStatus": {
+    "mastered": "Mastered!",
+    "readyToLearn": "Ready to Learn",
+    "comingSoon": "Coming Soon"
+  },
+  "stats": {
+    "dayStreak": "Day Streak",
+    "dinoEnergy": "Dino Energy"
+  },
+  "mascot": {
+    "readyMessage": "Ready for an adventure?"
   },
   "home": {
-    "title": "Your Pronunciation Journey",
-    "weekProgress": "Week {{number}} - Letter Sounds",
-    "completedProgress": "{{completed}} of {{total}} letters completed",
-    "nextWeekComing": "Next week's letters coming soon!",
-    "practiceLocked": "Practice Locked",
-    "completeFirst": "Complete the previous letter first!",
-    "practiceTitle": "{{letter}} Practice",
-    "practiceMessage": "Ready to practice pronouncing \"{{letter}}\" with your dino friend?",
-    "notReady": "Not Ready",
-    "startPractice": "Start Practice!"
+    "learningJourney": "Your Learning Journey",
+    "moreAdventuresAhead": "More Adventures Ahead!",
+    "keepPracticing": "Keep practicing to unlock new worlds with your dino friends!"
+  },
+  "alerts": {
+    "adventureLocked": {
+      "title": "Adventure Locked",
+      "message": "Complete the previous lessons to unlock this adventure!",
+      "button": "Got it!"
+    },
+    "startAdventure": {
+      "title": "{{lessonTitle}} Adventure",
+      "message": "Ready to start your pronunciation practice?",
+      "cancelButton": "Not Ready",
+      "confirmButton": "Let's Go!"
+    }
   }
 }
