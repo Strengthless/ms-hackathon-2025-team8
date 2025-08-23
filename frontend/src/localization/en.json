@@ -9,5 +9,17 @@
   },
   "login": {
     "title": "Phonics Fun"
+  },
+  "home": {
+    "title": "Your Pronunciation Journey",
+    "weekProgress": "Week {{number}} - Letter Sounds",
+    "completedProgress": "{{completed}} of {{total}} letters completed",
+    "nextWeekComing": "Next week's letters coming soon!",
+    "practiceLocked": "Practice Locked",
+    "completeFirst": "Complete the previous letter first!",
+    "practiceTitle": "{{letter}} Practice",
+    "practiceMessage": "Ready to practice pronouncing \"{{letter}}\" with your dino friend?",
+    "notReady": "Not Ready",
+    "startPractice": "Start Practice!"
   }
 }

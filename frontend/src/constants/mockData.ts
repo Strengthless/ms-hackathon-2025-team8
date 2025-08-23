@@ -54,3 +54,67 @@ export const badges = [
   { id: 3, name: "Sound Explorer", icon: "compass", color: "#2196F3" },
   { id: 4, name: "Word Champion", icon: "star", color: "#FF9800" },
 ];
+
+type LessonStatus = 'completed' | 'current' | 'locked';
+
+export const weeklyLessons: {
+  id: number;
+  title: string;
+  letter: string;
+  status: LessonStatus;
+  week: number;
+  dinoEmoji: string;
+  pronunciationTips: string[];
+  points: number;
+}[] = [
+    {
+      id: 1,
+      title: "Letter A",
+      letter: "A",
+      status: "completed",
+      week: 1,
+      dinoEmoji: '🦕',
+      pronunciationTips: ["Say 'Ah' like when the doctor checks your throat", "Apple starts with A"],
+      points: 100,
+    },
+    {
+      id: 2,
+      title: "Letter B",
+      letter: "B",
+      status: "completed",
+      week: 1,
+      dinoEmoji: '🦖',
+      pronunciationTips: ["Put your lips together and make a 'Buh' sound", "Ball starts with B"],
+      points: 100,
+    },
+    {
+      id: 3,
+      title: "Letter C",
+      letter: "C",
+      status: "current",
+      week: 1,
+      dinoEmoji: '🦴',
+      pronunciationTips: ["Make a 'Kuh' sound like a cat", "Cat starts with C"],
+      points: 100,
+    },
+    {
+      id: 4,
+      title: "Letter D",
+      letter: "D",
+      status: "locked",
+      week: 1,
+      dinoEmoji: '🥚',
+      pronunciationTips: ["Touch your tongue to the roof of your mouth", "Dog starts with D"],
+      points: 100,
+    },
+    {
+      id: 5,
+      title: "Letter E",
+      letter: "E",
+      status: "locked",
+      week: 1,
+      dinoEmoji: '🥚',
+      pronunciationTips: ["Say 'Eh' like when you're confused", "Egg starts with E"],
+      points: 100,
+    },
+  ];
