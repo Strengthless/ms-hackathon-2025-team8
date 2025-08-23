@@ -9,5 +9,31 @@
   },
   "login": {
     "title": "Phonics Fun"
+  },
+  "assignment": {
+    "title": "Assignments",
+    "submitAssignment": "Submit Assignment",
+    "noAssignments": "No assignments found.",
+    "assignmentCompleted": "Assignment completed!",
+    "completed": "Completed",
+    "pending": "Pending",
+    "deadline": "Deadline",
+    "dinoStar": "Dino Stars",
+    "instructions": "Instructions",
+    "downloadExercise": "Click to Download Exercise",
+    "browseGallery": "Browse Gallery",
+    "browseFiles": "Browse Files",
+    "selectFile": "Select Submission File",
+    "checking": "Checking your submission...",
+    "submit": "Submit",
+    "remove": "Remove",
+    "submitLoading": "Submitting your assignment...",
+    "fileLoading": "Loading your file...",
+    "next": "Next",
+    "retry": "Retry",
+    "playRecording": "Play Recording",
+    "record": "Record",
+    "rerecord": "Re-record",
+    "stopRecording": "Stop Recording",
   }
 }

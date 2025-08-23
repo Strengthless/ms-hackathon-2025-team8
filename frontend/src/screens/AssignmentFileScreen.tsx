@@ -5,6 +5,7 @@ import { View, StyleSheet, ScrollView, Linking } from "react-native";
 import { Title, Text, Chip, Button, Divider, Portal, Dialog, Card } from "react-native-paper";
 import { Video } from "expo-av";
 import { MaterialIcons } from "@expo/vector-icons";
+import { useTranslation } from "react-i18next";
 import * as DocumentPicker from 'expo-document-picker';
 import * as ImagePicker from 'expo-image-picker';
 
@@ -12,15 +13,16 @@ import { RootStackParamList } from "../AppNavigator";
 import { tasks, Task, Status } from "../constants/mockData";
 import LoadingAnimation from "../components/LoadingAnimation";
 
-type AssignmentScreenRouteProp = RouteProp<RootStackParamList, "Assignment">;
-type AssignmentScreenNavigationProp = StackNavigationProp<RootStackParamList, "Assignment">;
+type AssignmentScreenRouteProp = RouteProp<RootStackParamList, "AssignmentFile">;
+type AssignmentScreenNavigationProp = StackNavigationProp<RootStackParamList, "AssignmentFile">;
 
 type Props = {
   route: AssignmentScreenRouteProp;
   navigation: AssignmentScreenNavigationProp;
 };
 
-const AssignmentScreen: React.FC<Props> = ({ route }) => {
+const AssignmentFileScreen: React.FC<Props> = ({ route }) => {
+    const { t } = useTranslation();
     const { ass_id } = route.params;
     const task: Task | undefined = tasks.find(t => t.id === ass_id);
     const [selectedFile, setSelectedFile] = useState<DocumentPicker.DocumentPickerAsset | ImagePicker.ImagePickerAsset | null>(null);
@@ -38,11 +40,10 @@ const AssignmentScreen: React.FC<Props> = ({ route }) => {
         }
     }, [])
 
-
     if (!task) {
         return (
         <View style={styles.centered}>
-            <Text>No assignment found.</Text>
+            <Text>{t("assignment.noAssignments")}</Text>
         </View>
         );
     }
@@ -116,25 +117,21 @@ const AssignmentScreen: React.FC<Props> = ({ route }) => {
         <View style={styles.row}>
             <Chip style={styles.tag}>{task.curriculumArea}</Chip>
             <Chip style={[styles.statusChip, task.status === Status.Completed ? styles.completed : styles.pending]}>
-            {task.status === Status.Completed ? "Completed ✅" : "Pending ⌛"}
+            {task.status === Status.Completed ? t("assignment.completed") : t("assignment.pending")}
             </Chip>
         </View>
 
         <Divider style={styles.divider} />
 
-        {/* Estimated Time & Deadline & Points */}
+        {/* Deadline & Points */}
         <View style={styles.infoRow}>
             <View style={styles.infoBox}>
-                <Text style={styles.infoLabel}>Estimated Time</Text>
-                <Text style={styles.infoValue}>{task.timeEstimated} min</Text>
+                <Text style={styles.infoLabel}>{t("assignment.deadline")}</Text>
+                <Text style={styles.infoValue}>{task.dueDate}</Text>
             </View>
             <View style={styles.infoBox}>
-            <Text style={styles.infoLabel}>Deadline</Text>
-            <Text style={styles.infoValue}>{task.dueDate}</Text>
-            </View>
-            <View style={styles.infoBox}>
-            <Text style={styles.infoLabel}>Dino Stars 🌟</Text>
-            <Text style={styles.infoValue}>{task.points}</Text>
+                <Text style={styles.infoLabel}>{t("assignment.dinoStar")} 🌟</Text>
+                <Text style={styles.infoValue}>{task.points}</Text>
             </View>
         </View>
 
@@ -142,7 +139,7 @@ const AssignmentScreen: React.FC<Props> = ({ route }) => {
 
         {/* Instructions */}
         <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Instructions 📝</Text>
+            <Text style={styles.sectionTitle}>{t("assignment.instructions")} 📝</Text>
             <Text style={styles.sectionText}>{task.instruction}</Text>
             {task.instructionVideo && (
             <Video
@@ -158,81 +155,78 @@ const AssignmentScreen: React.FC<Props> = ({ route }) => {
         <Card style={styles.attachmentCard} onPress={() => Linking.openURL(task.assignmentFile)}>
             <Card.Content style={styles.attachmentContent}>
             <MaterialIcons name="attach-file" size={28} color="green" />
-            <Text style={styles.attachmentText}>Click to Download Exercise</Text>
+            <Text style={styles.attachmentText}>{t("assignment.downloadExercise")}</Text>
             </Card.Content>
         </Card>
         )}
 
         {/* Submission */}
-        {!completed ? (
-            selectedFile === null ? (
-                !loading ? (
-                    <>
-                    {/* Select File Button */}
-                    <Button
-                        mode="contained"
-                        onPress={() => setPickerVisible(true)}
-                        style={styles.selectButton}
-                        contentStyle={{ paddingVertical: 5 }}
-                        icon="file-upload"
-                    >
-                        Select Submission File
-                    </Button>
-
-                    {/* Dialog to choose between browsing files and gallery */}
-                    <Portal>
-                        <Dialog visible={pickerVisible} onDismiss={() => setPickerVisible(false)}>
-                        <Dialog.Title style={styles.dialogTitle}>Choose File Source</Dialog.Title>
-                        <Dialog.Content style={styles.dialogContent}>
-                            <Button onPress={pickFromDocs} icon="file">Browse Files</Button>
-                            <Button onPress={pickFromGallery} icon="video-image">Browse Gallery</Button>
-                        </Dialog.Content>
-                        </Dialog>
-                    </Portal>
-                    </>
-                ) : (
-                    <View style={styles.section}>
-                        <LoadingAnimation text="Loading your file..." />
-                    </View>
-                )
-            ) : (
-                !loading ? (
-                <View style={styles.section}>
-                {/* Show selected file */}
-                <View style={styles.fileRow}>
-                    <MaterialIcons name="insert-drive-file" size={24} color="#555" />
-                    <Text style={styles.fileName}>{selectedFile?.name || selectedFile?.fileName}</Text>
-                    <Button icon="delete" onPress={removeFile} compact mode="text" color="red">
-                    Remove
-                    </Button>
-                </View>
-
-                {/* Confirm button */}
-                <Button
-                    mode="contained"
-                    onPress={confirmSubmission}
-                    style={styles.submitButton}
-                    contentStyle={{ paddingVertical: 5 }}
-                    icon="check"
-                >
-                    Submit
-                </Button>
-                </View>
-                ) : (
-                    // Loading Animation During Submission
-                    <View style={styles.section}>
-                        <LoadingAnimation text="Submitting your assignment..." />
-                    </View>
-                )
-            )
-        ): (
-            // Completion Section
-            <View style={styles.completionSection}>
-                <MaterialIcons name="check-circle" size={52} color="white" style={styles.icon} />
-                <Text style={styles.completionTitle}>Assignment Completed! 🎉</Text>
-                <Text style={styles.stars}>You got ⭐ 5 Dino Stars ⭐</Text>
-                <Text style={styles.feedback}>FEEDBACK</Text>
+        {completed ? (
+        // Completion State
+        <View style={styles.completionSection}>
+            <MaterialIcons name="check-circle" size={52} color="white" style={styles.icon} />
+            <Text style={styles.completionTitle}>{t("assignment.assignmentCompleted")} 🎉</Text>
+            <Text style={styles.stars}>You got ⭐ 5 Dino Stars ⭐</Text>
+            <Text style={styles.feedback}>FEEDBACK</Text>
+        </View>
+        ) : loading ? (
+        // Loading State
+        <View style={styles.section}>
+            <LoadingAnimation
+            text={
+                selectedFile ? t("assignment.submitLoading") : t("assignment.fileLoading")
+            }
+            />
+        </View>
+        ) : selectedFile ? (
+        // File Selected
+        <View style={styles.section}>
+            <View style={styles.fileRow}>
+            <MaterialIcons name="insert-drive-file" size={24} color="#555" />
+            <Text style={styles.fileName}>
+                {selectedFile?.name || selectedFile?.fileName}
+            </Text>
+            <Button icon="delete" onPress={removeFile} compact mode="text" color="red">
+            {t("assignment.remove")}
+            </Button>
             </View>
+            <Button
+            mode="contained"
+            onPress={confirmSubmission}
+            style={styles.submitButton}
+            contentStyle={{ paddingVertical: 5 }}
+            icon="check"
+            >
+            {t("assignment.submit")}
+            </Button>
+        </View>
+        ) : (
+        // No File Selected
+        <>
+            <Button
+            mode="contained"
+            onPress={() => setPickerVisible(true)}
+            style={styles.selectButton}
+            contentStyle={{ paddingVertical: 5 }}
+            icon="file-upload"
+            >
+            {t("assignment.selectFile")}
+            </Button>
+
+            <Portal>
+            <Dialog visible={pickerVisible} onDismiss={() => setPickerVisible(false)}>
+                <Dialog.Title style={styles.dialogTitle}>Choose File Source</Dialog.Title>
+                <Dialog.Content style={styles.dialogContent}>
+                <Button onPress={pickFromDocs} icon="file">
+                    {t("assignment.browseFiles")}
+                </Button>
+                <Button onPress={pickFromGallery} icon="video-image">
+                    {t("assignment.browseGallery")}
+                </Button>
+                </Dialog.Content>
+            </Dialog>
+            </Portal>
+        </>
         )}
     </ScrollView>
     );
@@ -444,7 +438,7 @@ const styles = StyleSheet.create({
         color: "white",
         textAlign: "center",
         opacity: 0.9,
-    },
+    }
 });
 
-export default AssignmentScreen;
+export default AssignmentFileScreen;

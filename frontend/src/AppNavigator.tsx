@@ -9,7 +9,8 @@ import DashboardScreen from "./screens/DashboardScreen";
 import TasksScreen from "./screens/TasksScreen";
 import LeaderboardScreen from "./screens/LeaderboardScreen";
 import ProfileScreen from "./screens/ProfileScreen";
-import AssignmentScreen from "./screens/AssignmentScreen";
+import AssignmentAudioScreen from "./screens/AssignmentAudioScreen";
+import AssignmentFileScreen from "./screens/AssignmentFileScreen";
 import "./localization/i18n";
 import { DefaultTheme, PaperProvider } from "react-native-paper";
 
@@ -17,7 +18,8 @@ export type RootStackParamList = {
   Main: undefined;
   Login: undefined;
   Signup: undefined;
-  Assignment: { ass_id: number };
+  AssignmentAudio: { ass_id: number };
+  AssignmentFile: { ass_id: number }
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -88,8 +90,14 @@ export default function AppNavigator() {
             </Stack.Screen>
 
             <Stack.Screen
-              name="Assignment"
-              component={AssignmentScreen}
+              name="AssignmentAudio"
+              component={AssignmentAudioScreen}
+              options={{ title: "Assignment Details" }}
+            />
+
+            <Stack.Screen
+              name="AssignmentFile"
+              component={AssignmentFileScreen}
               options={{ title: "Assignment Details" }}
             />
             </>

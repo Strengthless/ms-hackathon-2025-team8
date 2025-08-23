@@ -12,12 +12,16 @@ export enum Status {
   Completed = "completed",
 }
 
+export type Question = {
+    id: number,
+    questionText: string,
+}
+
 export type Task = {
     id: number,
     title: string,
     curriculumArea: CurriculumArea,
     dueDate: string,
-    timeEstimated: number,  // in minutes
     instruction: string,
     instructionVideo: string,
     assignmentFile: string,
