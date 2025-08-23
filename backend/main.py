@@ -6,7 +6,6 @@ from typing import Optional
 
 from db_init import initialize_database
 from supabase import create_client, Client
-# from db.database import get_all_records, insert_record, update_record, delete_record
 
 import torch
 from dotenv import load_dotenv
@@ -240,43 +239,6 @@ async def analyze(
         logger.exception("Unhandled error in /analyze", extra={"client_host": client_host})
         raise HTTPException(status_code=500, detail=f"Error processing audio: {str(e)}")
     
-
-@app.get("/records/{table_name}")
-async def fetch_records(table_name: str):
-    """Fetch all records from a table."""
-    try:
-        records = get_all_records(supabase_client, table_name)
-        return {"data": records}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-@app.post("/records/{table_name}")
-async def add_record(table_name: str, record: dict):
-    """Insert a record into a table."""
-    try:
-        result = insert_record(supabase_client, table_name, record)
-        return {"data": result}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-@app.put("/records/{table_name}/{record_id}")
-async def modify_record(table_name: str, record_id: int, record: dict):
-    """Update a record in a table."""
-    try:
-        result = update_record(supabase_client, table_name, record_id, record)
-        return {"data": result}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-@app.delete("/records/{table_name}/{record_id}")
-async def remove_record(table_name: str, record_id: int):
-    """Delete a record from a table."""
-    try:
-        result = delete_record(supabase_client, table_name, record_id)
-        return {"data": result}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
 # SUBMISSIONS
 @app.post("/submissions")
 async def create_submission(payload: Dict[str, Any] = Body(...)):
