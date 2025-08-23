@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { 
   View, 
   StyleSheet, 
@@ -57,6 +57,8 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(30)).current;
   const pulseAnim = useRef(new Animated.Value(1)).current;
+  const titleGlow = useRef(new Animated.Value(0)).current;
+  const [hoveredLesson, setHoveredLesson] = useState<number | null>(null);
 
   useEffect(() => {
     // Entrance animation
@@ -89,25 +91,41 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
         }),
       ])
     ).start();
+
+    // Title glow animation
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(titleGlow, {
+          toValue: 1,
+          duration: 2000,
+          useNativeDriver: false,
+        }),
+        Animated.timing(titleGlow, {
+          toValue: 0,
+          duration: 2000,
+          useNativeDriver: false,
+        }),
+      ])
+    ).start();
   }, []);
 
   const startPronunciation = (lesson: Lesson) => {
     if (lesson.status === 'locked') {
       Alert.alert(
-        '🔒 Practice Locked',
-        'Complete the previous letters first to unlock this adventure!',
-        [{ text: 'Got it! 🦖' }]
+        'Adventure Locked',
+        'Complete the previous lessons to unlock this adventure!',
+        [{ text: 'Got it!' }]
       );
       return;
     }
 
     Alert.alert(
-      `${lesson.dinoEmoji} ${lesson.title} Adventure!`,
-      `Ready to practice with your dino friend?`,
+      `${lesson.title} Adventure`,
+      `Ready to start your pronunciation practice?`,
       [
         { text: 'Not Ready', style: 'cancel' },
         { 
-          text: "Let's Go! 🚀", 
+          text: "Let's Go!", 
           onPress: () => {
             if (navigation) {
               // navigation.navigate('PronunciationPractice', { lesson });
@@ -119,65 +137,75 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
     );
   };
 
-  const getStatusStyle = (status: LessonStatus) => {
+  const getStatusStyle = (status: LessonStatus, isHovered: boolean = false) => {
+    let baseStyle;
+    
     switch (status) {
       case 'completed':
-        return styles.completed;
+        baseStyle = styles.completed;
+        break;
       case 'current':
-        return styles.current;
+        baseStyle = styles.current;
+        break;
       case 'locked':
-        return styles.locked;
+        baseStyle = styles.locked;
+        break;
       default:
-        return styles.locked;
+        baseStyle = styles.locked;
     }
+
+    return [
+      baseStyle,
+      isHovered && status !== 'locked' && styles.hovered
+    ];
   };
 
   const getLessonPosition = (index: number): { offsetX: number } => {
-    // Create a beautiful zigzag pattern
+    // Create a smoother zigzag pattern
+    const centerX = 0;
+    const leftOffset = -width * 0.12;
+    const rightOffset = width * 0.12;
+    
     const patterns = [
-      { offsetX: 0 },                    // Center
-      { offsetX: -width * 0.15 },        // Left
-      { offsetX: width * 0.15 },         // Right
-      { offsetX: -width * 0.1 },         // Slightly left
-      { offsetX: width * 0.1 },          // Slightly right
-      { offsetX: 0 },                    // Center (boss battle)
+      { offsetX: centerX },           // Center - A
+      { offsetX: leftOffset },        // Left - B  
+      { offsetX: rightOffset },       // Right - C
+      { offsetX: leftOffset * 0.7 },  // Slightly left - D
+      { offsetX: rightOffset * 0.7 }, // Slightly right - E
+      { offsetX: centerX },           // Center - Boss
     ];
     
     return patterns[index % patterns.length];
   };
 
-  const renderDottedPath = (index: number) => {
-    if (index === extendedLessons.length - 1) return null;
-    
-    const currentPos = getLessonPosition(index);
-    const nextPos = getLessonPosition(index + 1);
-    
-    const isGoingLeft = nextPos.offsetX < currentPos.offsetX;
-    const isGoingRight = nextPos.offsetX > currentPos.offsetX;
-    const isStraight = Math.abs(nextPos.offsetX - currentPos.offsetX) < 10;
-    
-    return (
-      <View style={styles.pathContainer}>
-        <View style={[
-          styles.dottedPath,
-          isStraight && styles.straightPath,
-          isGoingLeft && styles.leftCurve,
-          isGoingRight && styles.rightCurve,
-        ]}>
-          {/* Create dotted effect with small circles */}
-          {Array.from({ length: 8 }).map((_, i) => (
-            <View key={i} style={[
-              styles.pathDot,
-              { opacity: 0.3 + (i * 0.1) } // Fade effect
-            ]} />
-          ))}
-        </View>
-      </View>
-    );
-  };
-
   const renderLessonNode = (lesson: Lesson, index: number) => {
     const position = getLessonPosition(index);
+    const isHovered = hoveredLesson === lesson.id;
+    
+    // Create staggered entrance animation
+    const delayedFade = useRef(new Animated.Value(0)).current;
+    const bounceIn = useRef(new Animated.Value(0)).current;
+    
+    useEffect(() => {
+      const delay = index * 200; // Stagger each lesson
+      
+      Animated.sequence([
+        Animated.delay(delay),
+        Animated.parallel([
+          Animated.timing(delayedFade, {
+            toValue: 1,
+            duration: 600,
+            useNativeDriver: true,
+          }),
+          Animated.spring(bounceIn, {
+            toValue: 1,
+            tension: 50,
+            friction: 8,
+            useNativeDriver: true,
+          }),
+        ])
+      ]).start();
+    }, [delayedFade, bounceIn, index]);
     
     return (
       <Animated.View 
@@ -185,10 +213,16 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
         style={[
           styles.lessonContainer,
           {
-            opacity: fadeAnim,
+            opacity: Animated.multiply(fadeAnim, delayedFade),
             transform: [
               { translateY: slideAnim },
-              { translateX: position.offsetX }
+              { translateX: position.offsetX },
+              { 
+                scale: bounceIn.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [0.3, 1]
+                })
+              }
             ]
           }
         ]}
@@ -196,21 +230,24 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
         {/* Lesson Node */}
         <TouchableOpacity
           style={[
-            styles.lessonNode, 
-            getStatusStyle(lesson.status),
+            styles.lessonNode,
+            ...getStatusStyle(lesson.status, isHovered),
             lesson.status === 'current' && {
               transform: [{ scale: pulseAnim }]
-            }
+            },
+            isHovered && { transform: [{ scale: 1.05 }] }
           ]}
           onPress={() => startPronunciation(lesson)}
+          onPressIn={() => setHoveredLesson(lesson.id)}
+          onPressOut={() => setHoveredLesson(null)}
           activeOpacity={lesson.status === 'locked' ? 1 : 0.6}
         >
           <Text style={styles.dinoEmoji}>{lesson.dinoEmoji}</Text>
           
           {lesson.status === 'current' && (
-            <View style={styles.playButton}>
+            <Animated.View style={styles.playButton}>
               <MaterialCommunityIcons name="play" size={16} color="white" />
-            </View>
+            </Animated.View>
           )}
           
           {lesson.status === 'completed' && (
@@ -222,39 +259,84 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
           {lesson.title.includes('Boss') && (
             <View style={styles.bossGlow} />
           )}
+          
+          {/* Hover sparkle effect */}
+          {isHovered && lesson.status !== 'locked' && (
+            <View style={styles.hoverSparkles}>
+              <Text style={styles.sparkle}>✨</Text>
+            </View>
+          )}
         </TouchableOpacity>
         
         <View style={styles.lessonInfo}>
-          <Text style={styles.lessonTitle}>{lesson.title}</Text>
+          <Text style={[
+            styles.lessonTitle,
+            isHovered && lesson.status !== 'locked' && styles.titleHovered
+          ]}>
+            {lesson.title}
+          </Text>
           <Text style={styles.lessonSubtitle}>
-            {lesson.status === 'completed' ? '✨ Mastered!' : 
-             lesson.status === 'current' ? '🎯 Ready to Learn' : 
-             '🔒 Coming Soon'}
+            {lesson.status === 'completed' ? 'Mastered!' : 
+             lesson.status === 'current' ? 'Ready to Learn' : 
+             'Coming Soon'}
           </Text>
         </View>
 
-        {/* Dotted Path to next lesson */}
-        {renderDottedPath(index)}
+        {/* Connecting Path to next lesson */}
       </Animated.View>
     );
   };
 
-  const renderWeekHeader = (weekNum: number) => (
-    <Animated.View 
-      style={[
-        styles.weekHeader,
-        {
-          opacity: fadeAnim,
-          transform: [{ translateY: slideAnim }]
-        }
-      ]}
-    >
-      <Surface style={styles.weekBadge} elevation={4}>
-        <MaterialCommunityIcons name="calendar-star" size={20} color="white" />
-        <Text style={styles.weekText}>Week {weekNum}</Text>
-      </Surface>
-    </Animated.View>
-  );
+  const renderWeekHeader = (weekNum: number) => {
+    const weekFade = useRef(new Animated.Value(0)).current;
+    const weekSlide = useRef(new Animated.Value(-50)).current;
+    
+    useEffect(() => {
+      const weekDelay = weekNum * 300;
+      
+      Animated.sequence([
+        Animated.delay(weekDelay),
+        Animated.parallel([
+          Animated.timing(weekFade, {
+            toValue: 1,
+            duration: 800,
+            useNativeDriver: true,
+          }),
+          Animated.spring(weekSlide, {
+            toValue: 0,
+            tension: 60,
+            friction: 8,
+            useNativeDriver: true,
+          }),
+        ])
+      ]).start();
+    }, [weekFade, weekSlide, weekNum]);
+    
+    return (
+      <Animated.View 
+        style={[
+          styles.weekHeader,
+          {
+            opacity: Animated.multiply(fadeAnim, weekFade),
+            transform: [
+              { translateY: weekSlide },
+              { 
+                scale: weekFade.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [0.8, 1]
+                })
+              }
+            ]
+          }
+        ]}
+      >
+        <Surface style={styles.weekBadge} elevation={4}>
+          <MaterialCommunityIcons name="calendar-star" size={20} color="white" />
+          <Text style={styles.weekText}>Week {weekNum}</Text>
+        </Surface>
+      </Animated.View>
+    );
+  };
 
   return (
     <ScrollView 
@@ -269,7 +351,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
           <Card.Content style={styles.headerContent}>
             <TouchableOpacity 
               style={styles.mascot}
-              onPress={() => Alert.alert('🦖', 'Rawr! Ready for an adventure?')}
+              onPress={() => Alert.alert('DinoPhonics', 'Ready for an adventure?')}
             >
               <Text style={styles.mascotEmoji}>🦖</Text>
               <Text style={styles.mascotText}>DinoPhonics</Text>
@@ -291,16 +373,52 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
         </Card>
 
         {/* Adventure Overview */}
-        <Surface style={styles.adventureOverview} elevation={4}>
-          <Text style={styles.adventureTitle}>🌟 Your Learning Journey 🌟</Text>
-          <Text style={styles.adventureSubtitle}>
-            Practice letters with your dino friends on this magical adventure!
-          </Text>
-        </Surface>
+        <View style={styles.adventureOverview}>
+          <Text style={styles.adventureTitle}>Your Learning Journey</Text>
+        </View>
       </Animated.View>
 
       {/* Main Roadmap */}
       <View style={styles.roadmap}>
+        {/* Floating particles animation */}
+        <View style={styles.floatingParticles}>
+          <Animated.View 
+            style={[
+              styles.particle,
+              {
+                transform: [
+                  {
+                    translateY: titleGlow.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [0, -10]
+                    })
+                  }
+                ]
+              }
+            ]}
+          >
+            <Text style={styles.particleText}>✨</Text>
+          </Animated.View>
+          <Animated.View 
+            style={[
+              styles.particle,
+              styles.particle2,
+              {
+                transform: [
+                  {
+                    translateY: titleGlow.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [0, -8]
+                    })
+                  }
+                ]
+              }
+            ]}
+          >
+            <Text style={styles.particleText}>💫</Text>
+          </Animated.View>
+        </View>
+        
         {/* Week 1 Section */}
         {renderWeekHeader(1)}
         <View style={styles.weekSection}>
@@ -331,16 +449,10 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
             }
           ]}
         >
-          <Text style={styles.comingSoonEmoji}>🥚✨🦴✨🥚</Text>
-          <Text style={styles.comingSoonTitle}>More Dino Adventures Ahead!</Text>
+          <Text style={styles.comingSoonTitle}>More Adventures Ahead!</Text>
           <Text style={styles.comingSoonText}>
-            Keep practicing to unlock amazing new worlds with your dino friends! 🌎
+            Keep practicing to unlock new worlds with your dino friends!
           </Text>
-          <View style={styles.comingSoonBadges}>
-            <Text style={styles.futureBadge}>🏔️ Mountain Quest</Text>
-            <Text style={styles.futureBadge}>🌊 Ocean Adventure</Text>
-            <Text style={styles.futureBadge}>🌋 Volcano Challenge</Text>
-          </View>
         </Animated.View>
       </View>
 
@@ -401,31 +513,47 @@ const styles = StyleSheet.create({
   },
   adventureOverview: {
     margin: width * 0.04,
-    padding: width * 0.05,
-    borderRadius: width * 0.05,
-    backgroundColor: '#FFF3E0',
+    marginTop: width * 0.01,
+    marginBottom: width * 0.02, // Reduced space before Week 1
     alignItems: 'center',
   },
   adventureTitle: {
-    fontSize: width * 0.048,
-    fontWeight: 'bold',
-    color: '#E65100',
-    marginBottom: 8,
+    fontSize: width * 0.06,
+    fontWeight: '600',
+    color: '#2E7D32',
     textAlign: 'center',
-  },
-  adventureSubtitle: {
-    fontSize: width * 0.034,
-    color: '#BF360C',
-    textAlign: 'center',
-    lineHeight: 20,
+    letterSpacing: 0.5,
   },
   roadmap: {
     paddingTop: 20,
     alignItems: 'center',
+    position: 'relative',
+  },
+  floatingParticles: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 100,
+    zIndex: -1,
+  },
+  particle: {
+    position: 'absolute',
+    top: 20,
+    left: width * 0.2,
+  },
+  particle2: {
+    position: 'absolute',
+    top: 10,
+    left: width * 0.7,
+  },
+  particleText: {
+    fontSize: 20,
+    opacity: 0.6,
   },
   weekHeader: {
     alignItems: 'center',
-    marginVertical: 25,
+    marginVertical: 15, // Reduced vertical spacing
   },
   weekBadge: {
     backgroundColor: '#4CAF50',
@@ -447,7 +575,7 @@ const styles = StyleSheet.create({
   },
   lessonContainer: {
     alignItems: 'center',
-    marginVertical: 20,
+    marginVertical: 25, // Increased spacing for better path visibility
     position: 'relative',
   },
   lessonNode: {
@@ -465,11 +593,13 @@ const styles = StyleSheet.create({
   },
   completed: {
     backgroundColor: '#4CAF50',
+    opacity: 1,
     borderWidth: 3,
     borderColor: '#2E7D32',
   },
   current: {
     backgroundColor: '#FF9800',
+    opacity: 1,
     borderWidth: 4,
     borderColor: '#FF5722',
   },
@@ -478,6 +608,11 @@ const styles = StyleSheet.create({
     opacity: 0.7,
     borderWidth: 2,
     borderColor: '#9E9E9E',
+  },
+  hovered: {
+    elevation: 15,
+    shadowOpacity: 0.4,
+    shadowRadius: 15,
   },
   dinoEmoji: {
     fontSize: width * 0.09,
@@ -509,6 +644,19 @@ const styles = StyleSheet.create({
     opacity: 0.3,
     zIndex: -1,
   },
+  hoverSparkles: {
+    position: 'absolute',
+    top: -15,
+    left: -15,
+    right: -15,
+    bottom: -15,
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 10,
+  },
+  sparkle: {
+    fontSize: 16,
+  },
   lessonInfo: {
     alignItems: 'center',
     marginTop: 15,
@@ -521,41 +669,88 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 4,
   },
+  titleHovered: {
+    color: '#1B5E20',
+    fontSize: width * 0.04,
+  },
   lessonSubtitle: {
     fontSize: width * 0.03,
     color: '#666',
     textAlign: 'center',
     fontWeight: '500',
   },
-  pathContainer: {
+  roadContainer: {
     position: 'absolute',
-    bottom: -35,
-    alignItems: 'center',
-    width: width * 0.3,
-  },
-  dottedPath: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    height: 50,
-  },
-  straightPath: {
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: -1,
     alignItems: 'center',
   },
-  leftCurve: {
+  roadSegment1: {
+    position: 'absolute',
+    top: 40,
+    left: '50%',
+    width: 8,
+    height: 60,
+    backgroundColor: '#A5D6A7',
+    borderRadius: 4,
+    opacity: 0.6,
+  },
+  roadSegment2: {
+    position: 'absolute',
+    top: 90,
+    left: '30%',
+    width: 8,
+    height: 70,
+    backgroundColor: '#A5D6A7',
+    borderRadius: 4,
+    opacity: 0.6,
     transform: [{ rotate: '-20deg' }],
-    marginLeft: -20,
   },
-  rightCurve: {
-    transform: [{ rotate: '20deg' }],
-    marginRight: -20,
+  roadSegment3: {
+    position: 'absolute',
+    top: 150,
+    right: '25%',
+    width: 8,
+    height: 80,
+    backgroundColor: '#A5D6A7',
+    borderRadius: 4,
+    opacity: 0.6,
+    transform: [{ rotate: '25deg' }],
   },
-  pathDot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: '#66BB6A',
-    marginVertical: 2,
+  roadSegment4: {
+    position: 'absolute',
+    top: 220,
+    left: '35%',
+    width: 8,
+    height: 70,
+    backgroundColor: '#A5D6A7',
+    borderRadius: 4,
+    opacity: 0.6,
+    transform: [{ rotate: '-15deg' }],
+  },
+  roadSegment5: {
+    position: 'absolute',
+    top: 280,
+    right: '30%',
+    width: 8,
+    height: 75,
+    backgroundColor: '#A5D6A7',
+    borderRadius: 4,
+    opacity: 0.6,
+    transform: [{ rotate: '18deg' }],
+  },
+  roadSegment6: {
+    position: 'absolute',
+    top: 350,
+    left: '50%',
+    width: 8,
+    height: 60,
+    backgroundColor: '#A5D6A7',
+    borderRadius: 4,
+    opacity: 0.6,
   },
   comingSoon: {
     alignItems: 'center',
@@ -565,11 +760,6 @@ const styles = StyleSheet.create({
     borderRadius: width * 0.06,
     elevation: 4,
     marginHorizontal: width * 0.04,
-  },
-  comingSoonEmoji: {
-    fontSize: width * 0.12,
-    marginBottom: 15,
-    letterSpacing: 5,
   },
   comingSoonTitle: {
     fontSize: width * 0.048,
@@ -583,22 +773,6 @@ const styles = StyleSheet.create({
     color: '#7B1FA2',
     textAlign: 'center',
     lineHeight: 22,
-    marginBottom: 20,
-  },
-  comingSoonBadges: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    gap: 8,
-  },
-  futureBadge: {
-    backgroundColor: '#E1BEE7',
-    color: '#4A148C',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 15,
-    fontSize: width * 0.028,
-    fontWeight: '600',
   },
   bottomSpace: {
     height: 40,
