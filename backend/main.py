@@ -409,8 +409,7 @@ async def get_forum_posts_by_author(author: str = Query(...)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
-    from fastapi import Path, HTTPException
-from typing import Dict, Any
+
 
 @app.post("/posts/{post_id}/like")
 async def increment_post_likes(post_id: int = Path(...)) -> Dict[str, Any]:
@@ -429,6 +428,45 @@ async def increment_post_likes(post_id: int = Path(...)) -> Dict[str, Any]:
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
+@app.post("/comments")
+async def create_comment(payload: Dict[str, Any] = Body(...)):
+    """
+    Create a new comment.
+    Adds created_at as the current UTC timestamp.
+    Expected keys: author:text, post:int8 (post id), anonymous:bool, likes:int (optional)
+    """
+    try:
+        enriched = {
+            **payload,
+            "created_at": datetime.now(timezone.utc).isoformat()
+        }
+        res = (
+            supabase_client
+            .table("comments")
+            .insert(enriched)
+            .execute()
+        )
+        return {"data": res.data}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/comments")
+async def get_comments_by_post(post_id: int = Query(..., alias="post_id")):
+    """
+    Get comments for a given post id.
+    """
+    try:
+        res = (
+            supabase_client
+            .table("comments")
+            .select("*")
+            .eq("post", post_id)
+            .order("created_at", desc=False)
+            .execute()
+        )
+        return {"data": res.data}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
     import uvicorn
