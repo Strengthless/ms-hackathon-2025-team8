@@ -5,12 +5,13 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import LoginScreen from "./screens/LoginScreen";
 import SignupScreen from "./screens/SignupScreen";
-import HomeScreen from "./screens/HomeScreen"; 
+import DashboardScreen from "./screens/DashboardScreen";
 import TasksScreen from "./screens/TasksScreen";
 import LeaderboardScreen from "./screens/LeaderboardScreen";
-import ProfileScreen from "./screens/ProfileScreen";
+import ForumScreen from "./screens/ForumScreen";
 import "./localization/i18n";
-import { DefaultTheme, PaperProvider } from "react-native-paper";
+import HomeScreen from "./screens/HomeScreen";
+import StorybookScreen from "./components/StorybookScreen";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -22,14 +23,16 @@ function TabNavigator() {
         tabBarIcon: ({ focused, color, size }) => {
           let iconName: string;
 
-          if (route.name === "Home") {
-            iconName = focused ? "home" : "home-outline";
-          } else if (route.name === "Tasks") {
-            iconName = focused ? "format-list-checks" : "format-list-checkbox";
+          if (route.name === "Den") {
+            iconName = focused ? "paw" : "paw-outline";
+          } else if (route.name === "Quests") {
+            iconName = focused ? "treasure-chest" : "treasure-chest";
           } else if (route.name === "Leaderboard") {
             iconName = focused ? "trophy" : "trophy-outline";
-          } else if (route.name === "Profile") {
-            iconName = focused ? "account" : "account-outline";
+          } else if (route.name === "Forum") {
+            iconName = focused
+              ? "comment-multiple"
+              : "comment-multiple-outline";
           } else {
             iconName = "unknown";
           }
@@ -38,22 +41,18 @@ function TabNavigator() {
             <MaterialCommunityIcons name={iconName} size={size} color={color} />
           );
         },
-        tabBarActiveTintColor: "#6200EE",
-        tabBarInactiveTintColor: "gray",
+        tabBarActiveTintColor: "#519872", // main pastel green
+        tabBarInactiveTintColor: "#3E8E6E", // darker pastel green
         headerStyle: {
-          backgroundColor: "#6200EE",
+          backgroundColor: "#519872", // main pastel green header
         },
-        headerTintColor: "#fff",
+        headerTintColor: "#ffffff", // white text
       })}
     >
-      <Tab.Screen 
-        name="Home" 
-        component={HomeScreen} 
-        options={{ title: "DinoPhonics" }}
-      />
-      <Tab.Screen name="Tasks" component={TasksScreen} />
+      <Tab.Screen name="Den" component={DashboardScreen} />
+      <Tab.Screen name="Quests" component={HomeScreen} />
       <Tab.Screen name="Leaderboard" component={LeaderboardScreen} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen name="Forum" component={ForumScreen} />
     </Tab.Navigator>
   );
 }
@@ -61,40 +60,40 @@ function TabNavigator() {
 export default function AppNavigator() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  // Source of truth for our design theme
-  const theme = {
-    ...DefaultTheme,
-    // Specify custom property
-    myOwnProperty: true,
-    // Specify custom property in nested object
-    colors: {
-      ...DefaultTheme.colors,
-      myOwnColor: "#BADA55",
-    },
-  };
-
   return (
-    <PaperProvider theme={theme}>
-      <NavigationContainer>
-        <Stack.Navigator>
-          {isLoggedIn ? (
-            <Stack.Screen name="Main" options={{ headerShown: false }}>
-              {() => <TabNavigator />}
+    <NavigationContainer>
+      <Stack.Navigator>
+        {isLoggedIn ? (
+          <Stack.Screen name="Main" options={{ headerShown: false }}>
+            {() => <TabNavigator />}
+          </Stack.Screen>
+        ) : (
+          <>
+            <Stack.Screen name="Login" options={{ headerShown: false }}>
+              {() => <LoginScreen setIsLoggedIn={setIsLoggedIn} />}
             </Stack.Screen>
-          ) : (
-            <>
-              <Stack.Screen name="Login" options={{ headerShown: false }}>
-                {() => <LoginScreen setIsLoggedIn={setIsLoggedIn} />}
-              </Stack.Screen>
-              <Stack.Screen
-                name="Signup"
-                component={SignupScreen}
-                options={{ headerShown: false }}
-              />
-            </>
-          )}
-        </Stack.Navigator>
-      </NavigationContainer>
-    </PaperProvider>
+            <Stack.Screen
+              name="Signup"
+              component={SignupScreen}
+              options={{ headerShown: false }}
+            />
+          </>
+        )}
+        <Stack.Screen
+          name="Dino Library"
+          component={StorybookScreen}
+          options={{
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: "#519872", // Green color
+            },
+            headerTintColor: "#fff", // White text color
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+          }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
