@@ -1,3 +1,30 @@
+export enum CurriculumArea {
+  AR = "Alphabet Recognition",
+  SWR = "Sight Word Recognition",
+  V = "Vocabulary",
+  PR = "Point and Read",
+  PA = "Phonemic Awareness",
+}
+
+export enum Status {
+  NotStarted = "not-started",
+  InProgress = "in-progress",
+  Completed = "completed",
+}
+
+export type Task = {
+    id: number,
+    title: string,
+    curriculumArea: CurriculumArea,
+    dueDate: string,
+    timeEstimated: number,  // in minutes
+    instruction: string,
+    instructionVideo: string,
+    assignmentFile: string,
+    status: Status,
+    points: number,
+}
+
 export const users = [
   {
     id: 1,
@@ -13,29 +40,49 @@ export const tasks = [
   {
     id: 1,
     title: "Learn A to C Sounds",
+    curriculumArea: CurriculumArea.PA,
     dueDate: "2023-12-15",
-    status: "completed",
+    timeEstimated: 15,
+    instruction: "Practice the sounds of letters A, B, and C. Use the phonics app to listen and repeat.",
+    instructionVideo: "https://www.w3schools.com/html/mov_bbb.mp4",
+    assignmentFile: "https://example.com/assignment-a-to-c.pdf",
+    status: Status.Completed,
     points: 100,
   },
   {
     id: 2,
     title: "Practice D to F Words",
+    curriculumArea: CurriculumArea.V,
     dueDate: "2023-12-17",
-    status: "in-progress",
+    timeEstimated: 20,
+    instruction: "Find words starting with D, E, and F. Write them down and practice their sounds.",
+    instructionVideo: "https://www.w3schools.com/html/mov_bbb.mp4",
+    assignmentFile: "https://example.com/assignment-d-to-f.pdf",
+    status: Status.InProgress,
     points: 150,
   },
   {
     id: 3,
     title: "Master G to I Pronunciation",
+    curriculumArea: CurriculumArea.PA,
     dueDate: "2023-12-20",
-    status: "not-started",
+    timeEstimated: 15,
+    instruction: "Listen to the pronunciation of G, H, and I. Record yourself saying these letters and compare.",
+    instructionVideo: "https://www.w3schools.com/html/mov_bbb.mp4",
+    assignmentFile: "https://example.com/assignment-g-to-i.pdf",
+    status: Status.NotStarted,
     points: 200,
   },
   {
     id: 4,
     title: "J to L Sound Challenge",
+    curriculumArea: CurriculumArea.PA,
     dueDate: "2023-12-22",
-    status: "not-started",
+    timeEstimated: 10,
+    instruction: "Complete the sound challenge for letters J, K, and L. Use the phonics app to practice.",
+    instructionVideo: "https://www.w3schools.com/html/mov_bbb.mp4",
+    assignmentFile: "https://example.com/assignment-j-to-l.pdf",
+    status: Status.NotStarted,
     points: 250,
   },
 ];

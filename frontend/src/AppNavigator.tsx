@@ -9,10 +9,18 @@ import DashboardScreen from "./screens/DashboardScreen";
 import TasksScreen from "./screens/TasksScreen";
 import LeaderboardScreen from "./screens/LeaderboardScreen";
 import ProfileScreen from "./screens/ProfileScreen";
+import AssignmentScreen from "./screens/AssignmentScreen";
 import "./localization/i18n";
 import { DefaultTheme, PaperProvider } from "react-native-paper";
 
-const Stack = createStackNavigator();
+export type RootStackParamList = {
+  Main: undefined;
+  Login: undefined;
+  Signup: undefined;
+  Assignment: { ass_id: number };
+};
+
+const Stack = createStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator();
 
 function TabNavigator() {
@@ -74,14 +82,23 @@ export default function AppNavigator() {
       <NavigationContainer>
         <Stack.Navigator>
           {isLoggedIn ? (
+            <>
             <Stack.Screen name="Main" options={{ headerShown: false }}>
               {() => <TabNavigator />}
             </Stack.Screen>
+
+            <Stack.Screen
+              name="Assignment"
+              component={AssignmentScreen}
+              options={{ title: "Assignment Details" }}
+            />
+            </>
           ) : (
             <>
               <Stack.Screen name="Login" options={{ headerShown: false }}>
                 {() => <LoginScreen setIsLoggedIn={setIsLoggedIn} />}
               </Stack.Screen>
+
               <Stack.Screen
                 name="Signup"
                 component={SignupScreen}
