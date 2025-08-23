@@ -22,6 +22,7 @@ import {
   type LessonStatus,
   type Lesson 
 } from '../constants/mockData';
+import LessonPopup from '../components/LessonPopup'; // Import the popup component
 
 const { width } = Dimensions.get('window');
 
@@ -37,6 +38,10 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   const pulseAnim = useRef(new Animated.Value(1)).current;
   const titleGlow = useRef(new Animated.Value(0)).current;
   const [hoveredLesson, setHoveredLesson] = useState<number | null>(null);
+  
+  // Popup state
+  const [showPopup, setShowPopup] = useState(false);
+  const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
 
   useEffect(() => {
     // Entrance animation
@@ -86,6 +91,29 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
       ])
     ).start();
   }, [fadeAnim, slideAnim, pulseAnim, titleGlow]);
+
+  const handleLessonPress = (lesson: Lesson) => {
+    setSelectedLesson(lesson);
+    setShowPopup(true);
+  };
+
+  const handlePopupClose = () => {
+    setShowPopup(false);
+    setSelectedLesson(null);
+  };
+
+  const handleLearnMore = () => {
+    if (!selectedLesson) return;
+    
+    // Close popup first
+    setShowPopup(false);
+    
+    // Then handle the lesson start logic
+    startPronunciation(selectedLesson);
+    
+    // Reset selected lesson
+    setSelectedLesson(null);
+  };
 
   const startPronunciation = (lesson: Lesson) => {
     if (lesson.status === 'locked') {
@@ -232,7 +260,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
             },
             isHovered && { transform: [{ scale: 1.05 }] }
           ]}
-          onPress={() => startPronunciation(lesson)}
+          onPress={() => handleLessonPress(lesson)} // Updated to show popup
           onPressIn={() => setHoveredLesson(lesson.id)}
           onPressOut={() => setHoveredLesson(null)}
           activeOpacity={lesson.status === 'locked' ? 1 : 0.6}
@@ -298,78 +326,88 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   };
 
   return (
-    <ScrollView 
-      style={styles.container} 
-      showsVerticalScrollIndicator={false}
-      bounces={true}
-      contentContainerStyle={styles.scrollContent}
-    >
-      {/* Sticky Stats Bar */}
-      <View style={styles.stickyStatsBar}>
-        <Text style={styles.journeyText}>{t('home.learningJourney')}</Text>
-        
-        <View style={styles.statsRow}>
-          <View style={styles.statItem}>
-            <MaterialCommunityIcons name="fire" size={22} color="#FF5722" />
-            <Text style={styles.statNumber}>{user.streak}</Text>
-            <Text style={styles.statLabel}>{t('stats.dayStreak')}</Text>
-          </View>
-
-          <View style={styles.statItem}>
-            <MaterialCommunityIcons name="lightning-bolt" size={22} color="#FFC107" />
-            <Text style={styles.statNumber}>{user.score}</Text>
-            <Text style={styles.statLabel}>{t('stats.dinoEnergy')}</Text>
-          </View>
-        </View>
-      </View>
-
-      {/* Main Roadmap */}
-      <View style={styles.roadmap}>
-        {/* Week 1 Section */}
-        {renderWeekHeader(1)}
-        <View style={styles.weekSection}>
-          {localizedLessons.slice(0, 6).map((lesson, index) => (
-            <View key={lesson.id}>
-              {renderLessonNode(lesson, index)}
-              {/* Add footprint between lessons (except after the last one) */}
-              {index < 5 && renderFootprint(index)}
+    <>
+      <ScrollView 
+        style={styles.container} 
+        showsVerticalScrollIndicator={false}
+        bounces={true}
+        contentContainerStyle={styles.scrollContent}
+      >
+        {/* Sticky Stats Bar */}
+        <View style={styles.stickyStatsBar}>
+          <Text style={styles.journeyText}>{t('home.learningJourney')}</Text>
+          
+          <View style={styles.statsRow}>
+            <View style={styles.statItem}>
+              <MaterialCommunityIcons name="fire" size={22} color="#FF5722" />
+              <Text style={styles.statNumber}>{user.streak}</Text>
+              <Text style={styles.statLabel}>{t('stats.dayStreak')}</Text>
             </View>
-          ))}
-        </View>
-        
-        {/* Week 2 Section */}
-        {renderWeekHeader(2)}
-        <View style={styles.weekSection}>
-          {localizedLessons.slice(6, 12).map((lesson, index) => (
-            <View key={lesson.id}>
-              {renderLessonNode(lesson, index + 6)}
-              {/* Add footprint between lessons (except after the last one) */}
-              {index < 5 && renderFootprint(index + 6)}
-            </View>
-          ))}
-        </View>
-        
-        {/* Coming Soon Section */}
-        <Animated.View 
-          style={[
-            styles.comingSoon,
-            {
-              opacity: fadeAnim,
-              transform: [{ scale: fadeAnim }]
-            }
-          ]}
-        >
-          <Text variant="titleMedium" style={styles.comingSoonTitle}>
-            {t('home.moreAdventuresAhead')}
-          </Text>
-          <Text style={styles.comingSoonText}>
-            {t('home.keepPracticing')}
-          </Text>
-        </Animated.View>
-      </View>
 
-      <View style={styles.bottomSpace} />
-    </ScrollView>
+            <View style={styles.statItem}>
+              <MaterialCommunityIcons name="lightning-bolt" size={22} color="#FFC107" />
+              <Text style={styles.statNumber}>{user.score}</Text>
+              <Text style={styles.statLabel}>{t('stats.dinoEnergy')}</Text>
+            </View>
+          </View>
+        </View>
+
+        {/* Main Roadmap */}
+        <View style={styles.roadmap}>
+          {/* Week 1 Section */}
+          {renderWeekHeader(1)}
+          <View style={styles.weekSection}>
+            {localizedLessons.slice(0, 6).map((lesson, index) => (
+              <View key={lesson.id}>
+                {renderLessonNode(lesson, index)}
+                {/* Add footprint between lessons (except after the last one) */}
+                {index < 5 && renderFootprint(index)}
+              </View>
+            ))}
+          </View>
+          
+          {/* Week 2 Section */}
+          {renderWeekHeader(2)}
+          <View style={styles.weekSection}>
+            {localizedLessons.slice(6, 12).map((lesson, index) => (
+              <View key={lesson.id}>
+                {renderLessonNode(lesson, index + 6)}
+                {/* Add footprint between lessons (except after the last one) */}
+                {index < 5 && renderFootprint(index + 6)}
+              </View>
+            ))}
+          </View>
+          
+          {/* Coming Soon Section */}
+          <Animated.View 
+            style={[
+              styles.comingSoon,
+              {
+                opacity: fadeAnim,
+                transform: [{ scale: fadeAnim }]
+              }
+            ]}
+          >
+            <Text variant="titleMedium" style={styles.comingSoonTitle}>
+              {t('home.moreAdventuresAhead')}
+            </Text>
+            <Text style={styles.comingSoonText}>
+              {t('home.keepPracticing')}
+            </Text>
+          </Animated.View>
+        </View>
+
+        <View style={styles.bottomSpace} />
+      </ScrollView>
+
+      {/* Lesson Popup */}
+      <LessonPopup
+        visible={showPopup}
+        lesson={selectedLesson}
+        onClose={handlePopupClose}
+        onLearnMore={handleLearnMore}
+      />
+    </>
   );
 };
 

@@ -1,5 +1,3 @@
-// constants/mockData.ts
-
 export type LessonStatus = 'completed' | 'current' | 'locked';
 
 export interface User {

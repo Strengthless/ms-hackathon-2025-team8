@@ -44,5 +44,22 @@
       "cancelButton": "Not Ready",
       "confirmButton": "Let's Go!"
     }
+  },
+  "popup": {
+    "startAdventure": "Start Adventure!",
+    "summaries": {
+      "lessons.letterA": "Master the mighty 'A' sound! Learn how to make this amazing letter with perfect pronunciation.",
+      "lessons.letterB": "Bounce into the 'B' sound! Discover the lip-popping technique for perfect pronunciation.",
+      "lessons.letterC": "Catch the 'C' sound! Learn the crisp consonant that starts so many words.",
+      "lessons.letterD": "Dive into the 'D' sound! Master the tongue-tip technique for this dynamic letter.",
+      "lessons.letterE": "Explore the 'E' sound! Practice the essential vowel that appears everywhere.",
+      "lessons.letterF": "Feel the 'F' sound! Learn the fantastic fricative with lip-to-teeth contact.",
+      "lessons.letterG": "Get the 'G' sound! Master the great consonant with back-of-tongue placement.",
+      "lessons.letterH": "Hear the 'H' sound! Practice the heavenly breath sound that starts so many words.",
+      "lessons.letterI": "Investigate the 'I' sound! Learn the important vowel with its short and long forms.",
+      "lessons.letterJ": "Jump into the 'J' sound! Master the joyful consonant with tongue placement.",
+      "lessons.week1Boss": "Boss Challenge! Test all your Week 1 consonant and vowel skills in epic sound battles!",
+      "lessons.week2Boss": "Ultimate Boss Battle! Show mastery of all sounds learned in an exciting final challenge!"
+    }
   }
 }
