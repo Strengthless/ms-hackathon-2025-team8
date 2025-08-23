@@ -21,6 +21,7 @@ def _generate_fallback_feedback(pronunciation_score: float, overall_quality: str
         english = "💪 Don't give up!"
     
     return f"{chinese}\n\n{english}"
+
 class AIFeedbackGenerator:
     def __init__(self):
         """
