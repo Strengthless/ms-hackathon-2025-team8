@@ -467,6 +467,23 @@ async def get_comments_by_post(post_id: int = Query(..., alias="post_id")):
         return {"data": res.data}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+@app.post("/comments/{comment_id}/like")
+async def increment_comment_likes(comment_id: int = Path(...)) -> Dict[str, Any]:
+    """
+    Increment the 'likes' column by 1 for the specified comment via RPC.
+    Returns the updated row.
+    """
+    try:
+        rpc_res = supabase_client.rpc("increment_comment_likes", {"c_id": comment_id}).execute()
+        if not rpc_res.data:
+            # When the function doesn't update any row (e.g., id not found)
+            raise HTTPException(status_code=404, detail="Comment not found")
+        return {"data": rpc_res.data}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
     import uvicorn
