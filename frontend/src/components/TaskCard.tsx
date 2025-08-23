@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Card, Title, Paragraph, Badge } from 'react-native-paper';
-import { Status, Task } from "../constants/mockData";
+import { Status, AssignmentDetail } from "../constants/mockData";
 
 interface TaskCardProps {
-  task: Task;
+  task: AssignmentDetail;
   onClick: () => void;
 }
 

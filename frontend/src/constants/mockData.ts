@@ -17,7 +17,7 @@ export type Question = {
     questionText: string,
 }
 
-export type Task = {
+export type AssignmentDetail = {
     id: number,
     title: string,
     curriculumArea: CurriculumArea,

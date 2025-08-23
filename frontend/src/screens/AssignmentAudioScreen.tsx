@@ -8,7 +8,7 @@ import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
 
 import { RootStackParamList } from "../AppNavigator";
-import { tasks, Task, Status } from "../constants/mockData";
+import { tasks, AssignmentDetail, Status } from "../constants/mockData";
 
 type AssignmentScreenRouteProp = RouteProp<RootStackParamList, "AssignmentAudio">;
 type AssignmentScreenNavigationProp = StackNavigationProp<RootStackParamList, "AssignmentAudio">;
@@ -21,7 +21,7 @@ type Props = {
 const AssignmentAudioScreen: React.FC<Props> = ({ route }) => {
     const { t } = useTranslation();
     const { ass_id } = route.params;
-    const task: Task | undefined = tasks.find(t => t.id === ass_id);
+    const task: AssignmentDetail | undefined = tasks.find(t => t.id === ass_id);
     const [completed, setCompleted] = useState(false);
     const [recordedUri, setRecordedUri] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);

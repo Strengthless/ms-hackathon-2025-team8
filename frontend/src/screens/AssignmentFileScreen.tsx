@@ -10,7 +10,7 @@ import * as DocumentPicker from 'expo-document-picker';
 import * as ImagePicker from 'expo-image-picker';
 
 import { RootStackParamList } from "../AppNavigator";
-import { tasks, Task, Status } from "../constants/mockData";
+import { tasks, AssignmentDetail, Status } from "../constants/mockData";
 import LoadingAnimation from "../components/LoadingAnimation";
 
 type AssignmentScreenRouteProp = RouteProp<RootStackParamList, "AssignmentFile">;
@@ -24,7 +24,7 @@ type Props = {
 const AssignmentFileScreen: React.FC<Props> = ({ route }) => {
     const { t } = useTranslation();
     const { ass_id } = route.params;
-    const task: Task | undefined = tasks.find(t => t.id === ass_id);
+    const task: AssignmentDetail | undefined = tasks.find(t => t.id === ass_id);
     const [selectedFile, setSelectedFile] = useState<DocumentPicker.DocumentPickerAsset | ImagePicker.ImagePickerAsset | null>(null);
     const [pickerVisible, setPickerVisible] = useState(false);
     const [completed, setCompleted] = useState(false);
