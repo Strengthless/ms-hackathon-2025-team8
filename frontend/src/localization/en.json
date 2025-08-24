@@ -1,14 +1,37 @@
 {
-  "dashboard": {
-    "welcome": "Welcome back, {{username}}!",
-    "keepUp": "Keep up the great work learning phonics!",
-    "streak": "Day Streak",
-    "points": "Points",
-    "badges": "Your Badges",
-    "tip": "Tip of the Day"
-  },
   "login": {
-    "title": "Phonics Fun"
+    "name": "Dino Learn",
+    "growTogether": "Grow Together, Fly Together",
+    "tagline": "Learn, Play, Grow!",
+    "username": "Username",
+    "password": "Password",
+    "loginButton": "Login",
+    "signupPrompt": "Don't have an account? Sign up"
+  },
+  "dashboard": {
+    "welcome": "Welcome, {{username}}!",
+    "keepUpGreatWork": "Keep stomping forward on your learning adventure!",
+    "storyTime": "Dino Library",
+    "storySubtitle": "Explore roaring adventures through stories!",
+    "readStories": "Read Stories",
+    "dayStreak": "Day Streak",
+    "points": "Dino Energy",
+    "learningJourney": "Learning Journey",
+    "totalTime": "Total Time",
+    "withParent": "Eggs hatched",
+    "yourBadges": "Your Badges",
+    "calendarTitle": "2025 Stomping Streak",
+    "close": "Close"
+  },
+  "signup": {
+    "createAccount": "Create Account",
+    "joinAdventure": "Join the adventure!",
+    "tagline": "Learn, Play, Grow!",
+    "username": "Username",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "signUpButton": "Sign Up",
+    "alreadyHaveAccount": "Already have an account? Login"
   },
   "assignment": {
     "title": "Assignments",
@@ -67,7 +90,7 @@
     "readyMessage": "Ready for an adventure?"
   },
   "home": {
-    "learningJourney": "Your Learning Journey",
+    "learningJourney": "Your Stomping Journey",
     "moreAdventuresAhead": "More Adventures Ahead!",
     "keepPracticing": "Keep practicing to unlock new worlds with your dino friends!"
   },
@@ -86,6 +109,7 @@
   },
   "popup": {
     "startAdventure": "Start Adventure!",
+    "reviewAssignment": "Review Lesson",
     "summaries": {
       "lessons.letterA": "Master the mighty 'A' sound! Learn how to make this amazing letter with perfect pronunciation.",
       "lessons.letterB": "Bounce into the 'B' sound! Discover the lip-popping technique for perfect pronunciation.",
@@ -100,5 +124,32 @@
       "lessons.week1Boss": "Boss Challenge! Test all your Week 1 consonant and vowel skills in epic sound battles!",
       "lessons.week2Boss": "Ultimate Boss Battle! Show mastery of all sounds learned in an exciting final challenge!"
     }
+  },
+  "forum": {
+    "untitled": "Untitled",
+    "anonymousParent": "Anonymous Parent",
+    "privateLabel": "[Private]",
+    "privateHint": "Only you and the REACH can view this.",
+    "comment": "Comment",
+    "writeReply": "Write a reply...",
+    "reply": "Reply",
+    "tabPublic": "Public",
+    "tabPrivate": "Private",
+    "searchPlaceholder": "Search discussions...",
+    "createPublic": "Create Public Discussion",
+    "createPrivate": "Create Private Discussion",
+    "title": "Title",
+    "whatsOnMind": "What's on your mind?",
+    "newPublic": "New Public",
+    "newPrivate": "New Private"
+  },
+  "common": {
+    "cancel": "Cancel",
+    "post": "Post"
+  },
+  "leaderboard": {
+    "title": "Weekly Leaderboard",
+    "subtitle": "Top phonics learners this week",
+    "points": "{{count}} points"
   }
 }
