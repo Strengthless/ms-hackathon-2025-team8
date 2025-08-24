@@ -36,14 +36,15 @@ class AIFeedbackGenerator:
             raise ValueError("POE key is required. Set POE_API_KEY in .env file")
         
         self.base_url = "https://api.poe.com/v1"
-        self.model = "GPT-4o-mini"
+        self.model = "GPT-4o"
         
     def generate_feedback(self, 
                          pronunciation_score: float,
                          target_text: str,
                          transcribed_text: str,
                          word_comparisons: List[Dict],
-                         overall_quality: str) -> str:
+                         overall_quality: str,
+                         is_letter_correct_all_words: str) -> str:
         """
         Generate encouraging feedback for kids based on pronunciation results.
         
@@ -61,7 +62,7 @@ class AIFeedbackGenerator:
         # Prepare the prompt for the AI
         prompt = self._create_prompt(
             pronunciation_score, target_text, transcribed_text, 
-            word_comparisons, overall_quality
+            word_comparisons, overall_quality, is_letter_correct_all_words
         )
         print(f"AI Feedback Prompt: {prompt}")
         try:
@@ -80,7 +81,8 @@ class AIFeedbackGenerator:
                       target_text: str,
                       transcribed_text: str,
                       word_comparisons: List[Dict],
-                      overall_quality: str) -> str:
+                      overall_quality: str,
+                      is_letter_correct_all_words: str) -> str:
         """Create a prompt for the AI to generate feedback."""
        
         # Analyze word-level issues
@@ -129,6 +131,8 @@ Student's Performance:
 - Overall quality: {overall_quality}
 
 Phoneme Analysis:{phoneme_analysis}
+Letter by Letter correctness (1 is correct, 0 is wrong): {is_letter_correct_all_words}
+
 
 Guidelines:
 1. Use simple, friendly language suitable for primary school students
