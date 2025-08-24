@@ -35,7 +35,11 @@ const HomeScreen: React.FC<HomeScreenProps> = ({
 }) => {
   const { t } = useTranslation();
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-  const user = users[0];
+  const user = {
+    ...users[0],
+    streak: 7,
+    score: 850,
+  };
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(30)).current;
   const pulseAnim = useRef(new Animated.Value(1)).current;
@@ -438,7 +442,7 @@ const styles = StyleSheet.create({
     position: "sticky",
     top: 0,
     zIndex: 100,
-    backgroundColor: "#388E3C", // darker Dino green
+    backgroundColor: "#E8F5E9", // darker Dino green
     paddingHorizontal: width * 0.04,
     paddingVertical: width * 0.03,
     flexDirection: "column", // stack text and stats vertically
@@ -451,7 +455,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
   },
   journeyText: {
-    color: "white",
+    color: "#388E3C",
     fontSize: width * 0.04,
     fontWeight: "600",
     textAlign: "center", // center the text
@@ -473,12 +477,12 @@ const styles = StyleSheet.create({
     paddingBottom: 60,
   },
   statNumber: {
-    color: "white",
+    color: "#388E3C",
     fontSize: width * 0.032,
     fontWeight: "bold",
   },
   statLabel: {
-    color: "white",
+    color: "#388E3C",
     fontSize: width * 0.025,
     fontWeight: "500",
   },

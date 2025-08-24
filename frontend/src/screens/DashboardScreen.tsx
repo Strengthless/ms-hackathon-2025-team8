@@ -155,6 +155,16 @@ const DashboardScreen: React.FC = () => {
               "Keep up the great work learning phonics!"
             )}
           </Text>
+
+          {/* Scrapbook Button */}
+          <Button
+            mode="contained"
+            style={styles.scrapbookButton}
+            onPress={() => navigation.navigate("Scrapbook")}
+            icon="star"
+          >
+            {t("dashboard.viewScrapbook", "View Scrapbook")}
+          </Button>
         </View>
       </View>
 
@@ -402,6 +412,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   daySquare: { width: 10, height: 10, margin: 1, borderRadius: 2 },
+  scrapbookButton: {
+    marginTop: 12,
+    backgroundColor: "#43A047", // same green as Dino Library button
+  },
 });
 
 export default DashboardScreen;

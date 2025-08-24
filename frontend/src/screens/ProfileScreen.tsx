@@ -37,7 +37,7 @@ const ProfileScreen: React.FC = () => {
     {
       id: 1,
       week: 1,
-      title: "My First Learning Week",
+      title: "Week 1",
       storybooks: ["The Very Hungry Caterpillar", "Brown Bear, Brown Bear"],
       parentTime: "3 hours",
       learnings: [
@@ -49,7 +49,7 @@ const ProfileScreen: React.FC = () => {
     {
       id: 2,
       week: 2,
-      title: "Exploring Nature",
+      title: "Week 2",
       storybooks: ["The Tiny Seed", "The Grouchy Ladybug"],
       parentTime: "4 hours",
       learnings: [
@@ -61,7 +61,7 @@ const ProfileScreen: React.FC = () => {
     {
       id: 3,
       week: 3,
-      title: "Animal Adventures",
+      title: "Week 3",
       storybooks: ["Polar Bear, Polar Bear", "Panda Bear, Panda Bear"],
       parentTime: "5 hours",
       learnings: [
@@ -73,13 +73,61 @@ const ProfileScreen: React.FC = () => {
     {
       id: 4,
       week: 4,
-      title: "Fantasy Journey",
+      title: "Week 4",
       storybooks: ["Where the Wild Things Are", "Goodnight Moon"],
       parentTime: "6 hours",
       learnings: [
         "Used imagination to create stories",
         "Learned about day and night cycles",
         "Practiced measuring objects",
+      ],
+    },
+    {
+      id: 5,
+      week: 5,
+      title: "Week 5",
+      storybooks: ["Chicka Chicka Boom Boom", "Dr. Seuss’s ABC"],
+      parentTime: "3.5 hours",
+      learnings: [
+        "Recognized uppercase and lowercase letters",
+        "Matched letters with beginning sounds",
+        "Practiced tracing alphabet letters",
+      ],
+    },
+    {
+      id: 6,
+      week: 6,
+      title: "Week 6",
+      storybooks: ["I See", "We Play"],
+      parentTime: "4.5 hours",
+      learnings: [
+        "Read and recognized first 10 sight words (I, see, a, the, we, like, and, go, to, play)",
+        "Played memory games with sight words",
+        "Pointed and read sight words in short sentences",
+      ],
+    },
+    {
+      id: 7,
+      week: 7,
+      title: "Week 7",
+      storybooks: ["First 100 Words", "My Big Animal Book"],
+      parentTime: "5 hours",
+      learnings: [
+        "Learned new words for everyday objects",
+        "Sorted words into groups (food, animals, toys)",
+        "Practiced saying new words with actions",
+      ],
+    },
+    {
+      id: 8,
+      week: 8,
+      title: "Week 8",
+      storybooks: ["Rhyming Dust Bunnies", "Hop on Pop"],
+      parentTime: "6 hours",
+      learnings: [
+        "Clapped out syllables in words",
+        "Practiced rhyming word families (cat, bat, hat)",
+        "Listened and identified beginning sounds in words",
       ],
     },
   ];
@@ -354,7 +402,7 @@ const ProfileScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#e6f4ea",
+    backgroundColor: "#e6f4ea", // very light pastel blue
     alignItems: "center",
     padding: 20,
     paddingTop: 50,
@@ -362,7 +410,7 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#2e7d32",
+    color: "#5A86B9", // muted darker pastel blue
     marginBottom: 20,
     textAlign: "center",
   },
@@ -371,7 +419,7 @@ const styles = StyleSheet.create({
     height: SCREEN_WIDTH * 0.85 * 1.2,
     alignItems: "center",
     justifyContent: "center",
-    shadowColor: "#a5d6a7",
+    shadowColor: "#CFE8FF", // soft pastel shadow
     shadowOffset: { width: 0, height: 10 },
     shadowOpacity: 0.3,
     shadowRadius: 15,
@@ -381,7 +429,7 @@ const styles = StyleSheet.create({
   bookBackground: {
     width: "100%",
     height: "100%",
-    backgroundColor: "#a5d6a7",
+    backgroundColor: "#B0D4FF", // pastel blue
     borderRadius: 15,
     flexDirection: "row",
     overflow: "hidden",
@@ -390,7 +438,7 @@ const styles = StyleSheet.create({
   bookBinding: {
     width: 12,
     height: "100%",
-    backgroundColor: "#81c784",
+    backgroundColor: "#5A86B9", // muted darker pastel blue
     position: "absolute",
     left: "50%",
     marginLeft: -6,
@@ -405,17 +453,17 @@ const styles = StyleSheet.create({
   },
   leftPage: {
     borderRightWidth: 1,
-    borderRightColor: "#c8e6c9",
+    borderRightColor: "#CFE8FF",
     borderTopLeftRadius: 12,
     borderBottomLeftRadius: 12,
-    backgroundColor: "#f1f8f2",
+    backgroundColor: "#F5FAFF", // very soft pastel for page
   },
   rightPage: {
     borderLeftWidth: 1,
-    borderLeftColor: "#c8e6c9",
+    borderLeftColor: "#CFE8FF",
     borderTopRightRadius: 12,
     borderBottomRightRadius: 12,
-    backgroundColor: "#f1f8f2",
+    backgroundColor: "#F5FAFF",
   },
   pageContent: { flex: 1 },
   pageTitle: {
@@ -423,24 +471,24 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     marginBottom: 15,
-    color: "#2e7d32",
+    color: "#5A86B9", // darker pastel
   },
   section: { marginBottom: 15 },
   sectionTitle: {
     fontSize: 14,
     fontWeight: "bold",
-    color: "#388e3c",
+    color: "#3B5C7E", // softer blue for section headings
     marginBottom: 5,
   },
-  listText: { fontSize: 13, color: "#33691e", lineHeight: 18 },
+  listText: { fontSize: 13, color: "#3B5C7E", lineHeight: 18 },
   blankPage: {
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#e6f4ea",
+    backgroundColor: "#EAF6FF",
   },
   blankPageText: {
     fontSize: 16,
-    color: "#81c784",
+    color: "#5A86B9",
     fontStyle: "italic",
     textAlign: "center",
     fontWeight: "bold",
@@ -454,16 +502,16 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   navButton: {
-    backgroundColor: "#c8e6c9",
+    backgroundColor: "#CFE8FF", // pastel button
     paddingHorizontal: 15,
     paddingVertical: 10,
     borderRadius: 20,
     minWidth: 100,
     alignItems: "center",
   },
-  disabledButton: { backgroundColor: "#e0e0e0" },
-  navButtonText: { color: "#2e7d32", fontWeight: "bold", fontSize: 14 },
-  pageIndicator: { fontSize: 16, fontWeight: "bold", color: "#2e7d32" },
+  disabledButton: { backgroundColor: "#E0E0E0" },
+  navButtonText: { color: "#3B5C7E", fontWeight: "bold", fontSize: 14 },
+  pageIndicator: { fontSize: 16, fontWeight: "bold", color: "#5A86B9" },
 });
 
 export default ProfileScreen;

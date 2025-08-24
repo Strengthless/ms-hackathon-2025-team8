@@ -155,8 +155,8 @@
     "post": "Post"
   },
   "leaderboard": {
-    "title": "Weekly Leaderboard",
-    "subtitle": "Top phonics learners this week",
+    "title": "Leaderboard",
+    "subtitle": "Top learners this week",
     "points": "{{count}} points"
   },
   "instructions": {

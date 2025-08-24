@@ -36,10 +36,10 @@ function TabNavigator() {
         tabBarIcon: ({ focused, color, size }) => {
           let iconName: string;
 
-          if (route.name === "Den") {
+          if (route.name === "Profile") {
             iconName = focused ? "paw" : "paw-outline";
-          } else if (route.name === "Nest") {
-            iconName = focused ? "egg" : "egg-outline";
+          } else if (route.name === "Quest") {
+            iconName = focused ? "map-marker" : "map-marker-outline";
           } else if (route.name === "Leaderboard") {
             iconName = focused ? "trophy" : "trophy-outline";
           } else if (route.name === "Forum") {
@@ -64,15 +64,10 @@ function TabNavigator() {
         headerTintColor: "#ffffff", // white text
       })}
     >
-      <Tab.Screen name="Den" component={DashboardScreen} />
-      <Tab.Screen name="Nest" component={HomeScreen} />
+      <Tab.Screen name="Quest" component={HomeScreen} />
       <Tab.Screen name="Leaderboard" component={LeaderboardScreen} />
       <Tab.Screen name="Forum" component={ForumScreen} />
-      <Tab.Screen
-        name="Profile"
-        component={ProfileScreen}
-        options={{ title: "Profile" }}
-      />
+      <Tab.Screen name="Profile" component={DashboardScreen} />
     </Tab.Navigator>
   );
 }
@@ -106,7 +101,7 @@ export default function AppNavigator() {
                 options={{
                   title: "Assignment Details",
                   headerStyle: {
-                    backgroundColor: "#519872", // Using code 2's green
+                    backgroundColor: "#519872",
                   },
                   headerTintColor: "#fff",
                 }}
@@ -117,7 +112,7 @@ export default function AppNavigator() {
                 options={{
                   title: "Assignment Details",
                   headerStyle: {
-                    backgroundColor: "#519872", // Using code 2's green
+                    backgroundColor: "#519872",
                   },
                   headerTintColor: "#fff",
                 }}
@@ -128,9 +123,24 @@ export default function AppNavigator() {
                 options={{
                   headerShown: true,
                   headerStyle: {
-                    backgroundColor: "#519872", // Green color
+                    backgroundColor: "#519872",
                   },
-                  headerTintColor: "#fff", // White text color
+                  headerTintColor: "#fff",
+                  headerTitleStyle: {
+                    fontWeight: "bold",
+                  },
+                }}
+              />
+              {/* 👇 Added this for your scrapbook button */}
+              <Stack.Screen
+                name="Scrapbook"
+                component={ProfileScreen}
+                options={{
+                  title: "Scrapbook",
+                  headerStyle: {
+                    backgroundColor: "#519872",
+                  },
+                  headerTintColor: "#fff",
                   headerTitleStyle: {
                     fontWeight: "bold",
                   },

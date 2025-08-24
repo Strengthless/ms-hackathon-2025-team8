@@ -40,127 +40,132 @@ interface StoryPage {
 const stories: Story[] = [
   {
     id: "1",
-    title: "The Little Dinosaur",
+    title: "The Little Elephant and Mama",
     author: "Emily Johnson",
     readingTime: 5,
     difficulty: "easy",
-    question: "What lesson did Dino teach you about friendship?",
+    question:
+      "What is one thing you enjoy doing with your parent that makes you feel safe?",
     coverColor: "#8ECAE6",
     pages: [
       {
         pageNumber: 1,
-        text: "Once upon a time, in a land before time, there lived a little dinosaur named Dino.",
+        text: "In the wide savanna, a little elephant named Niko walked closely beside his mother.",
       },
       {
         pageNumber: 2,
-        text: "Dino loved to explore the forest. He would chase butterflies and play in the streams.",
+        text: "Whenever Niko felt scared, Mama would wrap her long trunk around him, reminding him he was never alone.",
       },
       {
         pageNumber: 3,
-        text: "One day, Dino found a mysterious egg. It was different from any egg he had seen before.",
+        text: "One stormy night, Niko realized that as long as Mama was near, he could be brave too.",
       },
     ],
   },
   {
     id: "2",
-    title: "Adventure in Alphabet Land",
+    title: "The Bear Family’s Picnic",
     author: "Michael Chen",
     readingTime: 5,
     difficulty: "medium",
-    question: "Which letter adventure did you enjoy the most and why?",
+    question:
+      "If you and your parent planned a picnic, what food would you both want to bring?",
     coverColor: "#FFB4A2",
     pages: [
       {
         pageNumber: 1,
-        text: "Alex the Adventurer woke up to find a magical map on his doorstep.",
+        text: "Deep in the forest, the Bear family packed a basket full of berries, honey, and warm bread.",
       },
       {
         pageNumber: 2,
-        text: "The map showed a path through Alphabet Land, where each letter had its own kingdom.",
+        text: "Little Bella Bear helped carry the basket, and her father carried her on his shoulders when she got tired.",
       },
       {
         pageNumber: 3,
-        text: "Alex packed his bag with supplies and set off on his grand adventure.",
+        text: "Together, they laughed, shared food, and enjoyed being a family under the tall trees.",
       },
     ],
   },
   {
     id: "3",
-    title: "The Secret Garden",
+    title: "The Garden We Grew",
     author: "Sarah Williams",
     readingTime: 5,
     difficulty: "hard",
-    question: "What would you plant in your own secret garden?",
+    question:
+      "What would you like to grow in a garden together with your parent?",
     coverColor: "#83C5BE",
     pages: [
       {
         pageNumber: 1,
-        text: "Lily discovered the old iron key while exploring her grandmother's attic.",
+        text: "Lila and her father found a small patch of land behind their house and decided to make it into a garden.",
       },
       {
         pageNumber: 2,
-        text: "The key felt cold and heavy in her hand, with intricate patterns along its bow.",
+        text: "They planted seeds, watered them every day, and pulled out weeds together.",
       },
       {
         pageNumber: 3,
-        text: "That night, under the light of a full moon, Lily found the hidden door in the garden wall.",
+        text: "Soon, bright flowers and tasty vegetables grew, just like their bond that grew stronger each day.",
       },
     ],
   },
   {
     id: "4",
-    title: "Space Explorers",
+    title: "Reaching the Stars Together",
     author: "Carlos Rodriguez",
     readingTime: 5,
     difficulty: "medium",
-    question: "What planet would you most like to visit and why?",
+    question:
+      "If you and your parent could travel anywhere in space, where would you go?",
     coverColor: "#FFD166",
     pages: [
       {
         pageNumber: 1,
-        text: "Zoe and Max built a spaceship from cardboard boxes and their imagination.",
+        text: "Sami built a cardboard rocket, and his mother joined him on the living room floor for the countdown.",
       },
       {
         pageNumber: 2,
-        text: "With a countdown from ten, their spaceship launched into the starry night.",
+        text: "Together, they imagined flying past the moon, holding hands as they reached for the stars.",
       },
     ],
   },
   {
     id: "5",
-    title: "The Friendly Monster",
+    title: "The Nighttime Story",
     author: "Jamie Smith",
     readingTime: 5,
     difficulty: "easy",
-    question: "Have you ever made friends with someone who seemed different?",
+    question: "What bedtime story do you enjoy most with your parent, and why?",
     coverColor: "#9C89B8",
     pages: [
       {
         pageNumber: 1,
-        text: "In a cozy village at the edge of a dark forest, lived a monster named Milo.",
+        text: "Every night, little fox Milo curled up beside his mom as she told him magical stories of forests and skies.",
       },
       {
         pageNumber: 2,
-        text: "Milo was very friendly, but everyone was afraid of him because he looked different.",
+        text: "Milo’s favorite part wasn’t the stories themselves—it was being close to his mother before sleep.",
       },
     ],
   },
   {
     id: "6",
-    title: "Ocean Discovery",
+    title: "Under the Sea with Dad",
     author: "Lisa Johnson",
     readingTime: 5,
     difficulty: "medium",
-    question: "What sea creature would you like to be and why?",
+    question:
+      "What is one fun adventure you would like to go on with your parent?",
     coverColor: "#48BFE3",
     pages: [
       {
         pageNumber: 1,
-        text: "Sofia received a special snorkel for her birthday that allowed her to breathe underwater.",
+        text: "Tara and her dad put on their snorkels and splashed into the ocean together.",
       },
       {
         pageNumber: 2,
-        text: "She dove into the ocean and discovered a colorful world of coral and amazing sea creatures.",
+        text: "They discovered colorful fish, playful dolphins, and held hands whenever the waves grew strong.",
       },
     ],
   },
