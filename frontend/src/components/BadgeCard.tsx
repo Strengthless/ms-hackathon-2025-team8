@@ -1,7 +1,7 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
 import { Card, Title, Avatar } from "react-native-paper";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Badge } from "../constants/mockData";
 
 type BadgeCardProps = {
   badge: Badge;

@@ -12,13 +12,17 @@ import {
 import { TextInput, Button, Text } from "react-native-paper";
 import { useTranslation } from "react-i18next";
 
-const LoginScreen = ({ setIsLoggedIn }) => {
+interface LoginScreenProps {
+  setIsLoggedIn: (isLoggedIn: boolean) => void;
+}
+
+const LoginScreen = ({ setIsLoggedIn }: LoginScreenProps) => {
   const { t, i18n } = useTranslation();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
 
   const handleLogin = () => {
     if (username && password) {

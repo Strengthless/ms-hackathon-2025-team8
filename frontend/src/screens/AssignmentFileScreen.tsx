@@ -111,7 +111,7 @@ const AssignmentFileScreen: React.FC<Props> = ({ route }) => {
         {/* Tags & Status */}
         <View style={styles.row}>
             <Chip style={styles.tag}>{t("curriculumArea." + task.curriculumArea)}</Chip>
-            <Chip style={[styles.statusChip, task.status === Status.Completed ? styles.completed : styles.pending]}>
+            <Chip style={[styles.statusChip as any, task.status === Status.Completed ? styles.completed : styles.pending]}>
             {task.status === Status.Completed ? t("assignment.completed") : t("assignment.pending")}
             </Chip>
         </View>
@@ -179,7 +179,7 @@ const AssignmentFileScreen: React.FC<Props> = ({ route }) => {
             <View style={styles.fileRow}>
             <MaterialIcons name="insert-drive-file" size={24} color="#555" />
             <Text style={styles.fileName}>
-                {selectedFile?.name || selectedFile?.fileName}
+                {(selectedFile as any)?.name || (selectedFile as any)?.fileName}
             </Text>
             <Button icon="delete" onPress={removeFile} compact mode="text" color="red">
             {t("assignment.remove")}

@@ -42,7 +42,15 @@ const AssignmentAudioScreen: React.FC<Props> = ({ route }) => {
 
     useEffect(() => {
         setCurrentQuestion(task.questions?.find(q => q.id === currentId))
-    }, [currentId]);
+    }, [currentId, task.questions]);
+
+    useEffect(() => {
+        return sound
+          ? () => {
+              sound.unloadAsync();
+            }
+          : undefined;
+    }, [sound]);
 
     if (!task) {
         return (
@@ -143,14 +151,6 @@ const AssignmentAudioScreen: React.FC<Props> = ({ route }) => {
         }
     };
 
-    useEffect(() => {
-        return sound
-          ? () => {
-              sound.unloadAsync();
-            }
-          : undefined;
-    }, [sound]);
-
     const submitAnswer = async () => {
         setIsSubmitting(true);
         await analyzeRecording();
@@ -180,7 +180,7 @@ const AssignmentAudioScreen: React.FC<Props> = ({ route }) => {
         {/* Tags & Status */}
         <View style={styles.row}>
             <Chip style={styles.tag}>{t("curriculumArea." + task.curriculumArea)}</Chip>
-            <Chip style={[styles.statusChip, task.status === Status.Completed ? styles.completed : styles.pending]}>
+            <Chip style={[styles.statusChip as any, task.status === Status.Completed ? styles.completed : styles.pending]}>
             {task.status === Status.Completed ? t("assignment.completed") : t("assignment.pending")}
             </Chip>
         </View>
@@ -230,14 +230,14 @@ const AssignmentAudioScreen: React.FC<Props> = ({ route }) => {
                 onPress={recording ? stopRecording : startRecording}
                 >
                 <Ionicons
-                    name={recordedUri ? "mic-circle" : recording ? "stop-circle" : "mic-circle"}
+                    name={recordedUri ? "mic-circle" : isRecording ? "stop-circle" : "mic-circle"}
                     size={70}
-                    color={recordedUri ? "orange" : recording ? "red" : "#4CAF50"}
+                    color={recordedUri ? "orange" : isRecording ? "red" : "#4CAF50"}
                 />
                 <Text style={styles.btnText}>
                     {recordedUri
                     ? t("assignment.rerecord")
-                    : recording
+                    : isRecording
                     ? t("assignment.stopRecording")
                     : t("assignment.record")}
                 </Text>
