@@ -201,7 +201,8 @@ async def analyze(
                         target_text=result["target_text"],
                         transcribed_text=result["recording_transcript"],
                         word_comparisons=word_comparisons,
-                        overall_quality=overall_quality
+                        overall_quality=overall_quality,
+                        is_letter_correct_all_words=is_letter_correct_all_words.strip()
                     )
                     logger.info("AI feedback generated")
                 else:
@@ -216,7 +217,9 @@ async def analyze(
                     pronunciation_score=float(result["pronunciation_accuracy"]),
                     overall_quality=overall_quality
                 )
-            
+                
+            if result["pronunciation_accuracy"] < 0:
+                result["pronunciation_accuracy"] = 0
             # Prepare response
             response = {
                 "success": True,

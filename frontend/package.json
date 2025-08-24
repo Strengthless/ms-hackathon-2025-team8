@@ -35,6 +35,7 @@
     "expo-video": "~2.2.2",
     "expo-web-browser": "~14.2.0",
     "i18next": "^25.4.0",
+    "mime": "^4.0.7",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-i18next": "^15.7.1",
