@@ -2,9 +2,15 @@ import React from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
 import { Title, FAB } from "react-native-paper";
 import TaskCard from "../components/TaskCard";
-import { tasks } from "../constants/mockData";
+import { CurriculumArea, tasks } from "../constants/mockData";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../AppNavigator"
 
-const TasksScreen = () => {
+type MainScreenProps = {
+  navigation: StackNavigationProp<RootStackParamList, "Main">;
+};
+
+const TasksScreen: React.FC<MainScreenProps> = ({navigation}) => {
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -13,7 +19,14 @@ const TasksScreen = () => {
         </View>
 
         {tasks.map((task) => (
-          <TaskCard key={task.id} task={task} />
+          <TaskCard key={task.id} task={task} onClick={() => {
+            if (task.curriculumArea === CurriculumArea.AR || task.curriculumArea === CurriculumArea.SWR || task.curriculumArea === CurriculumArea.PR) {
+              navigation.navigate("AssignmentFile", { ass_id: task.id })
+            } else {
+              navigation.navigate("AssignmentAudio", { ass_id: task.id })
+            }
+          }}
+           />
         ))}
       </ScrollView>
 

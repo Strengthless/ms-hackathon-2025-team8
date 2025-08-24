@@ -6,13 +6,22 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import LoginScreen from "./screens/LoginScreen";
 import SignupScreen from "./screens/SignupScreen";
 import HomeScreen from "./screens/HomeScreen"; 
-import TasksScreen from "./screens/TasksScreen";
 import LeaderboardScreen from "./screens/LeaderboardScreen";
 import ProfileScreen from "./screens/ProfileScreen";
+import AssignmentAudioScreen from "./screens/AssignmentAudioScreen";
+import AssignmentFileScreen from "./screens/AssignmentFileScreen";
 import "./localization/i18n";
 import { DefaultTheme, PaperProvider } from "react-native-paper";
 
-const Stack = createStackNavigator();
+export type RootStackParamList = {
+  Main: undefined;
+  Login: undefined;
+  Signup: undefined;
+  AssignmentAudio: { ass_id: number };
+  AssignmentFile: { ass_id: number };
+};
+
+const Stack = createStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator();
 
 function TabNavigator() {
@@ -31,7 +40,7 @@ function TabNavigator() {
           } else if (route.name === "Profile") {
             iconName = focused ? "account" : "account-outline";
           } else {
-            iconName = "unknown";
+            iconName = "help-circle-outline";
           }
 
           return (
@@ -51,22 +60,31 @@ function TabNavigator() {
         component={HomeScreen} 
         options={{ title: "DinoPhonics" }}
       />
-      <Tab.Screen name="Tasks" component={TasksScreen} />
-      <Tab.Screen name="Leaderboard" component={LeaderboardScreen} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen 
+        name="Tasks" 
+        component={HomeScreen}
+        options={{ title: "Tasks" }}
+      />
+      <Tab.Screen 
+        name="Leaderboard" 
+        component={LeaderboardScreen}
+        options={{ title: "Leaderboard" }}
+      />
+      <Tab.Screen 
+        name="Profile" 
+        component={ProfileScreen}
+        options={{ title: "Profile" }}
+      />
     </Tab.Navigator>
   );
 }
 
 export default function AppNavigator() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true); // Set to true for testing
 
-  // Source of truth for our design theme
   const theme = {
     ...DefaultTheme,
-    // Specify custom property
     myOwnProperty: true,
-    // Specify custom property in nested object
     colors: {
       ...DefaultTheme.colors,
       myOwnColor: "#BADA55",
@@ -78,12 +96,41 @@ export default function AppNavigator() {
       <NavigationContainer>
         <Stack.Navigator>
           {isLoggedIn ? (
-            <Stack.Screen name="Main" options={{ headerShown: false }}>
-              {() => <TabNavigator />}
-            </Stack.Screen>
+            <React.Fragment>
+              <Stack.Screen 
+                name="Main" 
+                component={TabNavigator}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="AssignmentAudio"
+                component={AssignmentAudioScreen}
+                options={{ 
+                  title: "Assignment Details",
+                  headerStyle: {
+                    backgroundColor: "#6200EE",
+                  },
+                  headerTintColor: "#fff",
+                }}
+              />
+              <Stack.Screen
+                name="AssignmentFile"
+                component={AssignmentFileScreen}
+                options={{ 
+                  title: "Assignment Details",
+                  headerStyle: {
+                    backgroundColor: "#6200EE",
+                  },
+                  headerTintColor: "#fff",
+                }}
+              />
+            </React.Fragment>
           ) : (
-            <>
-              <Stack.Screen name="Login" options={{ headerShown: false }}>
+            <React.Fragment>
+              <Stack.Screen 
+                name="Login"
+                options={{ headerShown: false }}
+              >
                 {() => <LoginScreen setIsLoggedIn={setIsLoggedIn} />}
               </Stack.Screen>
               <Stack.Screen
@@ -91,7 +138,7 @@ export default function AppNavigator() {
                 component={SignupScreen}
                 options={{ headerShown: false }}
               />
-            </>
+            </React.Fragment>
           )}
         </Stack.Navigator>
       </NavigationContainer>

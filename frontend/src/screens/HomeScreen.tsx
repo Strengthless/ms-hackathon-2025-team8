@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, JSX } from 'react';
 import { 
   View, 
   StyleSheet, 
@@ -18,11 +18,14 @@ import {
   users, 
   footprintPatterns, 
   lessonPositions, 
-  localizedLessons, 
-  type LessonStatus,
-  type Lesson 
+  Status,
+  Task,
+  tasks
 } from '../constants/mockData';
-import LessonPopup from '../components/LessonPopup'; // Import the popup component
+import LessonPopup from '../components/LessonPopup'; 
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../AppNavigator';
 
 const { width } = Dimensions.get('window');
 
@@ -30,8 +33,9 @@ interface HomeScreenProps {
   navigation?: any;
 }
 
-const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
+const HomeScreen: React.FC<HomeScreenProps> = ({ navigation: propNavigation }) => {
   const { t } = useTranslation();
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const user = users[0];
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(30)).current;
@@ -41,7 +45,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   
   // Popup state
   const [showPopup, setShowPopup] = useState(false);
-  const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
 
   useEffect(() => {
     // Entrance animation
@@ -92,69 +96,73 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
     ).start();
   }, [fadeAnim, slideAnim, pulseAnim, titleGlow]);
 
-  const handleLessonPress = (lesson: Lesson) => {
-    setSelectedLesson(lesson);
+  const handleTaskPress = (task: Task) => {
+    setSelectedTask(task);
     setShowPopup(true);
   };
 
   const handlePopupClose = () => {
     setShowPopup(false);
-    setSelectedLesson(null);
+    setSelectedTask(null);
   };
 
-  const handleLearnMore = () => {
-    if (!selectedLesson) return;
+  const handleLearnMore = (task: Task) => {
+    if (!task) return;
     
     // Close popup first
     setShowPopup(false);
     
-    // Then handle the lesson start logic
-    startPronunciation(selectedLesson);
-    
-    // Reset selected lesson
-    setSelectedLesson(null);
-  };
-
-  const startPronunciation = (lesson: Lesson) => {
-    if (lesson.status === 'locked') {
+    // Check if lesson is locked
+    if (task.status === Status.Locked) {
       Alert.alert(
         t('alerts.adventureLocked.title'),
         t('alerts.adventureLocked.message'),
         [{ text: t('alerts.adventureLocked.button') }]
       );
+      setSelectedTask(null);
       return;
     }
 
-    const lessonTitle = t(lesson.titleKey);
-    Alert.alert(
-      t('alerts.startAdventure.title', { lessonTitle }),
-      t('alerts.startAdventure.message'),
-      [
-        { text: t('alerts.startAdventure.cancelButton'), style: 'cancel' },
-        { 
-          text: t('alerts.startAdventure.confirmButton'), 
-          onPress: () => {
-            if (navigation) {
-              // navigation.navigate('PronunciationPractice', { lesson });
-            }
-            console.log(t('console.startingAdventure'), lesson.letter);
-          }
-        }
-      ]
-    );
+    // Navigate directly to the appropriate assignment screen based on type
+    if (task.type === 'audio') {
+      navigation.navigate('AssignmentAudio', { ass_id: task.id });
+    } else {
+      navigation.navigate('AssignmentFile', { ass_id: task.id });
+    }
+    
+    // Reset selected task
+    setSelectedTask(null);
   };
 
-  const getStatusStyle = (status: LessonStatus, isHovered: boolean = false) => {
+  // Get emoji based on status and letter
+  const getTaskEmoji = (task: Task): string => {
+    if (task.letter === "Boss") {
+      return '👑'; // Crown for boss levels
+    }
+    
+    switch (task.status) {
+      case Status.Completed:
+        return '🦖'; // Dino for completed
+      case Status.Current:
+        return '🦴'; // Bone for current 
+      case Status.Locked:
+        return '🥚'; // Egg for locked
+      default:
+        return '🥚';
+    }
+  };
+
+  const getStatusStyle = (status: Status, isHovered: boolean = false) => {
     let baseStyle;
     
     switch (status) {
-      case 'completed':
+      case Status.Completed:
         baseStyle = styles.completed;
         break;
-      case 'current':
+      case Status.Current:
         baseStyle = styles.current;
         break;
-      case 'locked':
+      case Status.Locked:
         baseStyle = styles.locked;
         break;
       default:
@@ -163,7 +171,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
 
     return [
       baseStyle,
-      isHovered && status !== 'locked' && styles.hovered
+      isHovered && status !== Status.Locked && styles.hovered
     ];
   };
 
@@ -183,7 +191,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
     };
   };
 
-  const renderFootprint = (index: number) => {
+  const renderFootprint = (index: number): JSX.Element => {
     const position = getFootprintPosition(index);
     
     return (
@@ -219,26 +227,26 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
     };
   };
 
-  const getStatusText = (status: LessonStatus) => {
+  const getStatusText = (status: Status) => {
     switch (status) {
-      case 'completed':
+      case Status.Completed:
         return t('lessonStatus.mastered');
-      case 'current':
+      case Status.Current:
         return t('lessonStatus.readyToLearn');
-      case 'locked':
+      case Status.Locked:
         return t('lessonStatus.comingSoon');
       default:
         return t('lessonStatus.comingSoon');
     }
   };
 
-  const renderLessonNode = (lesson: Lesson, index: number) => {
+  const renderTaskNode = (task: Task, index: number): JSX.Element => {
     const position = getLessonPosition(index);
-    const isHovered = hoveredLesson === lesson.id;
+    const isHovered = hoveredLesson === task.id;
     
     return (
       <Animated.View 
-        key={lesson.id} 
+        key={task.id} 
         style={[
           styles.lessonContainer,
           {
@@ -250,41 +258,41 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
           }
         ]}
       >
-        {/* Lesson Node */}
+        {/* Task Node */}
         <TouchableOpacity
           style={[
             styles.lessonNode,
-            ...getStatusStyle(lesson.status, isHovered),
-            lesson.status === 'current' && {
+            ...getStatusStyle(task.status, isHovered),
+            task.status === Status.Current && {
               transform: [{ scale: pulseAnim }]
             },
             isHovered && { transform: [{ scale: 1.05 }] }
           ]}
-          onPress={() => handleLessonPress(lesson)} // Updated to show popup
-          onPressIn={() => setHoveredLesson(lesson.id)}
+          onPress={() => handleTaskPress(task)} // Show popup
+          onPressIn={() => setHoveredLesson(task.id)}
           onPressOut={() => setHoveredLesson(null)}
-          activeOpacity={lesson.status === 'locked' ? 1 : 0.6}
+          activeOpacity={task.status === Status.Locked ? 1 : 0.6}
         >
-          <Text style={styles.dinoEmoji}>{lesson.dinoEmoji}</Text>
+          <Text style={styles.dinoEmoji}>{getTaskEmoji(task)}</Text>
           
-          {lesson.status === 'current' && (
+          {task.status === Status.Current && (
             <Animated.View style={styles.playButton}>
               <MaterialCommunityIcons name="play" size={16} color="white" />
             </Animated.View>
           )}
           
-          {lesson.status === 'completed' && (
+          {task.status === Status.Completed && (
             <View style={styles.checkmark}>
               <MaterialCommunityIcons name="check-bold" size={14} color="white" />
             </View>
           )}
           
-          {lesson.titleKey.includes('Boss') && (
+          {task.letter === 'Boss' && (
             <View style={styles.bossGlow} />
           )}
           
           {/* Hover sparkle effect */}
-          {isHovered && lesson.status !== 'locked' && (
+          {isHovered && task.status !== Status.Locked && (
             <View style={styles.hoverEffect}>
               <Text style={styles.hoverEmoji}>✨</Text>
             </View>
@@ -294,19 +302,19 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
         <View style={styles.lessonInfo}>
           <Text style={[
             styles.lessonTitle,
-            isHovered && lesson.status !== 'locked' && styles.titleHovered
+            isHovered && task.status !== Status.Locked && styles.titleHovered
           ]}>
-            {t(lesson.titleKey)}
+            {task.title}
           </Text>
           <Text style={styles.lessonSubtitle}>
-            {getStatusText(lesson.status)}
+            {getStatusText(task.status)}
           </Text>
         </View>
       </Animated.View>
     );
   };
 
-  const renderWeekHeader = (weekNum: number) => {
+  const renderWeekHeader = (weekNum: number): JSX.Element => {
     return (
       <Animated.View 
         style={[
@@ -357,9 +365,9 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
           {/* Week 1 Section */}
           {renderWeekHeader(1)}
           <View style={styles.weekSection}>
-            {localizedLessons.slice(0, 6).map((lesson, index) => (
-              <View key={lesson.id}>
-                {renderLessonNode(lesson, index)}
+            {tasks.slice(0, 6).map((task, index) => (
+              <View key={task.id}>
+                {renderTaskNode(task, index)}
                 {/* Add footprint between lessons (except after the last one) */}
                 {index < 5 && renderFootprint(index)}
               </View>
@@ -369,9 +377,9 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
           {/* Week 2 Section */}
           {renderWeekHeader(2)}
           <View style={styles.weekSection}>
-            {localizedLessons.slice(6, 12).map((lesson, index) => (
-              <View key={lesson.id}>
-                {renderLessonNode(lesson, index + 6)}
+            {tasks.slice(6, 12).map((task, index) => (
+              <View key={task.id}>
+                {renderTaskNode(task, index + 6)}
                 {/* Add footprint between lessons (except after the last one) */}
                 {index < 5 && renderFootprint(index + 6)}
               </View>
@@ -400,10 +408,10 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
         <View style={styles.bottomSpace} />
       </ScrollView>
 
-      {/* Lesson Popup */}
+      {/* Task Popup */}
       <LessonPopup
         visible={showPopup}
-        lesson={selectedLesson}
+        lesson={selectedTask}
         onClose={handlePopupClose}
         onLearnMore={handleLearnMore}
       />

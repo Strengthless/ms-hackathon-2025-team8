@@ -1,4 +1,30 @@
-export type LessonStatus = 'completed' | 'current' | 'locked';
+export enum CurriculumArea {
+  AR = "Alphabet Recognition",
+  SWR = "Sight Word Recognition",
+  V = "Vocabulary",
+  PR = "Point and Read",
+  PA = "Phonemic Awareness",
+}
+
+export enum Status {
+  Locked = "locked",
+  Current = "current",
+  Completed = "completed",
+}
+
+export interface AssignmentDetail {
+  id: number,
+  title: string,
+  curriculumArea: CurriculumArea,
+  dueDate: string,
+  instruction: string,
+  instructionVideo: string,
+  assignmentFile: string,
+  status: Status,
+  points: number,
+}
+
+export type LessonStatus = Status;
 
 export interface User {
   id: number;
@@ -12,9 +38,18 @@ export interface User {
 export interface Task {
   id: number;
   title: string;
+  letter: string;
+  status: Status;
+  week: number;
+
+  curriculumArea: CurriculumArea;
   dueDate: string;
-  status: string;
+  instruction: string;
+  instructionVideo: string;
+  assignmentFile: string;
   points: number;
+  type: 'audio' | 'file';
+  timeEstimated: number;
 }
 
 export interface LeaderboardEntry {
@@ -42,15 +77,6 @@ export interface WeeklyLesson {
   points: number;
 }
 
-export interface Lesson {
-  id: number;
-  titleKey: string;
-  letter: string;
-  status: LessonStatus;
-  dinoEmoji: string;
-  week: number;
-}
-
 export const users: User[] = [
   {
     id: 1,
@@ -65,32 +91,95 @@ export const users: User[] = [
 export const tasks: Task[] = [
   {
     id: 1,
-    title: "Learn A to C Sounds",
+    title: "Letter A to C Sounds",
+    letter: "A to C",
+    status: Status.Completed,
+    week: 1,
+    curriculumArea: CurriculumArea.PA,
     dueDate: "2023-12-15",
-    status: "completed",
+    instruction: "Practice the sounds of letter A. Say 'Ah' like when the doctor checks your throat. Apple starts with A.",
+    instructionVideo: "https://www.w3schools.com/html/mov_bbb.mp4",
+    assignmentFile: "https://example.com/assignment-letter-a.pdf",
     points: 100,
+    timeEstimated: 15,
+    type: 'audio',
   },
   {
     id: 2,
     title: "Practice D to F Words",
+    letter: "D to F",
+    week: 1,
+    curriculumArea: CurriculumArea.V,
     dueDate: "2023-12-17",
-    status: "in-progress",
+    instruction: "Find words starting with D, E, and F. Write them down and practice their sounds.",
+    instructionVideo: "https://www.w3schools.com/html/mov_bbb.mp4",
+    assignmentFile: "https://example.com/assignment-d-to-f.pdf",
+    status: Status.Completed,
     points: 150,
+    timeEstimated: 20,
+    type: 'audio'
   },
   {
     id: 3,
     title: "Master G to I Pronunciation",
+    letter: "G to I",
+    week: 1,
+    curriculumArea: CurriculumArea.PA,
     dueDate: "2023-12-20",
-    status: "not-started",
+    timeEstimated: 15,
+    instruction: "Listen to the pronunciation of G, H, and I. Record yourself saying these letters and compare.",
+    instructionVideo: "https://www.w3schools.com/html/mov_bbb.mp4",
+    assignmentFile: "https://example.com/assignment-g-to-i.pdf",
+    status: Status.Current,
     points: 200,
+    type: 'audio'
   },
   {
     id: 4,
     title: "J to L Sound Challenge",
+    letter: "J to L",
+    week: 1,
+    curriculumArea: CurriculumArea.PA,
     dueDate: "2023-12-22",
-    status: "not-started",
+    timeEstimated: 10,
+    instruction: "Complete the sound challenge for letters J, K, and L. Use the phonics app to practice.",
+    instructionVideo: "https://www.w3schools.com/html/mov_bbb.mp4",
+    assignmentFile: "https://example.com/assignment-j-to-l.pdf",
+    status: Status.Locked,
     points: 250,
+    type: 'audio'
   },
+  {
+    id: 5,
+    title: "M to O Sound Challenge",
+    letter: "M to O",
+    week: 1,
+    curriculumArea: CurriculumArea.PA,
+    dueDate: "2023-12-22",
+    timeEstimated: 10,
+    instruction: "Complete the sound challenge for letters J, K, and L. Use the phonics app to practice.",
+    instructionVideo: "https://www.w3schools.com/html/mov_bbb.mp4",
+    assignmentFile: "https://example.com/assignment-j-to-l.pdf",
+    status: Status.Locked,
+    points: 250,
+    type: 'audio'
+  },
+  {
+    id: 6,
+    title: "P to Q Sound Challenge",
+    letter: "P to Q",
+    week: 1,
+    curriculumArea: CurriculumArea.PA,
+    dueDate: "2023-12-22",
+    timeEstimated: 10,
+    instruction: "Complete the sound challenge for letters J, K, and L. Use the phonics app to practice.",
+    instructionVideo: "https://www.w3schools.com/html/mov_bbb.mp4",
+    assignmentFile: "https://example.com/assignment-j-to-l.pdf",
+    status: Status.Locked,
+    points: 250,
+    type: 'audio'
+  }
+
 ];
 
 export const leaderboard: LeaderboardEntry[] = [
@@ -106,75 +195,6 @@ export const badges: Badge[] = [
   { id: 2, name: "Week Warrior", icon: "calendar", color: "#4CAF50" },
   { id: 3, name: "Sound Explorer", icon: "compass", color: "#2196F3" },
   { id: 4, name: "Word Champion", icon: "star", color: "#FF9800" },
-];
-
-export const weeklyLessons: WeeklyLesson[] = [
-  {
-    id: 1,
-    title: "Letter A",
-    letter: "A",
-    status: "completed",
-    week: 1,
-    dinoEmoji: '🦕',
-    pronunciationTips: ["Say 'Ah' like when the doctor checks your throat", "Apple starts with A"],
-    points: 100,
-  },
-  {
-    id: 2,
-    title: "Letter B",
-    letter: "B",
-    status: "completed",
-    week: 1,
-    dinoEmoji: '🦖',
-    pronunciationTips: ["Put your lips together and make a 'Buh' sound", "Ball starts with B"],
-    points: 100,
-  },
-  {
-    id: 3,
-    title: "Letter C",
-    letter: "C",
-    status: "current",
-    week: 1,
-    dinoEmoji: '🦴',
-    pronunciationTips: ["Make a 'Kuh' sound like a cat", "Cat starts with C"],
-    points: 100,
-  },
-  {
-    id: 4,
-    title: "Letter D",
-    letter: "D",
-    status: "locked",
-    week: 1,
-    dinoEmoji: '🥚',
-    pronunciationTips: ["Touch your tongue to the roof of your mouth", "Dog starts with D"],
-    points: 100,
-  },
-  {
-    id: 5,
-    title: "Letter E",
-    letter: "E",
-    status: "locked",
-    week: 1,
-    dinoEmoji: '🥚',
-    pronunciationTips: ["Say 'Eh' like when you're confused", "Egg starts with E"],
-    points: 100,
-  },
-];
-
-// Localized lessons structure with i18n keys
-export const localizedLessons: Lesson[] = [
-  { id: 1, titleKey: 'lessons.letterA', letter: "A", status: "completed", dinoEmoji: '🦕', week: 1 },
-  { id: 2, titleKey: 'lessons.letterB', letter: "B", status: "completed", dinoEmoji: '🦖', week: 1 },
-  { id: 3, titleKey: 'lessons.letterC', letter: "C", status: "current", dinoEmoji: '🦴', week: 1 },
-  { id: 4, titleKey: 'lessons.letterD', letter: "D", status: "locked", dinoEmoji: '🥚', week: 1 },
-  { id: 5, titleKey: 'lessons.letterE', letter: "E", status: "locked", dinoEmoji: '🥚', week: 1 },
-  { id: 6, titleKey: 'lessons.week1Boss', letter: "Boss", status: "locked", dinoEmoji: '👑', week: 1 },
-  { id: 7, titleKey: 'lessons.letterF', letter: "F", status: "locked", dinoEmoji: '🥚', week: 2 },
-  { id: 8, titleKey: 'lessons.letterG', letter: "G", status: "locked", dinoEmoji: '🥚', week: 2 },
-  { id: 9, titleKey: 'lessons.letterH', letter: "H", status: "locked", dinoEmoji: '🥚', week: 2 },
-  { id: 10, titleKey: 'lessons.letterI', letter: "I", status: "locked", dinoEmoji: '🥚', week: 2 },
-  { id: 11, titleKey: 'lessons.letterJ', letter: "J", status: "locked", dinoEmoji: '🥚', week: 2 },
-  { id: 12, titleKey: 'lessons.week2Boss', letter: "Boss", status: "locked", dinoEmoji: '👑', week: 2 },
 ];
 
 // Footprint patterns for the learning path

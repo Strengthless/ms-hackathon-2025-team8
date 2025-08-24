@@ -1,22 +1,28 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Card, Title, Paragraph, Badge } from 'react-native-paper';
+import { Status, AssignmentDetail } from "../constants/mockData";
 
-const TaskCard = ({ task }) => {
-  const getStatusColor = status => {
+interface TaskCardProps {
+  task: AssignmentDetail;
+  onClick: () => void;
+}
+
+const TaskCard = ({ task, onClick } : TaskCardProps) => {
+  const getStatusColor = (status : Status) => {
     switch (status) {
-      case 'completed':
+      case Status.Completed:
         return '#4CAF50';
-      case 'in-progress':
+      case Status.InProgress:
         return '#FF9800';
-      case 'not-started':
+      case Status.NotStarted:
         return '#F44336';
       default:
         return '#9E9E9E';
     }
   };
 
-  const getStatusText = status => {
+  const getStatusText = (status : Status) => {
     switch (status) {
       case 'completed':
         return 'Completed';
@@ -30,7 +36,7 @@ const TaskCard = ({ task }) => {
   };
 
   return (
-    <Card style={styles.card}>
+    <Card style={styles.card} onPress={onClick}>
       <Card.Content>
         <View style={styles.header}>
           <Title>{task.title}</Title>
@@ -54,6 +60,7 @@ const styles = StyleSheet.create({
   card: {
     marginVertical: 8,
     marginHorizontal: 16,
+    cursor: 'pointer',
   },
   header: {
     flexDirection: 'row',
