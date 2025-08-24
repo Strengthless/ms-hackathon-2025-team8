@@ -11,6 +11,7 @@ import { SubmissionShow } from "./components/submissions/SubmissionShow";
 import { SubmissionEdit } from "./components/submissions/SubmissionEdit";
 import { PostList, PostShow } from "./components/forum";
 import { supabaseDataProvider } from "ra-supabase";
+import { useEffect } from "react";
 
 const baseProvider = supabaseDataProvider({
   instanceUrl: "https://raagrtoqfqiafslninaj.supabase.co",
@@ -151,23 +152,32 @@ const dataProvider = {
   },
 };
 
-export const App = () => (
-  <Admin dataProvider={dataProvider} layout={Layout} title="REACH Admin Panel">
-    <Resource name="students" list={StudentList} show={StudentShow} />
-    <Resource
-      name="assignments"
-      list={AssignmentList}
-      create={AssignmentCreate}
-      edit={AssignmentEdit}
-      show={AssignmentShow}
-    />
-    <Resource
-      name="submissions"
-      list={UngradedAssignmentList}
-      show={SubmissionShow}
-      edit={SubmissionEdit}
-    />
-    <Resource name="posts" list={PostList} show={PostShow} />
-    {/* <Resource name="comments" list={CommentList} create={CommentCreate} /> */}
-  </Admin>
-);
+export const App = () => {
+  useEffect(() => {
+    document.title = "DinoLearn - Admin panel";
+  }, []);
+
+  return (
+    <Admin
+      dataProvider={dataProvider}
+      layout={Layout}
+      title="REACH Admin Panel"
+    >
+      <Resource name="students" list={StudentList} show={StudentShow} />
+      <Resource
+        name="assignments"
+        list={AssignmentList}
+        create={AssignmentCreate}
+        edit={AssignmentEdit}
+        show={AssignmentShow}
+      />
+      <Resource
+        name="submissions"
+        list={UngradedAssignmentList}
+        show={SubmissionShow}
+        edit={SubmissionEdit}
+      />
+      <Resource name="posts" list={PostList} show={PostShow} />
+    </Admin>
+  );
+};
