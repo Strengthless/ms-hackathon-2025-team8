@@ -12,7 +12,7 @@ from dotenv import load_dotenv
 from fastapi import FastAPI, File, UploadFile, Form, HTTPException, Request, Query, Body, Path
 from fastapi.middleware.cors import CORSMiddleware
 
-from typing import Optional, Any, Dict
+from typing import Optional, List,  Any, Dict
 
 from app.pronunciation_trainer import PronunciationTrainer
 from utils.audio_processing import load_audio_file
@@ -357,20 +357,39 @@ async def update_assignment(
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-    
-# POSTS
+  
+# STUDENTS
+
+@app.get("/students", response_model=List[Dict[str, Any]])
+async def get_all_students():
+    """
+    Retrieve all student details from the database.
+    Returns a list of all students with their complete information.
+    """
+    try:
+        # Fetch all students from the students table
+        res = supabase_client.table("students").select("*").execute()
+        return res.data
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error retrieving students: {str(e)}")
+
 @app.post("/students")
 async def create_student(payload: Dict[str, Any] = Body(...)):
     """
     Create a new student.
-    Expected keys: username:text, pw_hash:varchar
+    Expected keys: id:text, pw_hash:varchar
     """
     try:
-        res = supabase_client.table("students").insert(payload).execute()
+        enriched = {
+            **payload,
+            "created_at": datetime.now(timezone.utc).isoformat()
+        }
+        res = supabase_client.table("students").insert(enriched).execute()
         return {"data": res.data}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-    
+
+# POSTS
 @app.post("/posts")
 async def create_forum_post(payload: Dict[str, Any] = Body(...)):
     """
