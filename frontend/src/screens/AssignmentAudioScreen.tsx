@@ -6,9 +6,10 @@ import { Title, Text, Chip, Divider } from "react-native-paper";
 import { Audio } from "expo-av";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
+import axios from "axios";
 
 import { RootStackParamList } from "../AppNavigator";
-import { tasks, AssignmentDetail, Status } from "../constants/mockData";
+import { Status, Question } from "../constants/mockData";
 
 type AssignmentScreenRouteProp = RouteProp<RootStackParamList, "AssignmentAudio">;
 type AssignmentScreenNavigationProp = StackNavigationProp<RootStackParamList, "AssignmentAudio">;
@@ -20,22 +21,79 @@ type Props = {
 
 const AssignmentAudioScreen: React.FC<Props> = ({ route }) => {
     const { t } = useTranslation();
-    const { ass_id } = route.params;
-    const task: AssignmentDetail | undefined = tasks.find(t => t.id === ass_id);
+    const { task } = route.params;
     const [completed, setCompleted] = useState(false);
     const [recordedUri, setRecordedUri] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [currentIndex, setCurrentIndex] = useState(0);
+    const [currentId, setCurrentId] = useState(1);
+    const [currentQuestion, setCurrentQuestion] = useState<Question>();
     const [isRecording, setIsRecording] = useState(false);
     const [recording, setRecording] = useState<Audio.Recording | null>(null);
     const [sound, setSound] = useState<Audio.Sound | null>(null);
     const [feedback, setFeedback] = useState<string>('');
+    const [pronunciationScore, setPronunciationScore] = useState();
+    
+    
+    useEffect(() => {
+        if (task) {
+            setCompleted(task.status === Status.Completed);
+        }
+    }, [task]);
 
-    const questions = [
-        "i want to swim", "i want to sleep", "i want to eat", "i want to go gaming"
-    ]
+    useEffect(() => {
+        setCurrentQuestion(task.questions?.find(q => q.id === currentId))
+    }, [currentId]);
 
-    const currentQuestion = questions[currentIndex];
+    if (!task) {
+        return (
+            <View style={styles.centered}>
+            <Text>{t("assignment.noAssignments")}</Text>
+            </View>
+        );
+    }
+    
+    if (!task.questions) {
+        return (
+            <View style={styles.centered}>
+            <Text>{t("assignment.noQuestions")}</Text>
+            </View>
+        );
+    }
+
+    const analyzeRecording = async() => {
+
+        if (!recordedUri) return;
+
+        const formData = new FormData();
+        formData.append("audio_file", {
+            uri: recordedUri,
+            name: "recording.m4a",   
+            type: "audio/m4a",       
+          } as any);
+
+        formData.append("target_text", currentQuestion?.answer || "");
+        console.log("Analyzing recording for question:", currentQuestion);
+
+        try {
+            const result = await axios.post("http://0.0.0.0:8000/analyze", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    maxRedirects: 0, // prevent auto-follow
+                },
+            });
+
+            const data = result.data;
+
+            setFeedback(data.ai_feedback || t("assignment.feedback.noFeedback"));
+            setPronunciationScore(data.pronunciation_score || 0);
+            setRecordedUri(null);
+        } catch (err) {
+            console.error("Error analyzing recording:", err);
+            setFeedback(t("assignment.feedback.errorAnalyzing"));
+        } finally {
+            setIsSubmitting(false);
+        }
+    }
 
     // Start recording
     const startRecording = async () => {
@@ -72,12 +130,6 @@ const AssignmentAudioScreen: React.FC<Props> = ({ route }) => {
         console.log("Recording saved at", uri);
         setRecordedUri(uri);
         setRecording(null);
-
-        // Pass to backend for checking
-        // const result = await onSubmitAnswer(uri, currentQuestion);
-
-        // setFeedback(result);
-        // setRecording(null);
     };
 
     const playRecording = async () => {
@@ -100,17 +152,18 @@ const AssignmentAudioScreen: React.FC<Props> = ({ route }) => {
     }, [sound]);
 
     const submitAnswer = async () => {
+        setIsSubmitting(true);
+        await analyzeRecording();
         setRecordedUri(null);
-        setFeedback('Good Job!');
     }
 
     // Next card
     const handleNext = () => {
         setFeedback('');
-        if (currentIndex < questions.length - 1) {
-        setCurrentIndex(currentIndex + 1);
+        if (currentId < (task.questions?.length ?? 0) - 1) {
+            setCurrentId(currentId + 1);
         } else {
-        setCompleted(true);
+            setCompleted(true);
         }
     };
 
@@ -119,20 +172,6 @@ const AssignmentAudioScreen: React.FC<Props> = ({ route }) => {
         setRecordedUri(null);
     };
 
-    useEffect(() => {
-        if (task) {
-            setCompleted(task.status === Status.Completed);
-        }
-    }, [])
-
-    if (!task) {
-        return (
-        <View style={styles.centered}>
-            <Text>{t("assignment.noAssignments")}</Text>
-        </View>
-        );
-    }
-
     return (
         <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 20 }}>
         {/* Title */}
@@ -140,7 +179,7 @@ const AssignmentAudioScreen: React.FC<Props> = ({ route }) => {
 
         {/* Tags & Status */}
         <View style={styles.row}>
-            <Chip style={styles.tag}>{task.curriculumArea}</Chip>
+            <Chip style={styles.tag}>{t("curriculumArea." + task.curriculumArea)}</Chip>
             <Chip style={[styles.statusChip, task.status === Status.Completed ? styles.completed : styles.pending]}>
             {task.status === Status.Completed ? t("assignment.completed") : t("assignment.pending")}
             </Chip>
@@ -165,12 +204,12 @@ const AssignmentAudioScreen: React.FC<Props> = ({ route }) => {
         {/* Instructions */}
         <View style={styles.section}>
             <Text style={styles.sectionTitle}>{t("assignment.instructions")} 📝</Text>
-            <Text style={styles.sectionText}>{task.instruction}</Text>
+            <Text style={styles.sectionText}>{t(task.instruction)}</Text>
         </View>
 
         {/* Submission */}
         {completed && (
-        // Completion State (Will use data response from backend later)
+        // Completion State
         <View style={styles.completionSection}>
             <MaterialIcons name="check-circle" size={52} color="white" style={styles.icon} />
             <Text style={styles.completionTitle}>{t("assignment.assignmentCompleted")} 🎉</Text>
@@ -180,7 +219,7 @@ const AssignmentAudioScreen: React.FC<Props> = ({ route }) => {
 
         {!completed && (
         <View style={styles.card}>
-            <Text style={styles.word}>{currentQuestion}</Text>
+            {feedback === "" && <Text style={styles.word}>{currentQuestion?.question}</Text>}
 
             {/* Controls Row */}
             <View style={styles.controlsRow}>
@@ -225,17 +264,24 @@ const AssignmentAudioScreen: React.FC<Props> = ({ route }) => {
             )}
 
             {/* Feedback */}
-            {feedback !== "" && <Text style={styles.feedback}>{feedback}</Text>}
+            {feedback !== "" && 
+            <>
+                <Text style={styles.word}>{t("assignment.getScore", {score: pronunciationScore, total: 100})}</Text>
+                <Text style={styles.feedback}>{feedback}</Text>
+            </>
+            }
 
             {/* Next card */}
             <View style={styles.controlsRow}>
             {feedback !== "" && (
             <>
             <TouchableOpacity style={styles.retryBtn} onPress={handleRetry}>
+                <MaterialIcons style={styles.retryIcon} name="refresh" size={24} color="#fff" />
                 <Text style={styles.nextText}>{t("assignment.retry")}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.nextBtn} onPress={handleNext}>
+                <MaterialIcons style={styles.nextIcon} name="arrow-forward" size={24} color="#fff" />
                 <Text style={styles.nextText}>{t("assignment.next")}</Text>
             </TouchableOpacity>
             </>
@@ -380,6 +426,14 @@ const styles = StyleSheet.create({
         textAlign: "center",
     },
 
+    score: {
+        fontSize: 16,
+        fontWeight: "800",
+        color: "green",
+        marginBottom: 15,
+        textAlign: "center",
+    },
+
     feedback: {
         fontSize: 14,
         color: "black",
@@ -404,6 +458,7 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: "bold",
         marginBottom: 20,
+        textAlign: "center",
         color: "#333",
     },
 
@@ -432,15 +487,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
 
-    nextBtn: {
-        marginTop: 10,
-        marginLeft: 10,
-        paddingVertical: 10,
-        paddingHorizontal: 25,
-        borderRadius: 12,
-        backgroundColor: "#4CAF50",
-    },
-
+    
     retryBtn: {
         marginRight: 10,
         marginTop: 10,
@@ -448,6 +495,29 @@ const styles = StyleSheet.create({
         paddingHorizontal: 25,
         borderRadius: 12,
         backgroundColor: "#febe00",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    
+    retryIcon: {
+        marginRight: 5,
+    },
+    
+    nextBtn: {
+        marginTop: 10,
+        marginLeft: 10,
+        paddingVertical: 10,
+        paddingHorizontal: 25,
+        borderRadius: 12,
+        backgroundColor: "#4CAF50",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+
+    nextIcon: {
+        marginRight: 5,
     },
 
     nextText: {

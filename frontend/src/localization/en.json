@@ -59,7 +59,14 @@
     "rerecord": "Re-record",
     "stopRecording": "Stop Recording",
     "getStars": "You got ⭐ {{stars}} Dino Stars ⭐",
-    "waitForFeedback": "Please wait for feedback from your teacher."
+    "getScore": "You score is {{score}} / {{total}}🎉",
+    "feedback": {
+      "waitForFeedback": "Please wait for feedback from your teacher.",
+      "noFeedback": "No feedback available yet.",
+      "errorAnalyzing": "Error analyzing your recording. Please try again."
+    },
+    "noQuestions": "No questions available for this assignment.",
+    "area": "Curriculum Area"
   },
   "appName": "DinoPhonics",
   "week": "Week {{number}}",
@@ -108,7 +115,7 @@
     }
   },
   "popup": {
-    "startAdventure": "Start Adventure!",
+    "startAssignment": "Start Adventure!",
     "reviewAssignment": "Review Lesson",
     "summaries": {
       "lessons.letterA": "Master the mighty 'A' sound! Learn how to make this amazing letter with perfect pronunciation.",
@@ -151,5 +158,20 @@
     "title": "Weekly Leaderboard",
     "subtitle": "Top phonics learners this week",
     "points": "{{count}} points"
+  },
+  "instructions": {
+    "task1": "Practice the sounds of letter A, B, and C. Record yourself pronouncing them and get instant feedback. Try as many times as you like to get it right.",
+    "task2": "Find words starting with D, E, and F. Write them down and practice their sounds.",
+    "task3": "Record yourself saying the words starting with G, H, and I and get instant feedback. Try as many times as you like to get it right.",
+    "task4": "Complete the final challenge by recording yourself saying words starting with J, K, and L. Get feedback and see how many Dino Stars you can earn!",
+    "task5": "Record yourself saying the sounds M, N, and O, and compare your pronunciation. Try as many times as you like to get it right.",
+    "task6": "Practice the sounds of P, Q, and R. Record yourself pronouncing them and get instant feedback. Try as many times as you like to get it right."
+  },
+  "curriculumArea": {
+    "PA": "Phonemic Awareness",
+    "PR": "Phonics",
+    "V": "Vocabulary",
+    "AR": "Alphabet Recognition",
+    "SWR": "Sight Word Recognition"
   }
 }

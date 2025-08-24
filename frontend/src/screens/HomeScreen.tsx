@@ -124,9 +124,9 @@ const HomeScreen: React.FC<HomeScreenProps> = ({
 
     // Navigate directly to the appropriate assignment screen based on type
     if (task.type === "audio") {
-      navigation.navigate("AssignmentAudio", { ass_id: task.id });
+      navigation.navigate("AssignmentAudio", { task });
     } else {
-      navigation.navigate("AssignmentFile", { ass_id: task.id });
+      navigation.navigate("AssignmentFile", { task });
     }
 
     // Reset selected task

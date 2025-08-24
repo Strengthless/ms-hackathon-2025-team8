@@ -6,7 +6,6 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import LoginScreen from "./screens/LoginScreen";
 import SignupScreen from "./screens/SignupScreen";
 import DashboardScreen from "./screens/DashboardScreen";
-import TasksScreen from "./screens/TasksScreen";
 import LeaderboardScreen from "./screens/LeaderboardScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import AssignmentAudioScreen from "./screens/AssignmentAudioScreen";
@@ -14,6 +13,7 @@ import AssignmentFileScreen from "./screens/AssignmentFileScreen";
 import HomeScreen from "./screens/HomeScreen";
 import StorybookScreen from "./components/StorybookScreen";
 import ForumScreen from "./screens/ForumScreen";
+import { Task } from "./constants/mockData";
 import "./localization/i18n";
 import { DefaultTheme, PaperProvider } from "react-native-paper";
 
@@ -21,8 +21,8 @@ export type RootStackParamList = {
   Main: undefined;
   Login: undefined;
   Signup: undefined;
-  AssignmentAudio: { ass_id: number };
-  AssignmentFile: { ass_id: number };
+  AssignmentAudio: { task: Task };
+  AssignmentFile: { task: Task };
   "Dino Library": undefined;
 };
 

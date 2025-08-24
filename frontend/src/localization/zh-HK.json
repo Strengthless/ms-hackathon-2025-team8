@@ -59,7 +59,14 @@
     "rerecord": "重新錄音",
     "stopRecording": "停止錄音",
     "getStars": "你獲得咗 ⭐ {{stars}} 恐龍星 ⭐",
-    "waitForFeedback": "請等候老師嘅反饋。"
+    "getScore": "你嘅分數係 {{score}} / {{total}} 🎉",
+    "feedback": {
+      "waitForFeedback": "請等老師嘅反饋",
+      "noFeedback": "暫時未有反饋",
+      "errorAnalyzing": "分析你嘅錄音時出錯，請再試一次"
+    },
+    "noQuestions": "呢份作業暫時未有問題",
+    "area": "課程範疇"
   },
   "appName": "DinoPhonics",
   "week": "第 {{number}} 週",
@@ -108,7 +115,7 @@
     }
   },
   "popup": {
-    "startAdventure": "開始冒險！",
+    "startAssignment": "開始冒險！",
     "reviewAssignment": "複習課堂",
     "summaries": {
       "lessons.letterA": "掌握強勁嘅 'A' 音！學習點樣準確發音呢個字母。",
@@ -151,5 +158,20 @@
     "title": "每週排行榜",
     "subtitle": "本週最佳嘅恐龍學習者",
     "points": "{{count}} 分"
+  },
+  "instructions": {
+    "task1": "練習字母 A、B 和 C 的發音。錄低自己讀出的聲音並獲得即時反饋。可以不斷重試，直到正確為止",
+    "task2": "找出以 D、E 和 F 開頭的單字。寫低佢哋，然後練習發音",
+    "task3": "錄低自己讀出以 G、H 和 I 開頭嘅單字，並獲得即時反饋。可以不斷重試，直到正確為止",
+    "task4": "完成最後挑戰：錄低自己讀出以 J、K 和 L 開頭嘅單字。獲得反饋，睇下你可以贏到幾多 Dino 星星！",
+    "task5": "錄低自己讀出 M、N 和 O 嘅發音，並比較你嘅讀音。可以不斷重試，直到正確為止",
+    "task6": "練習字母 P、Q 和 R 嘅發音。錄低自己讀出的聲音並獲得即時反饋。可以不斷重試，直到正確為止"
+  },
+  "curriculumArea": {
+    "PA": "語音覺察",
+    "PR": "拼音",
+    "V": "詞彙",
+    "AR": "字母認知",
+    "SWR": "常見字認識"
   }
 }

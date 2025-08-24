@@ -219,7 +219,7 @@ const LessonPopup: React.FC<LessonPopupProps> = ({
                           {t("assignment.area")}:{" "}
                         </Text>
                         <Text style={styles.detailValue}>
-                          {lesson.curriculumArea}
+                          {t("curriculumArea." + lesson.curriculumArea)}
                         </Text>
                       </View>
                     </View>
@@ -228,7 +228,7 @@ const LessonPopup: React.FC<LessonPopupProps> = ({
                     <Text style={styles.summaryText}>
                       {lesson.instruction.length > 80
                         ? lesson.instruction.substring(0, 80) + "..."
-                        : lesson.instruction}
+                        : t(lesson.instruction)}
                     </Text>
 
                     {/* Action Button */}

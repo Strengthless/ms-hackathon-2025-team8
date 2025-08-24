@@ -21,9 +21,9 @@ const TasksScreen: React.FC<MainScreenProps> = ({navigation}) => {
         {tasks.map((task) => (
           <TaskCard key={task.id} task={task} onClick={() => {
             if (task.curriculumArea === CurriculumArea.AR || task.curriculumArea === CurriculumArea.SWR || task.curriculumArea === CurriculumArea.PR) {
-              navigation.navigate("AssignmentFile", { ass_id: task.id })
+              navigation.navigate("AssignmentFile", { task })
             } else {
-              navigation.navigate("AssignmentAudio", { ass_id: task.id })
+              navigation.navigate("AssignmentAudio", { task })
             }
           }}
            />

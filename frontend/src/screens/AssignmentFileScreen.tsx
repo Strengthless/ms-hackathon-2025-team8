@@ -10,7 +10,7 @@ import * as DocumentPicker from 'expo-document-picker';
 import * as ImagePicker from 'expo-image-picker';
 
 import { RootStackParamList } from "../AppNavigator";
-import { tasks, AssignmentDetail, Status } from "../constants/mockData";
+import { Status } from "../constants/mockData";
 import LoadingAnimation from "../components/LoadingAnimation";
 
 type AssignmentScreenRouteProp = RouteProp<RootStackParamList, "AssignmentFile">;
@@ -23,28 +23,23 @@ type Props = {
 
 const AssignmentFileScreen: React.FC<Props> = ({ route }) => {
     const { t } = useTranslation();
-    const { ass_id } = route.params;
-    const task: AssignmentDetail | undefined = tasks.find(t => t.id === ass_id);
+    const { task } = route.params;
     const [selectedFile, setSelectedFile] = useState<DocumentPicker.DocumentPickerAsset | ImagePicker.ImagePickerAsset | null>(null);
     const [pickerVisible, setPickerVisible] = useState(false);
     const [completed, setCompleted] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    // TODO:
-    // Fetch assignment details from one endpoint
-    // Fetch submission status from another endpoint
-
     useEffect(() => {
         if (task) {
             setCompleted(task.status === Status.Completed);
         }
-    }, [])
+    }, [task]);
 
     if (!task) {
         return (
-        <View style={styles.centered}>
+            <View style={styles.centered}>
             <Text>{t("assignment.noAssignments")}</Text>
-        </View>
+            </View>
         );
     }
 
@@ -115,7 +110,7 @@ const AssignmentFileScreen: React.FC<Props> = ({ route }) => {
 
         {/* Tags & Status */}
         <View style={styles.row}>
-            <Chip style={styles.tag}>{task.curriculumArea}</Chip>
+            <Chip style={styles.tag}>{t("curriculumArea." + task.curriculumArea)}</Chip>
             <Chip style={[styles.statusChip, task.status === Status.Completed ? styles.completed : styles.pending]}>
             {task.status === Status.Completed ? t("assignment.completed") : t("assignment.pending")}
             </Chip>
@@ -140,7 +135,7 @@ const AssignmentFileScreen: React.FC<Props> = ({ route }) => {
         {/* Instructions */}
         <View style={styles.section}>
             <Text style={styles.sectionTitle}>{t("assignment.instructions")} 📝</Text>
-            <Text style={styles.sectionText}>{task.instruction}</Text>
+            <Text style={styles.sectionText}>{t(task.instruction)}</Text>
             {task.instructionVideo && (
             <Video
                 source={{ uri: task.instructionVideo }}
@@ -167,7 +162,7 @@ const AssignmentFileScreen: React.FC<Props> = ({ route }) => {
             <MaterialIcons name="check-circle" size={52} color="white" style={styles.icon} />
             <Text style={styles.completionTitle}>{t("assignment.assignmentCompleted")} 🎉</Text>
             <Text style={styles.stars}>{t("assignment.getStars", {stars: task.points})}</Text>
-            <Text style={styles.feedback}>{t("assignment.waitForFeedback")}</Text>
+            <Text style={styles.feedback}>{t("assignment.feedback.waitForFeedback")}</Text>
         </View>
         ) : loading ? (
         // Loading State

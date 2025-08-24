@@ -1,9 +1,9 @@
 export enum CurriculumArea {
-  AR = "Alphabet Recognition",
-  SWR = "Sight Word Recognition",
-  V = "Vocabulary",
-  PR = "Point and Read",
-  PA = "Phonemic Awareness",
+  AR = "AR",
+  SWR = "SWR",
+  V = "V",
+  PR = "PR",
+  PA = "PA",
 }
 
 export enum Status {
@@ -49,6 +49,7 @@ export interface Task {
   points: number;
   type: "audio" | "file";
   timeEstimated: number;
+  questions?: Question[];
 }
 
 export interface LeaderboardEntry {
@@ -85,6 +86,12 @@ export interface Lesson {
   week: number;
 }
 
+export interface Question {
+  id: number;
+  question: string;
+  answer: string;
+}
+
 export const users: User[] = [
   {
     id: 1,
@@ -104,14 +111,25 @@ export const tasks: Task[] = [
     status: Status.Completed,
     week: 1,
     curriculumArea: CurriculumArea.PA,
-    dueDate: "2023-12-15",
-    instruction:
-      "Practice the sounds of letter A. Say 'Ah' like when the doctor checks your throat. Apple starts with A.",
+    dueDate: "2025-08-25",
+    instruction: "instructions.task1",
     instructionVideo: "https://www.w3schools.com/html/mov_bbb.mp4",
     assignmentFile: "https://example.com/assignment-letter-a.pdf",
     points: 100,
     timeEstimated: 15,
     type: "audio",
+    questions: [
+      { id: 1, question: 'Say "Apple"', answer: 'apple' },
+      { id: 2, question: 'Say "Ant"', answer: 'ant' },
+      { id: 3, question: 'Say "Arm"', answer: 'arm' },
+      { id: 4, question: 'Say "Ball"', answer: 'ball' },
+      { id: 5, question: 'Say "Bat"', answer: 'bat' },
+      { id: 6, question: 'Say "Bag"', answer: 'bag' },
+      { id: 7, question: 'Say "Cat"', answer: 'cat' },
+      { id: 8, question: 'Say "Cap"', answer: 'cap' },
+      { id: 9, question: 'Say "Cup"', answer: 'cup' },
+      { id: 10, question: 'Say "Cake"', answer: 'cake' },
+    ]
   },
   {
     id: 2,
@@ -119,31 +137,41 @@ export const tasks: Task[] = [
     letter: "D to F",
     week: 1,
     curriculumArea: CurriculumArea.V,
-    dueDate: "2023-12-17",
-    instruction:
-      "Find words starting with D, E, and F. Write them down and practice their sounds.",
+    dueDate: "2025-08-27",
+    instruction: "instructions.task2",
     instructionVideo: "https://www.w3schools.com/html/mov_bbb.mp4",
     assignmentFile: "https://example.com/assignment-d-to-f.pdf",
     status: Status.Completed,
     points: 150,
     timeEstimated: 20,
-    type: "audio",
+    type: "file",
   },
   {
     id: 3,
-    title: "Master G to I Pronunciation",
+    title: "Pronounce G to I Words",
     letter: "G to I",
     week: 1,
     curriculumArea: CurriculumArea.PA,
-    dueDate: "2023-12-20",
+    dueDate: "2025-08-29",
     timeEstimated: 15,
-    instruction:
-      "Listen to the pronunciation of G, H, and I. Record yourself saying these letters and compare.",
+    instruction: "instructions.task3",
     instructionVideo: "https://www.w3schools.com/html/mov_bbb.mp4",
     assignmentFile: "https://example.com/assignment-g-to-i.pdf",
     status: Status.Current,
     points: 200,
     type: "audio",
+    questions: [
+      { id: 1, question: 'Say "Game"', answer: 'game' },
+      { id: 2, question: 'Say "Goat"', answer: 'goat' },
+      { id: 3, question: 'Say "Hat"', answer: 'hat' },
+      { id: 4, question: 'Say "Hill"', answer: 'hill' },
+      { id: 5, question: 'Say "Ice"', answer: 'ice' },
+      { id: 6, question: 'Say "Ink"', answer: 'ink' },
+      { id: 7, question: 'Say "Gum"', answer: 'gum' },
+      { id: 8, question: 'Say "Horse"', answer: 'horse' },
+      { id: 9, question: 'Say "Igloo"', answer: 'igloo' },
+      { id: 10, question: 'Say "Green"', answer: 'green' },
+    ]
   },
   {
     id: 4,
@@ -151,15 +179,26 @@ export const tasks: Task[] = [
     letter: "J to L",
     week: 1,
     curriculumArea: CurriculumArea.PA,
-    dueDate: "2023-12-22",
+    dueDate: "2025-08-30",
     timeEstimated: 10,
-    instruction:
-      "Complete the sound challenge for letters J, K, and L. Use the phonics app to practice.",
+    instruction: "instructions.task4",
     instructionVideo: "https://www.w3schools.com/html/mov_bbb.mp4",
     assignmentFile: "https://example.com/assignment-j-to-l.pdf",
     status: Status.Locked,
     points: 250,
     type: "audio",
+    questions: [
+      { id: 1, question: 'Say "Jam"', answer: 'jam' },
+      { id: 2, question: 'Say "Jet"', answer: 'jet' },
+      { id: 3, question: 'Say "Jog"', answer: 'jog' },
+      { id: 4, question: 'Say "Jump"', answer: 'jump' },
+      { id: 5, question: 'Say "Kite"', answer: 'kite' },
+      { id: 6, question: 'Say "King"', answer: 'king' },
+      { id: 7, question: 'Say "Lamp"', answer: 'lamp' },
+      { id: 8, question: 'Say "Leaf"', answer: 'leaf' },
+      { id: 9, question: 'Say "Lion"', answer: 'lion' },
+      { id: 10, question: 'Say "Lid"', answer: 'lid' },
+    ]
   },
   {
     id: 5,
@@ -167,15 +206,26 @@ export const tasks: Task[] = [
     letter: "M to O",
     week: 1,
     curriculumArea: CurriculumArea.PA,
-    dueDate: "2023-12-22",
+    dueDate: "2025-08-31",
     timeEstimated: 10,
-    instruction:
-      "Complete the sound challenge for letters J, K, and L. Use the phonics app to practice.",
+    instruction: "instructions.task5",
     instructionVideo: "https://www.w3schools.com/html/mov_bbb.mp4",
     assignmentFile: "https://example.com/assignment-j-to-l.pdf",
     status: Status.Locked,
     points: 250,
     type: "audio",
+    questions: [
+      { id: 1, question: 'Say "Man"', answer: 'man' },
+      { id: 2, question: 'Say "Moon"', answer: 'moon' },
+      { id: 3, question: 'Say "Map"', answer: 'map' },
+      { id: 4, question: 'Say "Net"', answer: 'net' },
+      { id: 5, question: 'Say "Nest"', answer: 'nest' },
+      { id: 6, question: 'Say "Nap"', answer: 'nap' },
+      { id: 7, question: 'Say "Octopus"', answer: 'octopus' },
+      { id: 8, question: 'Say "Owl"', answer: 'owl' },
+      { id: 9, question: 'Say "Orange"', answer: 'orange' },
+      { id: 10, question: 'Say "Open"', answer: 'open' },
+    ]
   },
   {
     id: 6,
@@ -185,13 +235,24 @@ export const tasks: Task[] = [
     curriculumArea: CurriculumArea.PA,
     dueDate: "2023-12-22",
     timeEstimated: 10,
-    instruction:
-      "Complete the sound challenge for letters J, K, and L. Use the phonics app to practice.",
+    instruction: "instructions.task6",
     instructionVideo: "https://www.w3schools.com/html/mov_bbb.mp4",
     assignmentFile: "https://example.com/assignment-j-to-l.pdf",
     status: Status.Locked,
     points: 250,
     type: "audio",
+    questions: [
+      { id: 1, question: 'Say "Pen"', answer: 'pen' },
+      { id: 2, question: 'Say "Pig"', answer: 'pig' },
+      { id: 3, question: 'Say "Pot"', answer: 'pot' },
+      { id: 4, question: 'Say "Queen"', answer: 'queen' },
+      { id: 5, question: 'Say "Quick"', answer: 'quick' },
+      { id: 6, question: 'Say "Quilt"', answer: 'quilt' },
+      { id: 7, question: 'Say "Park"', answer: 'park' },
+      { id: 8, question: 'Say "Pizza"', answer: 'pizza' },
+      { id: 9, question: 'Say "Quiz"', answer: 'quiz' },
+      { id: 10, question: 'Say "Puzzle"', answer: 'puzzle' },
+    ]
   },
 ];
 
@@ -215,7 +276,7 @@ export const weeklyLessons: WeeklyLesson[] = [
     id: 1,
     title: "Letter A",
     letter: "A",
-    status: "completed",
+    status: Status.Completed,
     week: 1,
     dinoEmoji: "🦕",
     pronunciationTips: [
@@ -228,7 +289,7 @@ export const weeklyLessons: WeeklyLesson[] = [
     id: 2,
     title: "Letter B",
     letter: "B",
-    status: "completed",
+    status: Status.Completed,
     week: 1,
     dinoEmoji: "🦖",
     pronunciationTips: [
@@ -241,7 +302,7 @@ export const weeklyLessons: WeeklyLesson[] = [
     id: 3,
     title: "Letter C",
     letter: "C",
-    status: "current",
+    status: Status.Current,
     week: 1,
     dinoEmoji: "🦴",
     pronunciationTips: ["Make a 'Kuh' sound like a cat", "Cat starts with C"],
@@ -251,7 +312,7 @@ export const weeklyLessons: WeeklyLesson[] = [
     id: 4,
     title: "Letter D",
     letter: "D",
-    status: "locked",
+    status: Status.Locked,
     week: 1,
     dinoEmoji: "🥚",
     pronunciationTips: [
@@ -264,7 +325,7 @@ export const weeklyLessons: WeeklyLesson[] = [
     id: 5,
     title: "Letter E",
     letter: "E",
-    status: "locked",
+    status: Status.Locked,
     week: 1,
     dinoEmoji: "🥚",
     pronunciationTips: [
@@ -281,7 +342,7 @@ export const localizedLessons: Lesson[] = [
     id: 1,
     titleKey: "lessons.letterA",
     letter: "A",
-    status: "completed",
+    status: Status.Completed,
     dinoEmoji: "🦕",
     week: 1,
   },
@@ -289,7 +350,7 @@ export const localizedLessons: Lesson[] = [
     id: 2,
     titleKey: "lessons.letterB",
     letter: "B",
-    status: "completed",
+    status: Status.Completed,
     dinoEmoji: "🦖",
     week: 1,
   },
@@ -297,7 +358,7 @@ export const localizedLessons: Lesson[] = [
     id: 3,
     titleKey: "lessons.letterC",
     letter: "C",
-    status: "current",
+    status: Status.Current,
     dinoEmoji: "🦴",
     week: 1,
   },
@@ -305,7 +366,7 @@ export const localizedLessons: Lesson[] = [
     id: 4,
     titleKey: "lessons.letterD",
     letter: "D",
-    status: "locked",
+    status: Status.Locked,
     dinoEmoji: "🥚",
     week: 1,
   },
@@ -313,7 +374,7 @@ export const localizedLessons: Lesson[] = [
     id: 5,
     titleKey: "lessons.letterE",
     letter: "E",
-    status: "locked",
+    status: Status.Locked,
     dinoEmoji: "🥚",
     week: 1,
   },
@@ -321,7 +382,7 @@ export const localizedLessons: Lesson[] = [
     id: 6,
     titleKey: "lessons.week1Boss",
     letter: "Boss",
-    status: "locked",
+    status: Status.Locked,
     dinoEmoji: "👑",
     week: 1,
   },
@@ -329,7 +390,7 @@ export const localizedLessons: Lesson[] = [
     id: 7,
     titleKey: "lessons.letterF",
     letter: "F",
-    status: "locked",
+    status: Status.Locked,
     dinoEmoji: "🥚",
     week: 2,
   },
@@ -337,7 +398,7 @@ export const localizedLessons: Lesson[] = [
     id: 8,
     titleKey: "lessons.letterG",
     letter: "G",
-    status: "locked",
+    status: Status.Locked,
     dinoEmoji: "🥚",
     week: 2,
   },
@@ -345,7 +406,7 @@ export const localizedLessons: Lesson[] = [
     id: 9,
     titleKey: "lessons.letterH",
     letter: "H",
-    status: "locked",
+    status: Status.Locked,
     dinoEmoji: "🥚",
     week: 2,
   },
@@ -353,7 +414,7 @@ export const localizedLessons: Lesson[] = [
     id: 10,
     titleKey: "lessons.letterI",
     letter: "I",
-    status: "locked",
+    status: Status.Locked,
     dinoEmoji: "🥚",
     week: 2,
   },
@@ -361,7 +422,7 @@ export const localizedLessons: Lesson[] = [
     id: 11,
     titleKey: "lessons.letterJ",
     letter: "J",
-    status: "locked",
+    status: Status.Locked,
     dinoEmoji: "🥚",
     week: 2,
   },
@@ -369,7 +430,7 @@ export const localizedLessons: Lesson[] = [
     id: 12,
     titleKey: "lessons.week2Boss",
     letter: "Boss",
-    status: "locked",
+    status: Status.Locked,
     dinoEmoji: "👑",
     week: 2,
   },
