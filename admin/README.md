@@ -1,41 +1,75 @@
-# admin
+# Pronunciation Trainer Admin Panel
 
-## Installation
+A comprehensive admin panel for managing students, assignments, and grading for the pronunciation trainer application.
 
-Install the application dependencies by running:
+## Features
 
-```sh
-npm install
-```
+### Students Management
+- **Student List**: View all registered students with their basic information
+- **Student Portfolio**: Click on any student to view their detailed portfolio including:
+  - **Radar Chart**: Visual representation of student strengths and weaknesses across 5 assignment types:
+    - Pronunciation
+    - Grammar
+    - Vocabulary
+    - Fluency
+    - Comprehension
+  - **Assignment List**: All assignments assigned to the student
+  - **Performance Metrics**: 
+    - Completion rate of assignments
+    - Average grade across all assignments
+    - Total assignments vs completed assignments
 
-## Development
+### Assignments Management
+- **Assignment List**: View all assignments with a "Create New Assignment" button
+- **Create Assignment**: Form to create new assignments with fields for:
+  - Title and description
+  - Assignment type (Pronunciation, Grammar, Vocabulary, Fluency, Comprehension)
+  - Difficulty level (Beginner, Intermediate, Advanced)
+  - Instructions and audio URL
+  - Active status
+- **Edit Assignment**: Modify existing assignments
 
-Start the application in development mode by running:
+### Grading System
+- **Ungraded Assignments**: List of completed assignments ready for grading
+- **Grade Button**: Direct access to grade individual assignments
+- **Status Tracking**: Visual indicators for assignment completion status
 
-```sh
-npm run dev
-```
+## Technology Stack
 
-## Production
+- **React Admin**: For the admin interface
+- **Material-UI**: For UI components
+- **Recharts**: For data visualization (radar charts)
+- **TypeScript**: For type safety
+- **Vite**: For development and building
 
-Build the application in production mode by running:
+## Getting Started
 
-```sh
-npm run build
-```
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-## Development Setup
+2. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
-Update the `.env` file to populate the environment variables with the values found on your project API settings:
+3. Open your browser to `http://localhost:5173/`
 
-```sh
-# Your supabase instance URL
-VITE_SUPABASE_URL=
-# Your supabase API key. We recommend using the public anonymous key
-VITE_SUPABASE_API_KEY=
-```
+## Data Structure
 
-## Customize The Application
+The admin panel currently uses mock data for development. In production, it would connect to a Supabase backend with the following main entities:
 
-Follow the instructions in your browser console once you start the application.
+- **Students**: User information and performance data
+- **Assignments**: Exercise definitions and metadata
+- **Student Assignments**: Submission records and grades
+
+## Future Enhancements
+
+- Real-time data synchronization with Supabase
+- Advanced filtering and search capabilities
+- Bulk grading operations
+- Export functionality for reports
+- Student progress tracking over time
+- Integration with the main pronunciation trainer application
 
