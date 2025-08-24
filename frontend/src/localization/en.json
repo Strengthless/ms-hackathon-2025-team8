@@ -1,177 +1,177 @@
 {
-  "login": {
-    "name": "Dino Learn",
-    "growTogether": "Grow Together, Fly Together",
-    "tagline": "Learn, Play, Grow!",
-    "username": "Username",
-    "password": "Password",
-    "loginButton": "Login",
-    "signupPrompt": "Don't have an account? Sign up"
-  },
-  "dashboard": {
-    "welcome": "Welcome, {{username}}!",
-    "keepUpGreatWork": "Keep stomping forward on your learning adventure!",
-    "storyTime": "Dino Library",
-    "storySubtitle": "Explore roaring adventures through stories!",
-    "readStories": "Read Stories",
-    "dayStreak": "Day Streak",
-    "points": "Dino Energy",
-    "learningJourney": "Learning Journey",
-    "totalTime": "Total Time",
-    "withParent": "Eggs hatched",
-    "yourBadges": "Your Badges",
-    "calendarTitle": "2025 Stomping Streak",
-    "close": "Close"
-  },
-  "signup": {
-    "createAccount": "Create Account",
-    "joinAdventure": "Join the adventure!",
-    "tagline": "Learn, Play, Grow!",
-    "username": "Username",
-    "password": "Password",
-    "confirmPassword": "Confirm Password",
-    "signUpButton": "Sign Up",
-    "alreadyHaveAccount": "Already have an account? Login"
-  },
-  "assignment": {
-    "title": "Assignments",
-    "submitAssignment": "Submit Assignment",
-    "noAssignments": "No assignments found.",
-    "assignmentCompleted": "Assignment completed!",
-    "completed": "Completed",
-    "pending": "Pending",
-    "deadline": "Deadline",
-    "dinoStar": "Dino Energy",
-    "instructions": "Instructions",
-    "downloadExercise": "Click to Download Exercise",
-    "browseGallery": "Browse Gallery",
-    "browseFiles": "Browse Files",
-    "selectFile": "Select Submission File",
-    "checking": "Checking your submission...",
-    "submit": "Submit",
-    "remove": "Remove",
-    "submitLoading": "Submitting your assignment...",
-    "fileLoading": "Loading your file...",
-    "next": "Next",
-    "retry": "Retry",
-    "playRecording": "Play Recording",
-    "record": "Record",
-    "rerecord": "Re-record",
-    "stopRecording": "Stop Recording",
-    "getStars": "You got ⚡️ {{stars}} Dino Energy ⚡️",
-    "getScore": "You score is {{score}} / {{total}}🎉",
-    "feedback": {
-      "waitForFeedback": "Please wait for feedback from your teacher.",
-      "noFeedback": "No feedback available yet.",
-      "errorAnalyzing": "Error analyzing your recording. Please try again."
+    "login": {
+        "name": "Dino Learn",
+        "growTogether": "Grow Together, Fly Together",
+        "tagline": "Learn, Play, Grow!",
+        "username": "Username",
+        "password": "Password",
+        "loginButton": "Login",
+        "signupPrompt": "Don't have an account? Sign up"
     },
-    "noQuestions": "No questions available for this assignment.",
-    "area": "Curriculum Area"
-  },
-  "appName": "DinoPhonics",
-  "week": "Week {{number}}",
-  "lessons": {
-    "letterA": "Letter A",
-    "letterB": "Letter B",
-    "letterC": "Letter C",
-    "letterD": "Letter D",
-    "letterE": "Letter E",
-    "letterF": "Letter F",
-    "letterG": "Letter G",
-    "letterH": "Letter H",
-    "letterI": "Letter I",
-    "letterJ": "Letter J",
-    "week1Boss": "Week 1 Boss",
-    "week2Boss": "Week 2 Boss"
-  },
-  "lessonStatus": {
-    "mastered": "Mastered!",
-    "readyToLearn": "Ready to Learn",
-    "comingSoon": "Coming Soon"
-  },
-  "stats": {
-    "dayStreak": "Day Streak",
-    "dinoEnergy": "Dino Energy"
-  },
-  "mascot": {
-    "readyMessage": "Ready for an adventure?"
-  },
-  "home": {
-    "learningJourney": "Your Stomping Journey",
-    "moreAdventuresAhead": "More Adventures Ahead!",
-    "keepPracticing": "Keep practicing to unlock new worlds with your dino friends!"
-  },
-  "alerts": {
-    "adventureLocked": {
-      "title": "Adventure Locked",
-      "message": "Complete the previous lessons to unlock this adventure!",
-      "button": "Got it!"
+    "dashboard": {
+        "welcome": "Welcome, {{username}}!",
+        "keepUpGreatWork": "Keep stomping forward on your learning adventure!",
+        "storyTime": "Dino Library",
+        "storySubtitle": "Explore roaring adventures through stories!",
+        "readStories": "Read Stories",
+        "dayStreak": "Day Streak",
+        "points": "Dino Energy",
+        "learningJourney": "Learning Journey",
+        "totalTime": "Total Time",
+        "withParent": "Eggs hatched",
+        "yourBadges": "Your Badges",
+        "calendarTitle": "2025 Stomping Streak",
+        "close": "Close"
     },
-    "startAdventure": {
-      "title": "{{lessonTitle}} Adventure",
-      "message": "Ready to start your pronunciation practice?",
-      "cancelButton": "Not Ready",
-      "confirmButton": "Let's Go!"
+    "signup": {
+        "createAccount": "Create Account",
+        "joinAdventure": "Join the adventure!",
+        "tagline": "Learn, Play, Grow!",
+        "username": "Username",
+        "password": "Password",
+        "confirmPassword": "Confirm Password",
+        "signUpButton": "Sign Up",
+        "alreadyHaveAccount": "Already have an account? Login"
+    },
+    "assignment": {
+        "title": "Assignments",
+        "submitAssignment": "Submit Assignment",
+        "noAssignments": "No assignments found.",
+        "assignmentCompleted": "Assignment completed!",
+        "completed": "Completed",
+        "pending": "Pending",
+        "deadline": "Deadline",
+        "dinoStar": "Dino Energy",
+        "instructions": "Instructions",
+        "downloadExercise": "Click to Download Exercise",
+        "browseGallery": "Browse Gallery",
+        "browseFiles": "Browse Files",
+        "selectFile": "Select Submission File",
+        "checking": "Checking your submission...",
+        "submit": "Submit",
+        "remove": "Remove",
+        "submitLoading": "Submitting your assignment...",
+        "fileLoading": "Loading your file...",
+        "next": "Next",
+        "retry": "Retry",
+        "playRecording": "Play Recording",
+        "record": "Record",
+        "rerecord": "Re-record",
+        "stopRecording": "Stop Recording",
+        "getStars": "You got ⚡️ {{stars}} Dino Energy ⚡️",
+        "getScore": "You score is {{score}} / {{total}}🎉",
+        "feedback": {
+            "waitForFeedback": "Please wait for feedback from your teacher.",
+            "noFeedback": "No feedback available yet.",
+            "errorAnalyzing": "Error analyzing your recording. Please try again."
+        },
+        "noQuestions": "No questions available for this assignment.",
+        "area": "Curriculum Area"
+    },
+    "appName": "DinoPhonics",
+    "week": "Week {{number}}",
+    "lessons": {
+        "letterA": "Letter A",
+        "letterB": "Letter B",
+        "letterC": "Letter C",
+        "letterD": "Letter D",
+        "letterE": "Letter E",
+        "letterF": "Letter F",
+        "letterG": "Letter G",
+        "letterH": "Letter H",
+        "letterI": "Letter I",
+        "letterJ": "Letter J",
+        "week1Boss": "Week 1 Boss",
+        "week2Boss": "Week 2 Boss"
+    },
+    "lessonStatus": {
+        "mastered": "Mastered!",
+        "readyToLearn": "Ready to Learn",
+        "comingSoon": "Coming Soon"
+    },
+    "stats": {
+        "dayStreak": "Day Streak",
+        "dinoEnergy": "Dino Energy"
+    },
+    "mascot": {
+        "readyMessage": "Ready for an adventure?"
+    },
+    "home": {
+        "learningJourney": "Your Stomping Journey",
+        "moreAdventuresAhead": "More Adventures Ahead!",
+        "keepPracticing": "Keep practicing to unlock new worlds with your dino friends!"
+    },
+    "alerts": {
+        "adventureLocked": {
+            "title": "Adventure Locked",
+            "message": "Complete the previous lessons to unlock this adventure!",
+            "button": "Got it!"
+        },
+        "startAdventure": {
+            "title": "{{lessonTitle}} Adventure",
+            "message": "Ready to start your pronunciation practice?",
+            "cancelButton": "Not Ready",
+            "confirmButton": "Let's Go!"
+        }
+    },
+    "popup": {
+        "startAssignment": "Start Adventure!",
+        "reviewAssignment": "Review Lesson",
+        "summaries": {
+            "lessons.letterA": "Master the mighty 'A' sound! Learn how to make this amazing letter with perfect pronunciation.",
+            "lessons.letterB": "Bounce into the 'B' sound! Discover the lip-popping technique for perfect pronunciation.",
+            "lessons.letterC": "Catch the 'C' sound! Learn the crisp consonant that starts so many words.",
+            "lessons.letterD": "Dive into the 'D' sound! Master the tongue-tip technique for this dynamic letter.",
+            "lessons.letterE": "Explore the 'E' sound! Practice the essential vowel that appears everywhere.",
+            "lessons.letterF": "Feel the 'F' sound! Learn the fantastic fricative with lip-to-teeth contact.",
+            "lessons.letterG": "Get the 'G' sound! Master the great consonant with back-of-tongue placement.",
+            "lessons.letterH": "Hear the 'H' sound! Practice the heavenly breath sound that starts so many words.",
+            "lessons.letterI": "Investigate the 'I' sound! Learn the important vowel with its short and long forms.",
+            "lessons.letterJ": "Jump into the 'J' sound! Master the joyful consonant with tongue placement.",
+            "lessons.week1Boss": "Boss Challenge! Test all your Week 1 consonant and vowel skills in epic sound battles!",
+            "lessons.week2Boss": "Ultimate Boss Battle! Show mastery of all sounds learned in an exciting final challenge!"
+        }
+    },
+    "forum": {
+        "untitled": "Untitled",
+        "anonymousParent": "Anonymous Parent",
+        "privateLabel": "[Private]",
+        "privateHint": "Only you and the REACH can view this.",
+        "comment": "Comment",
+        "writeReply": "Write a reply...",
+        "reply": "Reply",
+        "tabPublic": "Public",
+        "tabPrivate": "Private",
+        "searchPlaceholder": "Search discussions...",
+        "createPublic": "Create Public Discussion",
+        "createPrivate": "Create Private Discussion",
+        "title": "Title",
+        "whatsOnMind": "What's on your mind?",
+        "newPublic": "New Public",
+        "newPrivate": "New Private"
+    },
+    "common": {
+        "cancel": "Cancel",
+        "post": "Post"
+    },
+    "leaderboard": {
+        "title": "Leaderboard",
+        "subtitle": "Top learners this week",
+        "points": "{{count}} points"
+    },
+    "instructions": {
+        "task1": "Practice the sounds of letter A, B, and C. Record yourself pronouncing them and get instant feedback. Try as many times as you like to get it right.",
+        "task2": "Find words starting with D, E, and F. Write them down and practice their sounds.",
+        "task3": "Record yourself saying the words starting with G, H, and I and get instant feedback. Try as many times as you like to get it right.",
+        "task4": "Complete the final challenge by recording yourself saying words starting with J, K, and L. Get feedback and see how many Dino Energy you can earn!",
+        "task5": "Record yourself saying the sounds M, N, and O, and compare your pronunciation. Try as many times as you like to get it right.",
+        "task6": "Practice the sounds of P, Q, and R. Record yourself pronouncing them and get instant feedback. Try as many times as you like to get it right."
+    },
+    "curriculumArea": {
+        "PA": "Phonemic Awareness",
+        "PR": "Phonics",
+        "V": "Vocabulary",
+        "AR": "Alphabet Recognition",
+        "SWR": "Sight Word Recognition"
     }
-  },
-  "popup": {
-    "startAssignment": "Start Adventure!",
-    "reviewAssignment": "Review Lesson",
-    "summaries": {
-      "lessons.letterA": "Master the mighty 'A' sound! Learn how to make this amazing letter with perfect pronunciation.",
-      "lessons.letterB": "Bounce into the 'B' sound! Discover the lip-popping technique for perfect pronunciation.",
-      "lessons.letterC": "Catch the 'C' sound! Learn the crisp consonant that starts so many words.",
-      "lessons.letterD": "Dive into the 'D' sound! Master the tongue-tip technique for this dynamic letter.",
-      "lessons.letterE": "Explore the 'E' sound! Practice the essential vowel that appears everywhere.",
-      "lessons.letterF": "Feel the 'F' sound! Learn the fantastic fricative with lip-to-teeth contact.",
-      "lessons.letterG": "Get the 'G' sound! Master the great consonant with back-of-tongue placement.",
-      "lessons.letterH": "Hear the 'H' sound! Practice the heavenly breath sound that starts so many words.",
-      "lessons.letterI": "Investigate the 'I' sound! Learn the important vowel with its short and long forms.",
-      "lessons.letterJ": "Jump into the 'J' sound! Master the joyful consonant with tongue placement.",
-      "lessons.week1Boss": "Boss Challenge! Test all your Week 1 consonant and vowel skills in epic sound battles!",
-      "lessons.week2Boss": "Ultimate Boss Battle! Show mastery of all sounds learned in an exciting final challenge!"
-    }
-  },
-  "forum": {
-    "untitled": "Untitled",
-    "anonymousParent": "Anonymous Parent",
-    "privateLabel": "[Private]",
-    "privateHint": "Only you and the REACH can view this.",
-    "comment": "Comment",
-    "writeReply": "Write a reply...",
-    "reply": "Reply",
-    "tabPublic": "Public",
-    "tabPrivate": "Private",
-    "searchPlaceholder": "Search discussions...",
-    "createPublic": "Create Public Discussion",
-    "createPrivate": "Create Private Discussion",
-    "title": "Title",
-    "whatsOnMind": "What's on your mind?",
-    "newPublic": "New Public",
-    "newPrivate": "New Private"
-  },
-  "common": {
-    "cancel": "Cancel",
-    "post": "Post"
-  },
-  "leaderboard": {
-    "title": "Leaderboard",
-    "subtitle": "Top learners this week",
-    "points": "{{count}} points"
-  },
-  "instructions": {
-    "task1": "Practice the sounds of letter A, B, and C. Record yourself pronouncing them and get instant feedback. Try as many times as you like to get it right.",
-    "task2": "Find words starting with D, E, and F. Write them down and practice their sounds.",
-    "task3": "Record yourself saying the words starting with G, H, and I and get instant feedback. Try as many times as you like to get it right.",
-    "task4": "Complete the final challenge by recording yourself saying words starting with J, K, and L. Get feedback and see how many Dino Energy you can earn!",
-    "task5": "Record yourself saying the sounds M, N, and O, and compare your pronunciation. Try as many times as you like to get it right.",
-    "task6": "Practice the sounds of P, Q, and R. Record yourself pronouncing them and get instant feedback. Try as many times as you like to get it right."
-  },
-  "curriculumArea": {
-    "PA": "Phonemic Awareness",
-    "PR": "Phonics",
-    "V": "Vocabulary",
-    "AR": "Alphabet Recognition",
-    "SWR": "Sight Word Recognition"
-  }
 }
