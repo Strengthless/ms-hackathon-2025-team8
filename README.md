@@ -11,6 +11,10 @@ This serves as a mono-repository for all the code dedicated to Code to Give Hack
 - `admin` - the admin dashboard for the app
   - React with Grafana or React Admin, Typescript
 
+## Architecture
+
+<img width="1368" height="758" alt="image" src="https://github.com/user-attachments/assets/3de33902-9e4a-462a-bf5c-63021e205f29" />
+
 ## Code of conduct
 
 - Please create a new feature branch and PR for your changes. This helps track the changes and minimize unexpected regressions.
