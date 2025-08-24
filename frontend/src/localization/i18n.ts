@@ -11,6 +11,7 @@ const resources: Resource = {
   "zh-HK": { translation: translationZhHK },
 };
 
+// eslint-disable-next-line import/no-named-as-default-member
 i18n.use(initReactI18next).init({
   resources,
   lng: getLocales()[0].languageCode ?? "en", // default based on device
