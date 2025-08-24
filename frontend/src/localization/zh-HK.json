@@ -1,0 +1,155 @@
+{
+  "login": {
+    "name": "Dino Learn",
+    "growTogether": "一齊成長，一齊飛",
+    "tagline": "學習、遊戲、成長！",
+    "username": "用戶名",
+    "password": "密碼",
+    "loginButton": "登入",
+    "signupPrompt": "未有帳戶？立即註冊"
+  },
+  "dashboard": {
+    "welcome": "歡迎你，{{username}}！",
+    "keepUpGreatWork": "繼續努力，喺學習冒險中邁步向前！",
+    "storyTime": "恐龍圖書館",
+    "storySubtitle": "透過故事探索精彩冒險！",
+    "readStories": "閱讀故事",
+    "dayStreak": "連續學習日數",
+    "points": "恐龍能量",
+    "learningJourney": "學習旅程",
+    "totalTime": "總學習時間",
+    "withParent": "已孵化蛋數",
+    "yourBadges": "你的徽章",
+    "calendarTitle": "2025 恐龍連續學習日曆",
+    "close": "關閉"
+  },
+  "signup": {
+    "createAccount": "創建帳戶",
+    "joinAdventure": "加入冒險！",
+    "tagline": "學習、遊戲、成長！",
+    "username": "用戶名",
+    "password": "密碼",
+    "confirmPassword": "確認密碼",
+    "signUpButton": "註冊",
+    "alreadyHaveAccount": "已經有帳戶？登入"
+  },
+  "assignment": {
+    "title": "作業",
+    "submitAssignment": "提交作業",
+    "noAssignments": "暫時冇作業。",
+    "assignmentCompleted": "作業完成！",
+    "completed": "已完成",
+    "pending": "待完成",
+    "deadline": "截止日期",
+    "dinoStar": "恐龍星",
+    "instructions": "指示",
+    "downloadExercise": "點擊下載練習",
+    "browseGallery": "瀏覽相簿",
+    "browseFiles": "瀏覽檔案",
+    "selectFile": "選擇提交檔案",
+    "checking": "檢查你嘅提交...",
+    "submit": "提交",
+    "remove": "移除",
+    "submitLoading": "提交作業中...",
+    "fileLoading": "加載檔案中...",
+    "next": "下一步",
+    "retry": "重試",
+    "playRecording": "播放錄音",
+    "record": "錄音",
+    "rerecord": "重新錄音",
+    "stopRecording": "停止錄音",
+    "getStars": "你獲得咗 ⭐ {{stars}} 恐龍星 ⭐",
+    "waitForFeedback": "請等候老師嘅反饋。"
+  },
+  "appName": "DinoPhonics",
+  "week": "第 {{number}} 週",
+  "lessons": {
+    "letterA": "字母 A",
+    "letterB": "字母 B",
+    "letterC": "字母 C",
+    "letterD": "字母 D",
+    "letterE": "字母 E",
+    "letterF": "字母 F",
+    "letterG": "字母 G",
+    "letterH": "字母 H",
+    "letterI": "字母 I",
+    "letterJ": "字母 J",
+    "week1Boss": "第 1 週 挑戰",
+    "week2Boss": "第 2 週 挑戰"
+  },
+  "lessonStatus": {
+    "mastered": "已掌握！",
+    "readyToLearn": "準備學習",
+    "comingSoon": "即將推出"
+  },
+  "stats": {
+    "dayStreak": "連續學習日數",
+    "dinoEnergy": "恐龍能量"
+  },
+  "mascot": {
+    "readyMessage": "準備好冒險未？"
+  },
+  "home": {
+    "learningJourney": "你嘅學習旅程",
+    "moreAdventuresAhead": "更多冒險等緊你！",
+    "keepPracticing": "繼續練習，解鎖新世界同你嘅恐龍朋友一齊探索！"
+  },
+  "alerts": {
+    "adventureLocked": {
+      "title": "冒險鎖定",
+      "message": "完成之前嘅課堂先可以解鎖呢個冒險！",
+      "button": "明白！"
+    },
+    "startAdventure": {
+      "title": "{{lessonTitle}} 冒險",
+      "message": "準備好開始你嘅發音練習未？",
+      "cancelButton": "未準備好",
+      "confirmButton": "出發！"
+    }
+  },
+  "popup": {
+    "startAdventure": "開始冒險！",
+    "reviewAssignment": "複習課堂",
+    "summaries": {
+      "lessons.letterA": "掌握強勁嘅 'A' 音！學習點樣準確發音呢個字母。",
+      "lessons.letterB": "跳入 'B' 音！發現用嘴唇爆破技巧，準確發音。",
+      "lessons.letterC": "捕捉 'C' 音！學習呢個清晰嘅輔音，開始好多單詞。",
+      "lessons.letterD": "潛入 'D' 音！掌握舌尖技巧，發出呢個有活力嘅字母。",
+      "lessons.letterE": "探索 'E' 音！練習呢個基本元音，無處不在。",
+      "lessons.letterF": "感受 'F' 音！學習呢個奇妙嘅摩擦音，嘴唇同牙齒接觸。",
+      "lessons.letterG": "掌握 'G' 音！學習呢個強勁嘅輔音，舌頭放喺後部。",
+      "lessons.letterH": "聽 'H' 音！練習呢個清晰嘅呼吸音，開始好多單詞。",
+      "lessons.letterI": "調查 'I' 音！學習呢個重要嘅元音，短音同長音形式。",
+      "lessons.letterJ": "跳入 'J' 音！掌握呢個開心嘅輔音，舌頭放位。",
+      "lessons.week1Boss": "Boss 挑戰！測試你第 1 週所有輔音同元音技能，進行史詩級音效對戰！",
+      "lessons.week2Boss": "終極 Boss 挑戰！展示你對所有學過嘅音效嘅掌握，進行刺激嘅最終挑戰！"
+    }
+  },
+  "forum": {
+    "untitled": "無標題",
+    "anonymousParent": "匿名家長",
+    "privateLabel": "[私密]",
+    "privateHint": "只有你同 REACH 可以查看。",
+    "comment": "留言",
+    "writeReply": "寫回覆...",
+    "reply": "回覆",
+    "tabPublic": "公開",
+    "tabPrivate": "私密",
+    "searchPlaceholder": "搜尋討論...",
+    "createPublic": "創建公開討論",
+    "createPrivate": "創建私密討論",
+    "title": "標題",
+    "whatsOnMind": "你有咩想法？",
+    "newPublic": "新公開",
+    "newPrivate": "新私密"
+  },
+  "common": {
+    "cancel": "取消",
+    "post": "發佈"
+  },
+  "leaderboard": {
+    "title": "每週排行榜",
+    "subtitle": "本週最佳嘅恐龍學習者",
+    "points": "{{count}} 分"
+  }
+}

@@ -5,11 +5,15 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import LoginScreen from "./screens/LoginScreen";
 import SignupScreen from "./screens/SignupScreen";
-import HomeScreen from "./screens/HomeScreen"; 
+import DashboardScreen from "./screens/DashboardScreen";
+import TasksScreen from "./screens/TasksScreen";
 import LeaderboardScreen from "./screens/LeaderboardScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import AssignmentAudioScreen from "./screens/AssignmentAudioScreen";
 import AssignmentFileScreen from "./screens/AssignmentFileScreen";
+import HomeScreen from "./screens/HomeScreen";
+import StorybookScreen from "./components/StorybookScreen";
+import ForumScreen from "./screens/ForumScreen";
 import "./localization/i18n";
 import { DefaultTheme, PaperProvider } from "react-native-paper";
 
@@ -19,6 +23,7 @@ export type RootStackParamList = {
   Signup: undefined;
   AssignmentAudio: { ass_id: number };
   AssignmentFile: { ass_id: number };
+  "Dino Library": undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -31,47 +36,40 @@ function TabNavigator() {
         tabBarIcon: ({ focused, color, size }) => {
           let iconName: string;
 
-          if (route.name === "Home") {
-            iconName = focused ? "home" : "home-outline";
-          } else if (route.name === "Tasks") {
-            iconName = focused ? "format-list-checks" : "format-list-checkbox";
+          if (route.name === "Den") {
+            iconName = focused ? "paw" : "paw-outline";
+          } else if (route.name === "Nest") {
+            iconName = focused ? "egg" : "egg-outline";
           } else if (route.name === "Leaderboard") {
             iconName = focused ? "trophy" : "trophy-outline";
+          } else if (route.name === "Forum") {
+            iconName = focused
+              ? "comment-multiple"
+              : "comment-multiple-outline";
           } else if (route.name === "Profile") {
             iconName = focused ? "account" : "account-outline";
           } else {
-            iconName = "help-circle-outline";
+            iconName = "unknown";
           }
 
           return (
             <MaterialCommunityIcons name={iconName} size={size} color={color} />
           );
         },
-        tabBarActiveTintColor: "#6200EE",
-        tabBarInactiveTintColor: "gray",
+        tabBarActiveTintColor: "#519872", // main pastel green
+        tabBarInactiveTintColor: "#3E8E6E", // darker pastel green
         headerStyle: {
-          backgroundColor: "#6200EE",
+          backgroundColor: "#519872", // main pastel green header
         },
-        headerTintColor: "#fff",
+        headerTintColor: "#ffffff", // white text
       })}
     >
-      <Tab.Screen 
-        name="Home" 
-        component={HomeScreen} 
-        options={{ title: "DinoPhonics" }}
-      />
-      <Tab.Screen 
-        name="Tasks" 
-        component={HomeScreen}
-        options={{ title: "Tasks" }}
-      />
-      <Tab.Screen 
-        name="Leaderboard" 
-        component={LeaderboardScreen}
-        options={{ title: "Leaderboard" }}
-      />
-      <Tab.Screen 
-        name="Profile" 
+      <Tab.Screen name="Den" component={DashboardScreen} />
+      <Tab.Screen name="Nest" component={HomeScreen} />
+      <Tab.Screen name="Leaderboard" component={LeaderboardScreen} />
+      <Tab.Screen name="Forum" component={ForumScreen} />
+      <Tab.Screen
+        name="Profile"
         component={ProfileScreen}
         options={{ title: "Profile" }}
       />
@@ -80,7 +78,7 @@ function TabNavigator() {
 }
 
 export default function AppNavigator() {
-  const [isLoggedIn, setIsLoggedIn] = useState(true); // Set to true for testing
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const theme = {
     ...DefaultTheme,
@@ -97,18 +95,18 @@ export default function AppNavigator() {
         <Stack.Navigator>
           {isLoggedIn ? (
             <React.Fragment>
-              <Stack.Screen 
-                name="Main" 
+              <Stack.Screen
+                name="Main"
                 component={TabNavigator}
                 options={{ headerShown: false }}
               />
               <Stack.Screen
                 name="AssignmentAudio"
                 component={AssignmentAudioScreen}
-                options={{ 
+                options={{
                   title: "Assignment Details",
                   headerStyle: {
-                    backgroundColor: "#6200EE",
+                    backgroundColor: "#519872", // Using code 2's green
                   },
                   headerTintColor: "#fff",
                 }}
@@ -116,21 +114,32 @@ export default function AppNavigator() {
               <Stack.Screen
                 name="AssignmentFile"
                 component={AssignmentFileScreen}
-                options={{ 
+                options={{
                   title: "Assignment Details",
                   headerStyle: {
-                    backgroundColor: "#6200EE",
+                    backgroundColor: "#519872", // Using code 2's green
                   },
                   headerTintColor: "#fff",
+                }}
+              />
+              <Stack.Screen
+                name="Dino Library"
+                component={StorybookScreen}
+                options={{
+                  headerShown: true,
+                  headerStyle: {
+                    backgroundColor: "#519872", // Green color
+                  },
+                  headerTintColor: "#fff", // White text color
+                  headerTitleStyle: {
+                    fontWeight: "bold",
+                  },
                 }}
               />
             </React.Fragment>
           ) : (
             <React.Fragment>
-              <Stack.Screen 
-                name="Login"
-                options={{ headerShown: false }}
-              >
+              <Stack.Screen name="Login" options={{ headerShown: false }}>
                 {() => <LoginScreen setIsLoggedIn={setIsLoggedIn} />}
               </Stack.Screen>
               <Stack.Screen
