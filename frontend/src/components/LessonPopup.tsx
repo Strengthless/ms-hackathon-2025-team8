@@ -1,26 +1,28 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Dimensions,
-  Animated,
   Modal,
+  View,
+  Text,
+  TouchableOpacity,
   TouchableWithoutFeedback,
+  Animated,
+  Dimensions,
+  StyleSheet,
 } from 'react-native';
-import { Text, Surface } from 'react-native-paper';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Surface } from 'react-native-paper';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTranslation } from 'react-i18next';
-import { type Lesson } from '../constants/mockData';
+import { Task, Status } from '../constants/mockData'; 
 
 const { width } = Dimensions.get('window');
 
 interface LessonPopupProps {
   visible: boolean;
-  lesson: Lesson | null;
+  lesson: Task | null;
   onClose: () => void;
-  onLearnMore: () => void;
+  onLearnMore: (task: Task) => void;
 }
+
 
 const LessonPopup: React.FC<LessonPopupProps> = ({
   visible,
@@ -138,7 +140,11 @@ const LessonPopup: React.FC<LessonPopupProps> = ({
                 ]}
               >
                 <Surface style={styles.dinoCircle} elevation={4}>
-                  <Text style={styles.dinoEmoji}>{lesson.dinoEmoji}</Text>
+                  <Text style={styles.dinoEmoji}>
+                    {lesson.letter === "Boss" ? '👑' : 
+                     lesson.status === Status.Completed ? '🦖' :
+                     lesson.status === Status.Current ? '🦴' : '🥚'}
+                  </Text>
                   
                   <View style={styles.sparkle1}>
                     <Text style={styles.sparkleEmoji}>✨</Text>
@@ -172,9 +178,9 @@ const LessonPopup: React.FC<LessonPopupProps> = ({
                   
                   {/* Content */}
                   <View style={styles.bubbleContent}>
-                    {/* Lesson Title */}
+                    {/* Assignment Title (now from lesson.title) */}
                     <Text style={styles.lessonTitle}>
-                      {t(lesson.titleKey)}
+                      {lesson.title}
                     </Text>
 
                     {/* Letter Badge */}
@@ -182,25 +188,58 @@ const LessonPopup: React.FC<LessonPopupProps> = ({
                       <Text style={styles.letterText}>{lesson.letter}</Text>
                     </Surface>
 
-                    {/* Summary Text */}
+                    {/* Assignment Details */}
+                    <View style={styles.assignmentDetails}>
+                      {/* Due Date */}
+                      <View style={styles.detailRow}>
+                        <MaterialCommunityIcons name="calendar" size={16} color="#666" />
+                        <Text style={styles.detailLabel}>{t('assignment.deadline')}: </Text>
+                        <Text style={styles.detailValue}>{lesson.dueDate}</Text>
+                      </View>
+
+                      {/* Points */}
+                      <View style={styles.detailRow}>
+                        <MaterialCommunityIcons name="star" size={16} color="#FFD700" />
+                        <Text style={styles.detailLabel}>{t('assignment.dinoStar')}: </Text>
+                        <Text style={styles.detailValue}>{lesson.points}</Text>
+                      </View>
+
+                      {/* Curriculum Area */}
+                      <View style={styles.detailRow}>
+                        <MaterialCommunityIcons name="book-open" size={16} color="#666" />
+                        <Text style={styles.detailLabel}>{t('assignment.area')}: </Text>
+                        <Text style={styles.detailValue}>{lesson.curriculumArea}</Text>
+                      </View>
+                    </View>
+
+                    {/* Assignment Summary (shortened instruction) */}
                     <Text style={styles.summaryText}>
-                      {t(`popup.summaries.${lesson.titleKey}`)}
+                      {lesson.instruction.length > 80 
+                        ? lesson.instruction.substring(0, 80) + '...'
+                        : lesson.instruction
+                      }
                     </Text>
 
                     {/* Action Button */}
                     <TouchableOpacity
                       style={styles.learnMoreButton}
-                      onPress={onLearnMore}
+                      onPress={() => onLearnMore(lesson)} // Pass the lesson/task object
                       activeOpacity={0.8}
+                      disabled={lesson.status === Status.Locked}
                     >
                       <MaterialCommunityIcons 
-                        name="rocket-launch" 
+                        name={lesson.status === Status.Locked ? 'lock' : 'rocket-launch'} 
                         size={20} 
                         color="white" 
                         style={styles.buttonIcon}
                       />
                       <Text style={styles.learnMoreText}>
-                        {t('popup.startAdventure')}
+                        {lesson.status === Status.Locked 
+                          ? t('popup.locked')
+                          : lesson.status === Status.Completed
+                          ? t('popup.reviewAssignment')
+                          : t('popup.startAssignment')
+                        }
                       </Text>
                     </TouchableOpacity>
 
@@ -208,17 +247,17 @@ const LessonPopup: React.FC<LessonPopupProps> = ({
                     <View style={styles.statusContainer}>
                       <MaterialCommunityIcons 
                         name={
-                          lesson.status === 'completed' 
+                          lesson.status === Status.Completed 
                             ? 'check-circle' 
-                            : lesson.status === 'current'
+                            : lesson.status === Status.Current
                             ? 'play-circle'
                             : 'lock'
                         } 
                         size={16} 
                         color={
-                          lesson.status === 'completed' 
+                          lesson.status === Status.Completed 
                             ? '#4CAF50' 
-                            : lesson.status === 'current'
+                            : lesson.status === Status.Current
                             ? '#FF9800'
                             : '#999'
                         }
@@ -226,17 +265,17 @@ const LessonPopup: React.FC<LessonPopupProps> = ({
                       <Text style={[
                         styles.statusText,
                         { color: 
-                          lesson.status === 'completed' 
+                          lesson.status === Status.Completed 
                             ? '#4CAF50' 
-                            : lesson.status === 'current'
+                            : lesson.status === Status.Current
                             ? '#FF9800'
                             : '#999'
                         }
                       ]}>
-                        {lesson.status === 'completed' 
-                          ? t('lessonStatus.mastered')
-                          : lesson.status === 'current'
-                          ? t('lessonStatus.readyToLearn')
+                        {lesson.status === Status.Completed 
+                          ? t('assignment.completed')
+                          : lesson.status === Status.Current
+                          ? t('assignment.pending')
                           : t('lessonStatus.comingSoon')
                         }
                       </Text>
@@ -253,6 +292,7 @@ const LessonPopup: React.FC<LessonPopupProps> = ({
 };
 
 const styles = StyleSheet.create({
+
   overlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -393,6 +433,28 @@ const styles = StyleSheet.create({
   statusText: {
     fontSize: width * 0.035,
     fontWeight: '500',
+  },
+  assignmentDetails: {
+    backgroundColor: '#f8f9fa',
+    padding: 12,
+    borderRadius: 8,
+    marginVertical: 8,
+  },
+  detailRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 6,
+  },
+  detailLabel: {
+    fontSize: 14,
+    color: '#666',
+    marginLeft: 6,
+    fontWeight: '500',
+  },
+  detailValue: {
+    fontSize: 14,
+    color: '#333',
+    fontWeight: '600',
   },
 });
 
