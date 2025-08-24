@@ -82,7 +82,7 @@ class AIFeedbackGenerator:
                       word_comparisons: List[Dict],
                       overall_quality: str) -> str:
         """Create a prompt for the AI to generate feedback."""
-        
+       
         # Analyze word-level issues
         problematic_words = []
         good_words = []

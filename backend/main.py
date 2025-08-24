@@ -18,7 +18,7 @@ from app.pronunciation_trainer import PronunciationTrainer
 from utils.audio_processing import load_audio_file
 from utils.helpers import get_ai_feedback, _get_quality_description
 from utils.ai_feedback import _generate_fallback_feedback
-
+from utils.word_matching import getWhichLettersWereTranscribedCorrectly, get_best_mapped_words
 # Load environment variables from .env file
 load_dotenv()
 
@@ -166,6 +166,23 @@ async def analyze(
                 )
             ]
             
+            real_transcripts = ' '.join([word[0] for word in result['real_and_transcribed_words']])
+            matched_transcripts = ' '.join([word[1] for word in result['real_and_transcribed_words']])
+            
+            words_real = real_transcripts.lower().split()
+            mapped_words = matched_transcripts.split()
+            
+            
+            is_letter_correct_all_words = ''
+            for idx, word_real in enumerate(words_real):
+
+                mapped_letters, mapped_letters_indices = get_best_mapped_words(
+                    mapped_words[idx], word_real)
+
+                is_letter_correct = getWhichLettersWereTranscribedCorrectly(
+                    word_real, mapped_letters)
+
+                is_letter_correct_all_words += ''.join([str(is_correct) for is_correct in is_letter_correct]) + ' '
             # Get overall quality description
             overall_quality = _get_quality_description(result["pronunciation_accuracy"])
             logger.info(
@@ -208,9 +225,13 @@ async def analyze(
                 "transcribed_text": result["recording_transcript"],
                 "word_comparisons": word_comparisons,  # Detailed comparison info
                 "overall_quality": overall_quality,
-                "ai_feedback": ai_feedback
+                "ai_feedback": ai_feedback,
+                "is_letter_correct_all_words": is_letter_correct_all_words.strip(),
+                "length_of_target_text": len(result["target_text"]),
+                "length_of_analyzed_text": len(is_letter_correct_all_words.strip())
+                
             }
-
+    
             logger.info(
                 "Analysis completed successfully",
                 extra={
