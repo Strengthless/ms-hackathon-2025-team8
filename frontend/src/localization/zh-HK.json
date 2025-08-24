@@ -41,7 +41,7 @@
     "completed": "已完成",
     "pending": "待完成",
     "deadline": "截止日期",
-    "dinoStar": "恐龍星",
+    "dinoStar": "恐龍能量",
     "instructions": "指示",
     "downloadExercise": "點擊下載練習",
     "browseGallery": "瀏覽相簿",
@@ -58,7 +58,7 @@
     "record": "錄音",
     "rerecord": "重新錄音",
     "stopRecording": "停止錄音",
-    "getStars": "你獲得咗 ⭐ {{stars}} 恐龍星 ⭐",
+    "getStars": "你獲得咗 ⚡️ {{stars}} 恐龍能量 ⚡️",
     "getScore": "你嘅分數係 {{score}} / {{total}} 🎉",
     "feedback": {
       "waitForFeedback": "請等老師嘅反饋",

@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "frontend",
-    "slug": "frontend",
+    "name": "DinoLearn",
+    "slug": "dino-learn",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/dino-icon.png",

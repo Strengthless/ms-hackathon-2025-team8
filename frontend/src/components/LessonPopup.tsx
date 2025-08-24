@@ -198,7 +198,7 @@ const LessonPopup: React.FC<LessonPopupProps> = ({
                       {/* Points */}
                       <View style={styles.detailRow}>
                         <MaterialCommunityIcons
-                          name="star"
+                          name="energy"
                           size={16}
                           color="#FFD700"
                         />
