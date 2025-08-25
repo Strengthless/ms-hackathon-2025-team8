@@ -178,7 +178,8 @@ async def analyze(
 
                 mapped_letters, mapped_letters_indices = get_best_mapped_words(
                     mapped_words[idx], word_real)
-
+                mapped_letters = list(map(lambda x: x.lower(), mapped_letters))
+                word_real = word_real.lower()
                 is_letter_correct = getWhichLettersWereTranscribedCorrectly(
                     word_real, mapped_letters)
 
